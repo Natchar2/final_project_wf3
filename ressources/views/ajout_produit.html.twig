@@ -1,0 +1,103 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
+{% endblock %}
+
+{% block contenu %}
+<div class="row">
+	<div class="col-x-6 col-xs-push-3">
+		<h2 class="text-center">Vendre un objet</h2>
+			<form action=""  class="form-horizontal" method="POST" enctype="multipart/form-data">
+
+				<!-- nom et marque -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Nom ou modèle</label>
+					<div class="col-md-7">
+						<input type="text" name="name" required>
+					</div>
+				</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">Nom et/ou modèle</label>
+					<div class="col-md-7">
+						<input type="text" name="brand" required>
+					</div>
+				</div>
+
+				<!-- Categorie -->
+				<div class="form-group">
+					<div class="col-md-7">
+						<label class="col-md-3 control-label">
+							Catégorie
+						</label>
+						<select></select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Sous-catégorie</label>
+					<div class="col-md-7">
+						<input type="text" name="sub_category">
+					</div>
+				</div>
+
+				<!-- prix et frais de livraisons-->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Prix</label>
+					<div class="col-md-7">
+						<input type="text" name="price" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Prix</label>
+					<div class="col-md-7">
+						<input type="text" name="shipping_charges">
+					</div>
+				</div>
+
+				<!-- Description -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Description</label>
+					<div class="col-md-7">
+						<textarea name="description">Saisissez une description du produit</textarea>
+					</div>
+				</div>
+
+				<!-- Images -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Images</label>
+					<div class="col-md-7">
+						<input type="file" class="dropify" name="image_1">
+					</div>
+					<label class="col-md-3 control-label">Images2</label>
+					<div class="col-md-7">
+						<input type="file" class="dropify" name="image_2">
+					</div>
+					<label class="col-md-3 control-label">Images3</label>
+					<div class="col-md-7">
+						<input type="file" class="dropify" name="image_3">
+					</div>
+				</div>
+			</form>
+
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+	{{parent()}}
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
+	<script>
+		$('.dropify').dropify({
+    messages: {
+        'default': 'Glissez-d&eacute;posez un fichier ici ou cliquez',
+        'replace': 'Glissez-d&eacute;posez un fichier ici ou cliquez pour remplacer',
+        'remove':  'Remplacer',
+        'error':   'Ooops, d&eacute;sol&eacute; le fichier est trop volumineux.'
+    }
+});
+	</script>
+	
+{% endblock %}
