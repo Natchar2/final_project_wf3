@@ -16,4 +16,13 @@
         ),
 	));
 	#----------------------------------------------------------------------
+
+	$app['categories'] = function() use($app){
+
+		$categories = $app['idiorm.db']->for_table('category')
+		->find_result_set();
+
+	return $categories;
+
+	}
 ?>
