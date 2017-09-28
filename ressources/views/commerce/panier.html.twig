@@ -3,8 +3,15 @@
 {% block contenu %}
 	<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
 	<div id="paypal-button"></div>
+	
+	<h1>total price: <span class="get_total_price">{% if app.session.get('total_price') is defined %} {{ app.session.get('total_price') }} EUR {% else %} 0 EUR {% endif %}</span></h1>
 
 	<button class="add_product" ID-product="1">ADD</button>
+	<button class="remove_one_product" ID-product="1">REMOVE 1</button>
+	<button class="remove_all_product" ID-product="1">REMOVE ALL 1</button>
+	<button class="remove_one_product" ID-product="2">REMOVE 2</button>
+	<button class="remove_all_product" ID-product="2">REMOVE ALL 2</button>
+	<button class="add_product" ID-product="2">ADD</button>
 {% endblock %}
 
 {% block javascripts %}

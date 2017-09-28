@@ -27,6 +27,10 @@
 	$app->register(new Silex\Provider\AssetServiceProvider());
 	#----------------------------------------------------------------------
 
+	# -- SESSION
+	$app->register(new Silex\Provider\SessionServiceProvider());
+	#----------------------------------------------------------------------
+
 	# -- SWIFT MAILER
 	$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
 		'swiftmailer.use_spool' => false,

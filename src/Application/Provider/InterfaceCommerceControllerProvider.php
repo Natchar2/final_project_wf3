@@ -16,21 +16,29 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		});
 
 		$controllers
-		->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
-		->bind('accueil');
+			->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
+			->bind('accueil');
 
 		$controllers
-		->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
-		->bind('panier');
+			->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
+			->bind('panier');
 
 		$controllers
-		->get('/categorie', 'Application\Controller\InterfaceCommerceController::categorieAction')
-		->bind('categorie');
+			->get('/categorie', 'Application\Controller\InterfaceCommerceController::categorieAction')
+			->bind('categorie');
 
 
     	$controllers
     		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
     		->bind('addItem');
+
+    	$controllers
+    		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
+    		->bind('removeOneItem');
+
+    	$controllers
+    		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
+    		->bind('removeAllItem');
 
 		return $controllers;
 	}
