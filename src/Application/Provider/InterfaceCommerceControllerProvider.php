@@ -23,6 +23,10 @@
 	    		->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
 	    		->bind('panier');
 
+	    	$controllers
+	    		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+	    		->bind('addItem');
+
 	    	return $controllers;
 	    }
 	}

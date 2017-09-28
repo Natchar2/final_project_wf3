@@ -3,6 +3,8 @@
 {% block contenu %}
 	<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
 	<div id="paypal-button"></div>
+
+	<button class="add_product" ID-product="1">ADD</button>
 {% endblock %}
 
 {% block javascripts %}
@@ -10,4 +12,5 @@
 
 	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 	<script src="{{ asset('js/paypalPay.js') }}"></script>
+	<script src="{{ asset('js/panier.js') }}"></script>
 {% endblock %}

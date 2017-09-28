@@ -53,11 +53,11 @@
 	#----------------------------------------------------------------------
 
 	# -- ERROR
-	$app->error(function(\Exception $e, Request $request, $code) use($app){
-		if($code == 404){
-			return $app['twig']->render('404.html.twig');
-		}
-	});
+	// $app->error(function(\Exception $e, Request $request, $code) use($app){
+	// 	if($code == 404){
+	// 		return $app['twig']->render('404.html.twig');
+	// 	}
+	// });
 	#----------------------------------------------------------------------
 
 	require_once RESSOURCES_ROOT . 'config/database.config.php';

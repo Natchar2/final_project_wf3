@@ -22,10 +22,18 @@
  //    	),
 
  //    	'security.access_rules' => array(
- //    		array('^/admin', 'ROLE_ADMIN', 'http'),,
+ //    		array('^/admin', 'ROLE_ADMIN', 'http'),
  //    	),
 
  //    	// 'security.role_hierarchy' => array(),
 	// ));
+
+	$app['security.default_encoder'] = function ($app) {
+        return $app['security.encoder.bcrypt'];
+    };
+    
+	$app['security.default_encoder'] = function() use($app){
+		return $app['security.encoder.digest'];
+	};
     #----------------------------------------------------------------------
 ?>
