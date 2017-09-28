@@ -12,6 +12,7 @@
         {% set pageMax = 12 %}
 
 
+            trou de balle
 
             {# contenu de la page #}
             {% block contenu %}
@@ -62,8 +63,8 @@
 
                                 <div class="paging">
 
-                                 <a href="#" class="current">Début</a>
-                                 {% if (page - 1) >= 1 %}<a href="#">Précédent</a>{% endif %}&nbsp;&nbsp;
+                                   <a href="#" class="current">Début</a>
+                                   {% if (page - 1) >= 1 %}<a href="#">Précédent</a>{% endif %}&nbsp;&nbsp;
                                     {% if (page - 2) >= 1 %}<a href="#">{{ (page - 2) }}</a>{% endif %}&nbsp;&nbsp;                       
                                         {% if (page - 1) >= 1 %}<a href="#">{{ (page - 1) }}</a>{% endif %}  &nbsp;&nbsp;  
                                             <a href="#" class="current">{{ page }}</a>&nbsp;&nbsp;
