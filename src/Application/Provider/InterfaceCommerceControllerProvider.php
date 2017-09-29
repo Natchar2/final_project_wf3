@@ -40,6 +40,14 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
     		->post('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
 			->bind('newAd');
 
+		$controllers
+    		->get('/contact', 'Application\Controller\GlobalController::contactAction')
+			->bind('contact_page');
+
+			$controllers
+    		->post('/contact', 'Application\Controller\GlobalController::contactPostAction')
+			->bind('contactPost');
+
 
 		return $controllers;
 	}

@@ -108,7 +108,7 @@ class InterfaceCommerceController
     			return $app['twig']->render('commerce/ajout_produit.html.twig',[
     				'errors'    => $errors,
     				'error'     => $error,
-                    'categories'=> $app['categories']
+            'categories'=> $app['categories']
     			]);
 
     		}

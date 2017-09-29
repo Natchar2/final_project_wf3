@@ -378,9 +378,71 @@ if($_FILES['image_3']['name']>""){
 
 		);
 
- 
-
 	}
+
+  public function VerificationContact($request, $app){
+
+  /*  Verification du formulaire de contact*/
+
+    $errors = [];
+
+    //verification des champs name et surname
+    if(null!=($request->get('name')) && !empty($request->get('name'))){
+
+      if (!preg_match('#^[a-z \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{3,30}$#i',$request->get('name'))) {
+
+        $errors[] = 'Nom  invalide';
+        }
+    }else{
+
+      $errors[] = "Veuillez remplir le champ nom";
+
+      }
+
+    if(null!=($request->get('surname')) && !empty($request->get('surname'))){
+
+      if (!preg_match('#^[a-z \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{3,30}$#i',$request->get('surname'))) {
+
+        $errors[] = 'Prénom  invalide';
+      }
+    }else{
+
+      $errors[] = "Veuillez remplir le champ prénom";
+
+      }
+      //verification du champ sujet
+    if(null!=($request->get('subject')) && !empty($request->get('subject'))){
+
+      if (!preg_match('#^[a-z \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{3,30}$#i',$request->get('subject'))) {
+
+        $errors[] = 'sujet  invalide';
+        }
+    }else{
+
+      $errors[] = "Veuillez remplir le champ sujet";
+
+      }
+
+    //Verification du champ email
+    if(null!=($request->get('email')) && !empty($request->get('email'))){
+
+      if (!filter_var(htmlspecialchars($request->get('email')),FILTER_VALIDATE_EMAIL)) {
+
+        $error[] = 'email n\'est pas valide';
+
+      }
+
+    }else{
+
+      $error[] = 'Veuillez remplir le champ email';
+
+       }
+
+    return array(
+      'errors'  => $errors,
+    );
+
+  }
 }
 
  ?>

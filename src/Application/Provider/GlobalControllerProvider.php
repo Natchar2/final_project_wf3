@@ -17,13 +17,7 @@ class GlobalControllerProvider implements ControllerProviderInterface
 	    			return $app->redirect('accueil');
 	    		});
 
-	    	$controllers
-    		->get('/contact', 'Application\Controller\GlobalController::contactAction')
-			->bind('contact_page');
-
-			$controllers
-    		->post('/contact', 'Application\Controller\GlobalController::contactPostAction')
-			->bind('contactPost');
+	    	
 
 	    	return $controllers;
 	    }
