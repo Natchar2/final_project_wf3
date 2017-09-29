@@ -44,9 +44,13 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
     		->get('/contact', 'Application\Controller\GlobalController::contactAction')
 			->bind('contact_page');
 
-			$controllers
+		$controllers
     		->post('/contact', 'Application\Controller\GlobalController::contactPostAction')
 			->bind('contactPost');
+
+		$controllers
+			->get('/faq', 'Application\Controller\GlobalController::FAQAction')
+			->bind('FAQ_page');
 
 
 		return $controllers;

@@ -71,5 +71,10 @@
 	    	}
 
 	    }
+
+	     public function FAQAction(Application $app)
+		    {
+		    	return $app['twig']->render('public/FAQ.html.twig');
+		    }
 	}
 ?>
