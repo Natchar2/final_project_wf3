@@ -47,6 +47,15 @@
 	$app->register(new Silex\Provider\CsrfServiceProvider());
 	#----------------------------------------------------------------------
 
+	# -- PAYPAL
+	$apiContext = new \PayPal\Rest\ApiContext(
+        new \PayPal\Auth\OAuthTokenCredential(
+            'AbB8aZ2BYsMvDfrV9MFhOxkhnwgaUawUSka2QPVwNfOrU5CU7h6ubG9BRiSx3UQ8233Ip-XgxYGhvnkg',     // ClientID
+            'EHdrwuNnzTp98c6UpIaVpAYD00wBKiUNXNQXmWHUXDrKQJWSIi-Jx4Kz13h7gWJsjmuLWrKrKm7yOfqV'      // ClientSecret
+        )
+	);
+	#----------------------------------------------------------------------
+
 	# -- FORM
 	$app->register(new Silex\Provider\FormServiceProvider());
 	$app->register(new Silex\Provider\LocaleServiceProvider());
