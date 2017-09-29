@@ -8,6 +8,10 @@
 {# fil d'ariane #}
 {% set active = product.category_name|lower %}
 
+    {% block jshead %}
+
+    {% endblock %}
+
     {# contenu de la page #}
     {% block contenu %}
         <div class="row">
@@ -43,6 +47,8 @@
                         <img id="selectedpic" src="{{ asset('../assets/images/'~product.image_1) }}" alt="" style="width:auto;height:100%;" />   
                     </figure>
                 </div>
+
+
 
 
                 <div class="row">
@@ -101,3 +107,13 @@
 
 
     {% endblock %}
+
+
+
+    {% block javascripts %}
+        {{ parent() }}
+
+
+
+    {% endblock %}
+

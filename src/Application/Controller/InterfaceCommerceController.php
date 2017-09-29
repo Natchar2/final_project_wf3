@@ -16,9 +16,9 @@ class InterfaceCommerceController
 
     public function accueilAction(Application $app)
     {
-        $products=$app['idiorm.db']->for_table('view_products')->order_by_desc()->limit(6)->find_result_set();
-        $topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc()->limit(6)->find_result_set();
-        $events=$app['idiorm.db']->for_table('view_events')->order_by_desc()->limit(3)->find_result_set();
+        $products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
+        $topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
+        $events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
 
         return $app['twig']->render('commerce/accueil.html.twig',[
             'products' => $products,
@@ -35,11 +35,11 @@ class InterfaceCommerceController
 
     public function addItemAction(Application $app, Request $request)
     {
-     return new Response($request->get('id'));
- }
+       return new Response($request->get('id'));
+   }
 
- public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
- {
+   public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
+   {
     $offset=(($page-1)*$nbPerPage);
     $totalProducts=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->find_result_set();
     $totalProducts=count($totalProducts);
@@ -100,13 +100,6 @@ public function menu($active, Application $app)
 }
 
 
-public function categorieAction($category_name,Application $app)
-{
-
-  return $app['twig']->render('categorie.html.twig',[
-   'products' => $products
-]);
-}
 
 public function newAdAction(Application $app){
 
