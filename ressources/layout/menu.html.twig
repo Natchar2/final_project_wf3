@@ -1,0 +1,31 @@
+
+
+<!--menu-->
+<nav class="menu font-heading">
+	<div class="menu-icon hidden-lg hidden-md">
+		<i class="fa fa-navicon"></i>
+		<span>MENU</span>
+	</div>
+	<ul class="hidden-sm hidden-xs">
+		<li {% if active == 'accueil' %} class="current" {% endif %}  style="display:inline;margin-left:20px;margin-right:20px;"><a href="{{ url('accueil') }}" >Accueil</a></li>
+		{% for category in categories %}
+			<li {% if active == category.category_name|lower %} class="current" {% endif %} style="display:inline;margin-left:20px;margin-right:20px;"><a href="{{ url('categorie', {'category_name': category.category_name|lower}) }}">{{ category.category_name }}</a></li>
+		{% endfor %}
+
+		{# if is_granted('IS_AUTHENTICATED_FULLY') #}
+		<!--<li><a href="{# path('admin_logout') #}">Déconnexion</a></li>-->
+		{# else #}
+		<li  style="display:inline;margin-left:20px;margin-right:20px;"><a href="{# url('connexion') #}">Connexion</a></li>
+		{# endif #}
+
+	</ul>
+	<div class="search-icon">
+		<div class="search-icon-inner">
+			<i class="fa fa-search"></i>
+		</div>
+		<div class="search-box">
+			<input type="text" placeholder="Rechercher..." />
+			<button>Lancer</button>
+		</div>
+	</div>
+</nav>

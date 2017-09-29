@@ -32,18 +32,43 @@
                 <button class="add_product" ID-product="{{ product.ID_product }}">Ajouter au panier</button>
                 <button class="remove_one_product" ID-product="{{ product.ID_product }}">Retirer une unité</button>
                 <button class="remove_all_product" ID-product="{{ product.ID_product }}">Retirer du panier</button>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+
+                <div class="row">
+                    <figure class="col-sm-12 col-md-8" style="height:350px;border:1px solid black;display:inline-block;text-align:center;">
+                        <img id="selectedpic" src="{{ asset('../assets/images/'~product.image_1) }}" alt="" style="width:auto;height:100%;" />   
+                    </figure>
+                </div>
 
 
+                <div class="row">
 
+                    {% if product.image_1 is not empty %}
+
+                        <img src="{{ asset('../assets/images/'~product.image_1) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('../assets/images/'~product.image_1) }}';"/>   
+
+                    {% endif %}
+
+
+                    {% if product.image_2 is not empty %}
+
+                        <img src="{{ asset('../assets/images/'~product.image_2) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('../assets/images/'~product.image_2) }}';"/>   
+
+                    {% endif %}
+
+
+                    {% if product.image_3 is not empty %}
+
+                        <img src="{{ asset('../assets/images/'~product.image_3) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('../assets/images/'~product.image_3) }}';"/>   
+
+                    {% endif %}
+                </div>
             </div>
         </div>
-
-
-
-
-
-
-
 
 
 
@@ -73,13 +98,6 @@
                 {% endfor %}
             </div>
         </section>
-
-
-
-
-
-
-
 
 
     {% endblock %}

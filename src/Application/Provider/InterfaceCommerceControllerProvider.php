@@ -32,7 +32,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-		->get('/categorie/{category_name}/{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
+		->get('/categorie/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
 		->assert('category_name','[^/]+')
 		->value('category_name','skate')
 		->assert('page','[0-9]+')	

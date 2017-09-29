@@ -5,19 +5,20 @@
 {% endblock %}
 
 {% block header %}
-	
+	{# version avec le HttpFragmentServiceProvider pour faire le rendu direct depuis un controleur #}
+	{{ render (controller('Application\\Controller\\InterfaceCommerceController::menu', { 'active':active } )) }}	
 {% endblock %}
 
 {% block body %}
 	{% block contenu %}{% endblock %}
-{% endblock %}
+	{% endblock %}
 
-{% block footer %}
-	
-{% endblock %}
+	{% block footer %}
+
+	{% endblock %}
 
 
-{% block javascripts %}
-	{{ parent() }}
-	<script src="{{ asset('js/script.js') }}"></script>
-{% endblock %}
+	{% block javascripts %}
+		{{ parent() }}
+		<script src="{{ asset('js/script.js') }}"></script>
+	{% endblock %}
