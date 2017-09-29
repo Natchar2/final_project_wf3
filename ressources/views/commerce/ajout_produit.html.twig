@@ -11,7 +11,7 @@
 		<h2 class="text-center">Vendre un objet</h2>
 
 		{% if error is not empty %}
-			<div class="alert alert-danger" role=alert>
+				<div class="alert alert-danger" role=alert>
 			{% for value in error %}
 				
 					<p>{{value}}</p><br>
@@ -19,8 +19,9 @@
 			{% endfor %}
 		</div><br>
 		{% endif %}
+
 		{% if  errors is not empty %}
-			<div class="alert alert-danger" role=alert>
+				<div class="alert alert-danger" role=alert>
 			{% for value in errors %}
 				
 					<p>{{value}}</p><br>
@@ -28,6 +29,7 @@
 			{% endfor %}
 		</div><br>
 		{% endif %}
+
 		{% if success is defined %}
 			<div class="alert alert-success" role=alert>
 				<p>Votre annonce a bien été ajoutée</p>
@@ -109,7 +111,6 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-7 col-md-push-3">
-
 						<input  type="submit" class="btn btn-primary" value="Ajouter">
 					</div>
 				</div>
@@ -126,13 +127,13 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
 	<script>
 		$('.dropify').dropify({
-    messages: {
-        'default': 'Glissez-d&eacute;posez un fichier ici ou cliquez',
-        'replace': 'Glissez-d&eacute;posez un fichier ici ou cliquez pour remplacer',
-        'remove':  'Remplacer',
-        'error':   'Ooops, d&eacute;sol&eacute; le fichier est trop volumineux.'
-    }
-});
+		    messages: {
+		        'default': 'Glissez-d&eacute;posez un fichier ici ou cliquez',
+		        'replace': 'Glissez-d&eacute;posez un fichier ici ou cliquez pour remplacer',
+		        'remove':  'Remplacer',
+		        'error':   'Ooops, d&eacute;sol&eacute; le fichier est trop volumineux.'
+		    }
+		});
 	</script>
 	
 {% endblock %}
