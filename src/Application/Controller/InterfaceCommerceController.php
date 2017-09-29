@@ -42,7 +42,7 @@ class InterfaceCommerceController
 public function newAdAction(Application $app){
 
 
-  return $app['twig']->render('ajout_produit.html.twig', [
+  return $app['twig']->render('commerce/ajout_produit.html.twig', [
       'categories'=> $app['categories'],      
         'error' => [] ,
         'errors' => []
@@ -97,7 +97,7 @@ if(empty($errors) && empty($error)){
 		//ON persiste en bdd
 		$product->save();
 
-    return $app['twig']->render('ajout_produit.html.twig',[
+    return $app['twig']->render('commerce/ajout_produit.html.twig',[
               'success' => true,
               'errors' => [] ,
               'error' => [] ,
@@ -106,7 +106,7 @@ if(empty($errors) && empty($error)){
 
 		}else{
 
-			return $app['twig']->render('ajout_produit.html.twig',[
+			return $app['twig']->render('commerce/ajout_produit.html.twig',[
 				'errors' => $errors,
 				'error' => $error,
         'categories'=> $app['categories']
