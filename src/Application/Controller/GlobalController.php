@@ -7,6 +7,7 @@
 	use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 	use Application\Model\Verifications;
 
+
 	class GlobalController
 	{
 		public function sendMailAction(Application $app, Request $request)
