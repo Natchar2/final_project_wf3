@@ -3,9 +3,11 @@ namespace Application\Traits;
 
 trait Shortcut{
 
-    //Génération de nom de fichier pour la mise en bdd des images
 
-	public static function createFileName($nameLength){
+	//Génération de nom de fichier pour la mise en bdd des images
+
+	public function createFileName($nameLength){
+
 
 		if(!is_int($nameLength) || $nameLength <=0){
 
@@ -28,51 +30,55 @@ trait Shortcut{
 
 		}
 		return $name;
-
 	}
 
-	public static function staticSlug($text){
 
-        //seuls lettre et chiffre accepter, utf8 , pas d'accent et minuscule et remplace les espaces par des tirets
+	public static function staticSlug($text)
+	{
 
-/*pour retirer tt les accents: 
-$strRetour = preg_replace('#&([A-za-z])(?:acute|cedil|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $strRetour)
-*/
+		//seuls lettre et chiffre accepter, utf8 , pas d'accent et minuscule et remplace les espaces par des tirets
 
-        // replace non letter or digits by -
-$text = preg_replace('~[^\pL\d]+~u', '-', $text);
 
-        // transliterate
-$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+		/*pour retirer tt les accents: 
+		$strRetour = preg_replace('#&([A-za-z])(?:acute|cedil|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $strRetour)
+		*/
 
-        // remove unwanted characters
-$text = preg_replace('~[^-\w]+~', '', $text);
 
-        // trim
-$text = trim($text, '-');
+		// replace non letter or digits by -
+		$text = preg_replace('~[^\pL\d]+~u', '-', $text);
 
-        // remove duplicate -
-$text = preg_replace('~-+~', '-', $text);
+		// transliterate
+		$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 
-        // lowercase
-$text = strtolower($text);
+		// remove unwanted characters
+		$text = preg_replace('~[^-\w]+~', '', $text);
 
-if (empty($text)) {
-	return 'n-a';
-}
+		// trim
+		$text = trim($text, '-');
 
-return $text;
-}
+		// remove duplicate -
+		$text = preg_replace('~-+~', '-', $text);
+
+		// lowercase
+		$text = strtolower($text);
+
+		if (empty($text)) {
+			return 'n-a';
+		}
+
+		return $text;
+	}
 
 //créer un slug a partir du titre d'un article
-public function generateSlug($text){
+	public function generateSlug($text){
 
-	return self::staticSlug($text);
+		return self::staticSlug($text);
 
-}
+	}
 
 
 
 }
 
 ?>
+

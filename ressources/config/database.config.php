@@ -20,6 +20,7 @@ $app->register(new \Idiorm\Silex\Provider\IdiormServiceProvider(), array(
 	#----------------------------------------------------------------------
 
 
+
 # permet le rendu d'un controleur dans la vue 
 # https://silex.symfony.com/doc/2.0/providers/twig.html#rendering-a-controller
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());

@@ -56,6 +56,15 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
 		->bind('addItem');
 
+    	$controllers
+    		->get('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdAction')
+			->bind('view_newAd');
+
+    	$controllers
+    		->post('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
+			->bind('newAd');
+
+
 		return $controllers;
 	}
 
