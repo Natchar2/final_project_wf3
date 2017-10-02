@@ -12,15 +12,27 @@
 {% endblock %}
 
 {% block body %}
-	{% block contenu %}{% endblock %}
-	{% endblock %}
+	<div class="row">
 
-	{% block footer %}
+		{% block menushop %}
+			<div class="col-xs-12 col-sm-2">
+				{# version avec le HttpFragmentServiceProvider pour faire le rendu direct depuis un controleur #}
+				{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}   
+			</div>
+		{% endblock %}
+		<div class="col-xs-12 col-sm-10">
+			{% block contenu %}
+			{% endblock %}
+		</div>
+	</div>
+{% endblock %}
 
-	{% endblock %}
+{% block footer %}
+
+{% endblock %}
 
 
-	{% block javascripts %}
-		{{ parent() }}
-		<script src="{{ asset('js/script.js') }}"></script>
-	{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('js/script.js') }}"></script>
+{% endblock %}

@@ -95,9 +95,22 @@ public function menu($active, Application $app)
     $categories = $app['idiorm.db']->for_table('category')->find_result_set();
     return $app['twig']->render('menu.html.twig',[
         'active' => $active,
+    ]);
+}
+
+
+    #génération du menu dans le layout
+public function menuShop($active, Application $app)
+{
+    $categories = $app['idiorm.db']->for_table('category')->find_result_set();
+    return $app['twig']->render('menu-shop.html.twig',[
+        'active' => $active,
         'categories' => $categories
     ]);
 }
+
+
+
 
 
 

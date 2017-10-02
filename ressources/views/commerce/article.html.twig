@@ -14,31 +14,29 @@
 
     {# contenu de la page #}
     {% block contenu %}
-        <div class="row">
-            <!--colleft-->
-            <div class="col-md-8 col-sm-12">
 
-                <h3><a href="#">{{ product.name }}</a></h3>
-                <ul>
-                    <li>id produit {{ product.ID_product }}</li>
-                    <li>categorie {{ product.category_name }}</li>
-                    <li>sous-categorie {{ product.sub_category }}</li>
-                    <li>marque : {{ product.brand }}</li>
-                    <li>prix : {{ product.price }}</li>
-                    <li>description : {{ product.description }}</li>
-                    <li>image_1 : {{ product.image_1 }}</li>
-                    <li>image_2 : {{ product.image_2 }}</li>
-                    <li>image_3 : {{ product.image_3 }}</li>
-                    <li>creation :{{ product.creation_date }}</li>
-                    <li>coordonnées GPS : {{ product.tracking_number }}</li>
-                </ul>
 
-                <button class="add_product" ID-product="{{ product.ID_product }}">Ajouter au panier</button>
-                <button class="remove_one_product" ID-product="{{ product.ID_product }}">Retirer une unité</button>
-                <button class="remove_all_product" ID-product="{{ product.ID_product }}">Retirer du panier</button>
-            </div>
 
-        </div>
+        <h3><a href="#">{{ product.name }}</a></h3>
+        <ul>
+            <li>id produit {{ product.ID_product }}</li>
+            <li>categorie {{ product.category_name }}</li>
+            <li>sous-categorie {{ product.sub_category }}</li>
+            <li>marque : {{ product.brand }}</li>
+            <li>prix : {{ product.price }}</li>
+            <li>description : {{ product.description }}</li>
+            <li>image_1 : {{ product.image_1 }}</li>
+            <li>image_2 : {{ product.image_2 }}</li>
+            <li>image_3 : {{ product.image_3 }}</li>
+            <li>creation :{{ product.creation_date }}</li>
+            <li>coordonnées GPS : {{ product.tracking_number }}</li>
+        </ul>
+
+        <button class="add_product" ID-product="{{ product.ID_product }}">Ajouter au panier</button>
+        <button class="remove_one_product" ID-product="{{ product.ID_product }}">Retirer une unité</button>
+        <button class="remove_all_product" ID-product="{{ product.ID_product }}">Retirer du panier</button>
+
+
         <div class="row">
             <div class="col-md-8 col-sm-12">
 
@@ -112,8 +110,5 @@
 
     {% block javascripts %}
         {{ parent() }}
-
-
-
     {% endblock %}
 

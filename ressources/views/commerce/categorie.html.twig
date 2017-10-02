@@ -11,7 +11,10 @@
 
     {# contenu de la page #}
     {% block contenu %}
+
+
         {% set pageMax = (totalProducts / nbPerPage)|round(0, 'ceil') %}
+
             {# 'total : ' ~ totalProducts ~ '***<br>' #}
             {# 'par page : ' ~ nbPerPage ~ '***<br>' #}
             {# 'pagesmax : ' ~ pageMax ~ '***<br>' #}
@@ -19,72 +22,60 @@
             {# 'products : ' ~ products|length ~ '***<br>' #}
 
 
-            <div class="row">
-                <!--colleft-->
-                <div class="col-md-8 col-sm-12">
+            {% if products is empty %}
+                <div class="alert alert-warning">Il n'y a pas encore d'products dans cette catégorie</div>
+            {% else %}
 
-                    {% if products is empty %}
-
-                        <div class="alert alert-warning">Il n'y a pas encore d'products dans cette catégorie</div>
-
-                    {% else %}
-
-                        <div class="box-caption">
-                            <span>{{ global.request.get('category_name') }}</span>
-                        </div>
-                        <!--list-news-cate-->
+                <div class="box-caption">
+                    <span>{{ global.request.get('category_name') }}</span>
+                </div>
+                <!--list-news-cate-->
 
 
-                        {% for product in products %}
+                {% for product in products %}
 
 
-                            <div class="row">
-                                <div class="col-md-5 col-sm-5 col-xs-12">
-                                    <h3><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a></h3>
-                                    <ul>
-                                        <li>id produit {{ product.ID_product }}</li>
-                                        <li>categorie {{ product.category_name }}</li>
-                                        <li>sous-categorie {{ product.sub_category }}</li>
-                                        <li>marque : {{ product.brand }}</li>
-                                        <li>prix : {{ product.price }}</li>
-                                        <li>description : {{ product.description }}</li>
-                                        <li>image_1 : {{ product.image_1 }}</li>
-                                        <li>image_2 : {{ product.image_2 }}</li>
-                                        <li>image_3 : {{ product.image_3 }}</li>
-                                        <li>creation :{{ product.creation_date }}</li>
-                                        <li>coordonnées GPS : {{ product.tracking_number }}</li>
-                                    </ul>
+                    <div class="col-xs-12">
+                        <h3><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a></h3>
+                        <ul>
+                            <li>id produit {{ product.ID_product }}</li>
+                            <li>categorie {{ product.category_name }}</li>
+                            <li>sous-categorie {{ product.sub_category }}</li>
+                            <li>marque : {{ product.brand }}</li>
+                            <li>prix : {{ product.price }}</li>
+                            <li>description : {{ product.description }}</li>
+                            <li>image_1 : {{ product.image_1 }}</li>
+                            <li>image_2 : {{ product.image_2 }}</li>
+                            <li>image_3 : {{ product.image_3 }}</li>
+                            <li>creation :{{ product.creation_date }}</li>
+                            <li>coordonnées GPS : {{ product.tracking_number }}</li>
+                        </ul>
 
-                                </div>
-                            </div>
+                    </div>
 
 
-                        {% endfor %}
+
+                {% endfor %}
 
 
-                        {% if page is defined %}
+                {% if page is defined %}
 
-                            <div class="paging">
+                    <div class="paging">
 
-                                <a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
-                                {% if (page - 1) > 1 %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>{% endif %}&nbsp;&nbsp;
-                                 {% if (page - 2) >= 1 %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>{% endif %}&nbsp;&nbsp;                       
-                                    {% if (page - 1) >= 1 %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>{% endif %}  &nbsp;&nbsp;  
-                                        <a href="#" class="btn btn-primary">{{ page }}</a>&nbsp;&nbsp;
-                                        {% if (page + 1) <= pageMax %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>{% endif %} &nbsp;&nbsp;   
-                                            {% if (page + 2) < pageMax %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>{% endif %}&nbsp;&nbsp; 
-                                                {% if (page + 1) < pageMax %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>{% endif %}&nbsp;&nbsp;
-                                                    <a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
-
-                                                {% endif %}
-
-                                            </div> 
-
+                        <a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
+                        {% if (page - 1) > 1 %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>{% endif %}&nbsp;&nbsp;
+                         {% if (page - 2) >= 1 %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>{% endif %}&nbsp;&nbsp;                       
+                            {% if (page - 1) >= 1 %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>{% endif %}  &nbsp;&nbsp;  
+                                <a href="#" class="btn btn-primary">{{ page }}</a>&nbsp;&nbsp;
+                                {% if (page + 1) <= pageMax %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>{% endif %} &nbsp;&nbsp;   
+                                    {% if (page + 2) < pageMax %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>{% endif %}&nbsp;&nbsp; 
+                                        {% if (page + 1) < pageMax %}<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>{% endif %}&nbsp;&nbsp;
+                                            <a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
 
                                         {% endif %}
 
+                                    </div> 
 
+                                {% endif %}
 
-                                    </div>
-                                </div>
                             {% endblock %}

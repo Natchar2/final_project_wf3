@@ -1,16 +1,25 @@
 {% extends 'defaultLayout.html.twig' %}
 
-{% block contenu %}
-	<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
-	<div id="paypal-button"></div>
-
-	<button class="add_product" ID-product="1">ADD</button>
+{# titre de la page #}
+{% block title %}
+	Panier | Street Connexion
 {% endblock %}
 
-{% block javascripts %}
-	{{ parent() }}
+{# fil d'ariane #}
+{% set active = 'panier' %}
 
-	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
-	<script src="{{ asset('js/paypalPay.js') }}"></script>
-	<script src="{{ asset('js/panier.js') }}"></script>
-{% endblock %}
+
+	{% block contenu %}
+		<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
+		<div id="paypal-button"></div>
+
+		<button class="add_product" ID-product="1">ADD</button>
+	{% endblock %}
+
+	{% block javascripts %}
+		{{ parent() }}
+
+		<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+		<script src="{{ asset('js/paypalPay.js') }}"></script>
+		<script src="{{ asset('js/panier.js') }}"></script>
+	{% endblock %}
