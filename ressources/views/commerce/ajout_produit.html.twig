@@ -5,36 +5,40 @@
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
 {% endblock %}
 
+{% block header %}
+	{% include 'commerce/menu.html.twig' %}
+{% endblock %}
+
 {% block contenu %}
-<div class="row">
-	<div class="col-xs-6 col-xs-push-3">
-		<h2 class="text-center">Vendre un objet</h2>
+	<div class="row">
+		<div class="col-xs-6 col-xs-push-3">
+			<h2 class="text-center">Vendre un objet</h2>
 
-		{% if error is not empty %}
+			{% if error is not empty %}
 				<div class="alert alert-danger" role=alert>
-			{% for value in error %}
-				
-					<p>{{value}}</p><br>
+					{% for value in error %}
 						
-			{% endfor %}
-		</div><br>
-		{% endif %}
+						<p>{{value}}</p><br>
+						
+					{% endfor %}
+				</div><br>
+			{% endif %}
 
-		{% if  errors is not empty %}
+			{% if  errors is not empty %}
 				<div class="alert alert-danger" role=alert>
-			{% for value in errors %}
-				
-					<p>{{value}}</p><br>
+					{% for value in errors %}
 						
-			{% endfor %}
-		</div><br>
-		{% endif %}
+						<p>{{value}}</p><br>
+						
+					{% endfor %}
+				</div><br>
+			{% endif %}
 
-		{% if success is defined %}
-			<div class="alert alert-success" role=alert>
-				<p>Votre annonce a bien été ajoutée</p>
-			</div><br>
-		{% endif %}
+			{% if success is defined %}
+				<div class="alert alert-success" role=alert>
+					<p>Votre annonce a bien été ajoutée</p>
+				</div><br>
+			{% endif %}
 
 			<form action=""  class="form-horizontal" method="POST" enctype="multipart/form-data">
 
@@ -45,8 +49,8 @@
 						<input class="form-control" type="text" name="name" required>
 					</div>
 				</div>
-					<div class="form-group">
-						<label class="col-md-3 control-label">Marque</label>
+				<div class="form-group">
+					<label class="col-md-3 control-label">Marque</label>
 					<div class="col-md-7">
 						<input class="form-control" type="text" name="brand" required>
 					</div>
@@ -54,10 +58,10 @@
 
 				<!-- Categorie -->
 				<div class="form-group">
-						<label class="col-md-3 control-label">
-							Catégorie
-						</label>
-						<div class="col-md-7">
+					<label class="col-md-3 control-label">
+						Catégorie
+					</label>
+					<div class="col-md-7">
 						<select name="category" class="form-control">
 							{% for value in categories %}
 								<option value="{{value.ID_category}}">{{value.category_name}}</option>
@@ -116,9 +120,13 @@
 				</div>
 			</form>
 
+		</div>
 	</div>
-</div>
 
+{% endblock %}
+
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}
@@ -126,14 +134,14 @@
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
 	<script>
-		$('.dropify').dropify({
-		    messages: {
-		        'default': 'Glissez-d&eacute;posez un fichier ici ou cliquez',
-		        'replace': 'Glissez-d&eacute;posez un fichier ici ou cliquez pour remplacer',
-		        'remove':  'Remplacer',
-		        'error':   'Ooops, d&eacute;sol&eacute; le fichier est trop volumineux.'
-		    }
-		});
+	$('.dropify').dropify({
+		messages: {
+			'default': 'Glissez-d&eacute;posez un fichier ici ou cliquez',
+			'replace': 'Glissez-d&eacute;posez un fichier ici ou cliquez pour remplacer',
+			'remove':  'Remplacer',
+			'error':   'Ooops, d&eacute;sol&eacute; le fichier est trop volumineux.'
+		}
+	});
 	</script>
 	
 {% endblock %}

@@ -16,12 +16,12 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		});
 
 		$controllers
-			->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
-			->bind('accueil');
+		->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
+		->bind('accueil');
 
 		$controllers
-			->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
-			->bind('panier');
+		->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
+		->bind('panier');
 
 		$controllers
 		->get('/categorie/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
@@ -57,19 +57,58 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('newAd');
 
 
-    	$controllers
-    		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
-    		->bind('removeOneItem');
+		$controllers
+		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
+		->bind('removeOneItem');
 
-    	$controllers
-    		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
-    		->bind('removeAllItem');
+		$controllers
+		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
+		->bind('removeAllItem');
+
+
+		$controllers
+		->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
+		->bind('faq');
+
+		$controllers
+		->get('/about', 'Application\Controller\InterfaceCommerceController::aboutAction')
+		->bind('about');
+
+
+		$controllers
+		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
+		->bind('forumAjoutPost');
+
+		$controllers
+		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
+		->bind('forumIndex');
+
+		$controllers
+		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
+		->bind('forumPostDetail');
+
+		$controllers
+		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
+		->bind('item');
+
+		$controllers
+		->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
+		->bind('shop');
+
+		$controllers
+		->get('/shoppingCard', 'Application\Controller\InterfaceCommerceController::shoppingCardAction')
+		->bind('shoppingCard');
+
+		$controllers
+		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
+		->bind('connexion');
+
+		$controllers
+		->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
+		->bind('inscription');
+
 
 		return $controllers;
 	}
-
-
-
-
 }
 ?>
