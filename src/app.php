@@ -1,6 +1,4 @@
 <?php
-
-	$app['session']->set('token','azerty');
 	# -- CONFIG APP
 	$app['debug'] = true;
 
