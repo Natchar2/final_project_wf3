@@ -39,6 +39,10 @@ $app->register(new Silex\Provider\AssetServiceProvider());
 	$app->register(new Silex\Provider\SessionServiceProvider());
 	#----------------------------------------------------------------------
 
+	# -- SESSION
+	$app->register(new Silex\Provider\SessionServiceProvider());
+	#----------------------------------------------------------------------
+
 	# -- SWIFT MAILER
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
 	'swiftmailer.use_spool' => false,
@@ -82,6 +86,15 @@ $app->register(new Silex\Provider\CsrfServiceProvider());
 	    //REALLY HELPFUL FOR DEBUGGING
 	    echo $ex->getData();
 	}*/
+	#----------------------------------------------------------------------
+
+	# -- PAYPAL
+	$apiContext = new \PayPal\Rest\ApiContext(
+        new \PayPal\Auth\OAuthTokenCredential(
+            'AbB8aZ2BYsMvDfrV9MFhOxkhnwgaUawUSka2QPVwNfOrU5CU7h6ubG9BRiSx3UQ8233Ip-XgxYGhvnkg',     // ClientID
+            'EHdrwuNnzTp98c6UpIaVpAYD00wBKiUNXNQXmWHUXDrKQJWSIi-Jx4Kz13h7gWJsjmuLWrKrKm7yOfqV'      // ClientSecret
+        )
+	);
 	#----------------------------------------------------------------------
 
 	# -- FORM
