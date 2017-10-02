@@ -16,50 +16,57 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		});
 
 		$controllers
-		->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
-		->bind('accueil');
+			->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
+			->bind('accueil');
 
 		$controllers
-		->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
-		->bind('panier');
+			->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
+			->bind('panier');
 
 		$controllers
-		->get('/categorie', 'Application\Controller\InterfaceCommerceController::categorieAction')
-		->bind('categorie');
-
-
-		$controllers
-		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-		->bind('addItem');
-
+			->get('/categorie', 'Application\Controller\InterfaceCommerceController::categorieAction')
+			->bind('categorie');
 
 		$controllers
-		->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
-		->bind('faq');
+			->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+			->bind('addItem');
 
 		$controllers
-		->get('/about', 'Application\Controller\InterfaceCommerceController::aboutAction')
-		->bind('about');
+			->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
+			->bind('faq');
 
 		$controllers
-		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
-		->bind('forumAjoutPost');
+			->get('/about', 'Application\Controller\InterfaceCommerceController::aboutAction')
+			->bind('about');
 
 		$controllers
-		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
-		->bind('forumIndex');
+
+			->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
+			->bind('forumAjoutPost');
 
 		$controllers
-		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
-		->bind('forumPostDetail');
+			->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
+			->bind('forumIndex');
 
 		$controllers
-		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
-		->bind('item');
+			->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
+			->bind('forumPostDetail');
 
 		$controllers
-		->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
-		->bind('shop');
+			->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
+			->bind('item');
+
+		$controllers
+			->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
+			->bind('shop');
+
+    	$controllers
+    		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
+    		->bind('removeOneItem');
+
+    	$controllers
+    		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
+    		->bind('removeAllItem');
 
     	$controllers
     		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
@@ -95,16 +102,16 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 			->bind('deleteProduct');
 
 		$controllers
-		->get('/shoppingCard', 'Application\Controller\InterfaceCommerceController::shoppingCardAction')
-		->bind('shoppingCard');
+			->get('/shoppingCard', 'Application\Controller\InterfaceCommerceController::shoppingCardAction')
+			->bind('shoppingCard');
 
 		$controllers
-		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
-		->bind('connexion');
+			->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
+			->bind('connexion');
 
 		$controllers
-		->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
-		->bind('inscription');
+			->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
+			->bind('inscription');
 
 
 		return $controllers;

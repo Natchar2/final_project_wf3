@@ -3,11 +3,13 @@
 {% block stylesheets %}
 	{{ parent() }}
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
+	 <link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet">
+
 {% endblock %}
 
-{% block header %}
+{#{% block header %}
 	{% include 'commerce/menu.html.twig' %}
-{% endblock %}
+{% endblock %}#}
 
 {% block contenu %}
 	<div class="container">
@@ -47,7 +49,8 @@
 					
 					<!-- champ caché pour l'id-->
 					<input type="hidden" name="ID_product"	
-					{% if modification is defined %}
+					{% if modification is not empty %}
+						{{dump(modification) }}
 						 value="{{modification.ID_product}}"
 					{% endif %}>
 
@@ -56,7 +59,7 @@
 						<label class="col-md-3 control-label">Nom ou modèle</label>
 						<div class="col-md-7">
 							<input class="form-control" type="text" name="name" required 
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								value="{{modification.name}}"
 							{% endif %}>
 						</div>
@@ -65,7 +68,7 @@
 						<label class="col-md-3 control-label">Marque</label>
 						<div class="col-md-7">
 							<input class="form-control" type="text" name="brand" required
-							{% if modification is defined %}
+							{% if modification is not empty %}
 							 	value="{{modification.brand}}"
 							{% endif %}>
 						</div>
@@ -81,7 +84,7 @@
 								{% for value in categories %}
 
 									<option value="{{value.ID_category}}"
-									{% if modification is defined %} 
+									{% if modification is not empty %} 
 										{% if modification.ID_category == value.ID_category %} 
 											{{' selected '}}
 										{% endif %}
@@ -95,7 +98,7 @@
 						<label class="col-md-3 control-label">Sous-catégorie</label>
 						<div class="col-md-7">
 							<input class="form-control" type="text" name="sub_category" 
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								value="{{modification.sub_category}}"
 							{% endif %}
 							>
@@ -107,7 +110,7 @@
 						<label class="col-md-3 control-label">Prix</label>
 						<div class="col-md-7">
 							<input class="form-control" type="text" name="price" required 
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								value="{{modification.price}}"
 							{% endif %}
 							>
@@ -117,7 +120,7 @@
 						<label class="col-md-3 control-label">Frais de livraison</label>
 						<div class="col-md-7">
 							<input class="form-control" type="text" name="shipping_charges" 
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								value="{{modification.shipping_charges}}"
 							{% endif %}
 							>
@@ -130,7 +133,7 @@
 						<div class="col-md-7">
 							<textarea name="description" class="form-control" placeholder="Saisissez une description du produit"						
 							>
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								{{modification.description}}
 							{% endif %}
 							</textarea>
@@ -141,7 +144,7 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label">Image</label>
 						<div class="col-md-7">
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								{% if modification.image_1 is not empty %}
 									<div class="alert alert-info" role="alert">
 									<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
@@ -151,13 +154,13 @@
 							{% endif %}
 							<input  type="file" class="dropify" name="image_1">
 							<input type="hidden" name="image_1-hidden"	
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								 value="{{modification.image_1}}"
 							{% endif %}>
 						</div>
 						<label class="col-md-3 control-label">Image 2</label>
 						<div class="col-md-7">
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								{% if modification.image_2 is not empty %}
 									<div class="alert alert-info" role="alert">
 									<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
@@ -167,13 +170,13 @@
 							{% endif %}
 							<input type="file" class="dropify" name="image_2">
 							<input type="hidden" name="image_2-hidden"	
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								 value="{{modification.image_2}}"
 							{% endif %}>
 						</div>
 						<label class="col-md-3 control-label">Image 3</label>
 						<div class="col-md-7">
-							{% if modification is defined %}
+							{% if modification is not empty %}
 
 								{% if modification.image_3 is not empty %}
 									<div class="alert alert-info" role="alert">
@@ -184,7 +187,7 @@
 							{% endif %}
 							<input type="file" class="dropify" name="image_3">
 							<input type="hidden" name="image_3-hidden"	
-							{% if modification is defined %}
+							{% if modification is not empty %}
 								 value="{{modification.image_3}}"
 							{% endif %}>
 						</div>
@@ -205,11 +208,12 @@
 
 {% endblock %}
 
-{% block footer %}
+{#{% block footer %}
 	{% include 'commerce/footer.html.twig' %}
-{% endblock %}
+{% endblock %}#}
 
 {% block javascripts %}
+      <script src="{{asset('dist/js/bootstrap.min.js')}}"></script>
 	{{parent()}}
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
