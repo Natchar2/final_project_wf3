@@ -42,7 +42,16 @@ class InterfaceCommerceController
 
         $total_price = $this->get_total_price($app, $request->get('id'), 'incrementation');
 
-        return new Response($total_price); 
+        $app['session']->set('total_product', $this->getTotalProduct($app));
+        $app['session']->set('total_product_by_id', $this->getTotalProductById($app));
+
+        $array = array(
+            'total_price' => $total_price,
+            'total_product' => $app['session']->get('total_product'),
+            'total_product_by_id' => $app['session']->get('total_product_by_id'),
+        );
+
+        return new Response(json_encode($array));
     }
 
     public function removeOneItemAction(Application $app, Request $request)
@@ -52,7 +61,7 @@ class InterfaceCommerceController
         $panier = $app['session']->get('panier');
         if(isset($panier[$request->get('id')]))
         {
-            if($panier[$request->get('id')] == 1)
+            if($panier[$request->get('id')] == 0)
             {
                 unset($panier[$request->get('id')]);
             }
@@ -61,11 +70,19 @@ class InterfaceCommerceController
                 $panier[$request->get('id')] -= 1;
             }
 
-            $app['session']->set('panier',$panier);
+            $app['session']->set('panier', $panier);
         }
 
+        $app['session']->set('total_product', $this->getTotalProduct($app));
+        $app['session']->set('total_product_by_id', $this->getTotalProductById($app));
 
-        return new Response($total_price); 
+        $array = array(
+            'total_price' => $total_price,
+            'total_product' => $app['session']->get('total_product'),
+            'total_product_by_id' => $app['session']->get('total_product_by_id'),
+        );
+
+        return new Response(json_encode($array)); 
     }
 
     public function removeAllItemAction(Application $app, Request $request)
@@ -74,11 +91,66 @@ class InterfaceCommerceController
 
         $panier = $app['session']->get('panier');
 
-        unset($panier[$request->get('id')]);
+        if($panier[$request->get('id')] == 0)
+        {
+            unset($panier[$request->get('id')]);
+        }
+        else
+        {
+            $panier[$request->get('id')] = 0;  
+        }
 
         $app['session']->set('panier',$panier);
 
-        return new Response($total_price); 
+        $app['session']->set('total_product', $this->getTotalProduct($app));
+        $app['session']->set('total_product_by_id', $this->getTotalProductById($app));
+
+        $array = array(
+            'total_price' => $total_price,
+            'total_product' => $app['session']->get('total_product'),
+            'total_product_by_id' => $app['session']->get('total_product_by_id'),
+        );
+
+        return new Response(json_encode($array));
+    }
+
+     public function getTotalProduct(Application $app)
+    {
+        $total_product = 0;
+
+        $panier = $app['session']->get('panier');
+
+        if(!empty($panier))
+        {
+            foreach ($panier as $data)
+            {
+                $total_product += $data;
+            }
+        }
+
+        return $total_product;
+    }
+
+    public function getTotalProductById(Application $app)
+    {
+        $total_product_by_id = array();
+
+        $panier = $app['session']->get('panier');
+
+        if(!empty($panier))
+        {
+            $n = 0;
+            foreach ($panier as $key => $data)
+            {
+                if(isset($panier[$key]))
+                {
+                    $total_product_by_id[$key] = $data;
+                    $n++;
+                }
+            }  
+        }
+
+        return $total_product_by_id;
     }
 
     public function get_total_price(Application $app, $id, $mode)
@@ -113,14 +185,21 @@ class InterfaceCommerceController
                 for ($i = $app['session']->get('panier')[$id]; $i > 0; $i--)
                 {
                     $total_price -= $price + $shipping_charges;
-                    if($total_price < 0)
+                    if($total_price <= 0)
                     {
                         $total_price = 0;
-                    }    
+                    }
                 }
             }
 
-            $app['session']->set('total_price', $total_price);  
+            $app['session']->set('total_price', $total_price);
+        }
+        else
+        {
+            if($total_price <= 0)
+            {
+                $total_price = 0;
+            }
         }
 
         return $total_price;

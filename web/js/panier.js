@@ -16,14 +16,18 @@ $('.add_product').click(function(e){
 	$.ajax({
 		url: 'addItem',
 		type: 'post',
-		dataType: 'html',
+		dataType: 'json',
 		timeout: 4000,
 		data: {
 			id: ID_product
 		},
 		success: function(data){
 			$.notify('Produit Ajouté', 'success');
-			$('.get_total_price').text(data + ' EUR');
+			$('.total_price').text(data.total_price);
+			$('.total_product').text(data.total_product);
+			$('.total_by_id').attr('ID-product', function(id){
+				$(this).text(data.total_product_by_id[$(this).attr('ID-product')]);
+			});
 		},
 		error: function(){
 			$.notify('Une Erreur c\'est produite', 'error');
@@ -41,18 +45,25 @@ $('.remove_one_product').click(function(e){
 	$.ajax({
 		url: 'removeOneItem',
 		type: 'post',
-		dataType: 'html',
+		dataType: 'json',
 		timeout: 4000,
 		data: {
 			id: ID_product
 		},
 		success: function(data){
-			$.notify('Produit Supprimé', 'success');
-			if(data == '')
-			{
-				data = '0';
-			}
-			$('.get_total_price').text(data + ' EUR');
+			if(data.total_product_by_id[$('.remove_one_product').attr('ID-product')] >= 0) $.notify('Produit Supprimé', 'success');
+			$('.total_price').text(data.total_price);
+			$('.total_product').text(data.total_product);
+			$('.total_by_id').attr('ID-product', function(id){
+				if(data.total_product_by_id[$(this).attr('ID-product')])
+				{
+					$(this).text(data.total_product_by_id[$(this).attr('ID-product')]);
+				}
+				else
+				{
+					$(this).text("0");
+				}
+			});
 		},
 		error: function(){
 			$.notify('Une Erreur c\'est produite', 'error');
@@ -70,18 +81,32 @@ $('.remove_all_product').click(function(e){
 	$.ajax({
 		url: 'removeAllItem',
 		type: 'post',
-		dataType: 'html',
+		dataType: 'json',
 		timeout: 4000,
 		data: {
 			id: ID_product
 		},
 		success: function(data){
-			$.notify('Tous les produits ont été supprimé', 'success');
-			if(data == '')
+			if(data.total_product_by_id[$('.remove_one_product').attr('ID-product')] >= 0) $.notify('Tous les produits ont été supprimé', 'success');
+			if(data.total_price == null)
 			{
-				data = '0';
+				$('.total_price').text("0");
 			}
-			$('.get_total_price').text(data + ' EUR');
+			else
+			{
+				$('.total_price').text(data.total_price);
+			}
+			$('.total_product').text(data.total_product);
+			$('.total_by_id').attr('ID-product', function(id){
+				if(data.total_product_by_id[$(this).attr('ID-product')])
+				{
+					$(this).text(data.total_product_by_id[$(this).attr('ID-product')]);
+				}
+				else
+				{
+					$(this).text("0");
+				}
+			});
 		},
 		error: function(){
 			$.notify('Une Erreur c\'est produite', 'error');
