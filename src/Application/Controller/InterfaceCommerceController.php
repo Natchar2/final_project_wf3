@@ -24,19 +24,9 @@ class InterfaceCommerceController
         return $app['twig']->render('commerce/panier.html.twig');
     }
 
-    public function addItemAction(Application $app, Request $request)
-    {
-        return new Response($request->get('id'));
-    }
-
     public function faqAction(Application $app)
     {
         return $app['twig']->render('commerce/FAQ.html.twig');
-    }
-
-    public function panierAction(Application $app)
-    {
-        return $app['twig']->render('commerce/panier.html.twig');
     }
 
     public function addItemAction(Application $app, Request $request)
@@ -352,7 +342,7 @@ class InterfaceCommerceController
                 'errors'    => $errors,
                 'error'     => $error,
                 'categories'=> $app['categories']
-            ])
+            ]);
         }
     }
 }
