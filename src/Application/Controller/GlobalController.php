@@ -5,7 +5,7 @@
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response; 
 	use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
+/*bloulouoi*/
 	class GlobalController
 	{
 		public function sendMailAction(Application $app, Request $request)

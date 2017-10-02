@@ -27,7 +27,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 			->get('/categorie', 'Application\Controller\InterfaceCommerceController::categorieAction')
 			->bind('categorie');
 
-
     	$controllers
     		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
     		->bind('addItem');
@@ -39,6 +38,14 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
     	$controllers
     		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
     		->bind('removeAllItem');
+
+    	$controllers
+    		->get('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdAction')
+			->bind('view_newAd');
+
+    	$controllers
+    		->post('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
+			->bind('newAd');
 
 		return $controllers;
 	}
