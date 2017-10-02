@@ -52,6 +52,9 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 			->get('/faq', 'Application\Controller\GlobalController::FAQAction')
 			->bind('FAQ_page');
 
+		$controllers
+			->get('/conditions_generales', 'Application\Controller\GlobalController::conditionsAction')
+			->bind('conditions_page');
 
 		return $controllers;
 	}

@@ -72,9 +72,15 @@
 
 	    }
 
-	     public function FAQAction(Application $app)
+	    public function FAQAction(Application $app)
 		    {
 		    	return $app['twig']->render('public/FAQ.html.twig');
 		    }
+
+		public function ConditionsAction(Application $app)
+			{
+				return $app['twig']->render('public/conditions.html.twig');
+			}
+
 	}
 ?>
