@@ -19,7 +19,7 @@ $errors = [];
 //verification du champ name
 	if(null!=($request->get('name')) && !empty($request->get('name'))){
 
-			if (!preg_match('#^[a-z \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{3,50}$#i',$request->get('name'))) {
+			if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_]{3,50}$#i',$request->get('name'))) {
              
                 $errors[] = 'Nom ou modèle invalide';
 			}
@@ -31,7 +31,7 @@ $errors = [];
 //verification du champ marque
     if(null!=($request->get('brand'))&& !empty($request->get('brand'))){
 
-			if (!preg_match('#^[a-z \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{3,30}$#i',$request->get('brand'))) {
+			if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_]{3,30}$#i',$request->get('brand'))) {
              
                 $errors[] = 'Marque invalide';
 			}
@@ -55,7 +55,7 @@ $errors = [];
 //verification du champ sous-catégorie
     if(null!=($request->get('sub_category'))&& !empty($request->get('sub_category'))){
 
-			if (!preg_match('#^[a-z \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{3,30}$#i',$request->get('sub_category'))) {
+			if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_]{3,30}$#i',$request->get('sub_category'))) {
              
                 $errors[] = 'Sous-catégorie invalide';
 			}
@@ -88,7 +88,7 @@ $errors = [];
 //verification du champ description
     if(null!=($request->get('description')) && !empty($request->get('description'))){
 
-			if (!preg_match('#^[a-z \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]{3,}$#i',$request->get('description'))) {
+			if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_\s\;\!\.\?\:\,\'+\(\)]{3,}$#i',$request->get('description'))) {
              
                 $errors[] = 'Description invalide';
 			}
@@ -97,8 +97,10 @@ $errors = [];
             $errors[] = "Veuillez remplir le champ description";
 
         }
+
+
 //verification du champ image_1
-if((($_FILES['image_1'])!=null) && !empty($_FILES['image_1'])){
+if($_FILES['image_1']['name']>""){
 
 
     switch ($_FILES['image_1']['error']) {
@@ -166,7 +168,7 @@ if((($_FILES['image_1'])!=null) && !empty($_FILES['image_1'])){
                     }
 
              
-                    move_uploaded_file($_FILES['image_1']['tmp_name'],ROOT.'assets/images/'. $finalFileName1);
+                    move_uploaded_file($_FILES['image_1']['tmp_name'],ROOT.'web/assets/images/'. $finalFileName1);
 
                     $success[]= 'image sauvegardée';
 
@@ -183,8 +185,26 @@ if((($_FILES['image_1'])!=null) && !empty($_FILES['image_1'])){
 
       break;
  		}
- 	}
 
+ 	}else{
+
+    if(!empty($request->get('image_1-hidden'))){
+
+      if(preg_match('#^[a-z0-9A-Z \.]{3,}$#i',$request->get('image_1-hidden'))){
+
+        $finalFileName1 = ($request->get('image_1-hidden'));
+
+      }else{
+
+        $finalFileName1 = null;
+        }
+
+    }else{
+
+    $finalFileName1 = null;
+    }
+
+  }
   //verification du champ image_2
 if(($_FILES['image_2']['name'])>""){
 
@@ -253,7 +273,7 @@ if(($_FILES['image_2']['name'])>""){
                     }
 
                    $image_2 = $_FILES['image_2']['tmp_name'];
-                    $image_2->move(ROOTH.'assets/images/',$finalFileName2);
+                    $image_2->move(ROOTH.'web/assets/images/',$finalFileName2);
 
                     $success[]= 'image sauvegardée';
 
@@ -273,7 +293,21 @@ if(($_FILES['image_2']['name'])>""){
 
 	}else{
 
-  $finalFileName2 = null;
+ if(!empty($request->get('image_2-hidden'))){
+
+      if(preg_match('#^[a-z0-9A-Z \.]{3,}$#i',$request->get('image_2-hidden'))){
+
+        $finalFileName2 = ($request->get('image_2-hidden'));
+
+      }else{
+
+        $finalFileName2 = null;
+        }
+      
+    }else{
+
+    $finalFileName2 = null;
+    }
 
 }
 
@@ -345,7 +379,7 @@ if($_FILES['image_3']['name']>""){
                     }
 
                    $image_3 = $_FILES['image_3']['tmp_name'];
-                    $image_3->move(ROOTH.'assets/images/',$finalFileName3);
+                    $image_3->move(ROOTH.'web/assets/images/',$finalFileName3);
 
                     $success[]= 'image sauvegardée';
 
@@ -365,9 +399,22 @@ if($_FILES['image_3']['name']>""){
 
 }else{
 
-  $finalFileName3 = null;
+  if(!empty($request->get('image_3-hidden'))){
 
-		}
+      if(preg_match('#^[a-z0-9 \.]{3,}$#i',$request->get('image_3-hidden'))){
+
+        $finalFileName3 = ($request->get('image_3-hidden'));
+
+      }else{
+
+        $finalFileName3 = null;
+        }
+      
+    }else{
+
+    $finalFileName3 = null;
+    }
+	}
 
 	return array(
 			'errors'        => $errors,

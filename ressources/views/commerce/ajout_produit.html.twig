@@ -32,23 +32,35 @@
 
 		{% if success is defined %}
 			<div class="alert alert-success" role=alert>
-				<p>Votre annonce a bien été ajoutée</p>
+				<p>{{ success }}</p>
 			</div><br>
 		{% endif %}
 
 			<form action=""  class="form-horizontal" method="POST" enctype="multipart/form-data">
+				
+				<!-- champ caché pour l'id-->
+				<input type="hidden" name="ID_product"	
+				{% if modification is defined %}
+					 value="{{modification.ID_product}}"
+				{% endif %}>
 
 				<!-- nom et marque -->
 				<div class="form-group">
 					<label class="col-md-3 control-label">Nom ou modèle</label>
 					<div class="col-md-7">
-						<input class="form-control" type="text" name="name" required>
+						<input class="form-control" type="text" name="name" required 
+						{% if modification is defined %}
+							value="{{modification.name}}"
+						{% endif %}>
 					</div>
 				</div>
 					<div class="form-group">
 						<label class="col-md-3 control-label">Marque</label>
 					<div class="col-md-7">
-						<input class="form-control" type="text" name="brand" required>
+						<input class="form-control" type="text" name="brand" required
+						{% if modification is defined %}
+						 	value="{{modification.brand}}"
+						{% endif %}>
 					</div>
 				</div>
 
@@ -60,7 +72,14 @@
 						<div class="col-md-7">
 						<select name="category" class="form-control">
 							{% for value in categories %}
-								<option value="{{value.ID_category}}">{{value.category_name}}</option>
+
+								<option value="{{value.ID_category}}"
+								{% if modification is defined %} 
+									{% if modification.ID_category == value.ID_category %} 
+										{{' selected '}}
+									{% endif %}
+								{% endif %}
+									>{{value.category_name}}</option>
 							{% endfor %}
 						</select>
 					</div>
@@ -68,7 +87,11 @@
 				<div class="form-group">
 					<label class="col-md-3 control-label">Sous-catégorie</label>
 					<div class="col-md-7">
-						<input class="form-control" type="text" name="sub_category">
+						<input class="form-control" type="text" name="sub_category" 
+						{% if modification is defined %}
+							value="{{modification.sub_category}}"
+						{% endif %}
+						>
 					</div>
 				</div>
 
@@ -76,13 +99,21 @@
 				<div class="form-group">
 					<label class="col-md-3 control-label">Prix</label>
 					<div class="col-md-7">
-						<input class="form-control" type="text" name="price" required>
+						<input class="form-control" type="text" name="price" required 
+						{% if modification is defined %}
+							value="{{modification.price}}"
+						{% endif %}
+						>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-3 control-label">Frais de livraison</label>
 					<div class="col-md-7">
-						<input class="form-control" type="text" name="shipping_charges">
+						<input class="form-control" type="text" name="shipping_charges" 
+						{% if modification is defined %}
+							value="{{modification.shipping_charges}}"
+						{% endif %}
+						>
 					</div>
 				</div>
 
@@ -90,23 +121,65 @@
 				<div class="form-group">
 					<label class="col-md-3 control-label">Description</label>
 					<div class="col-md-7">
-						<textarea name="description" class="form-control" placeholder="Saisissez une description du produit"></textarea>
+						<textarea name="description" class="form-control" placeholder="Saisissez une description du produit"						
+						>
+						{% if modification is defined %}
+							{{modification.description}}
+						{% endif %}
+						</textarea>
 					</div>
 				</div>
 
 				<!-- Images -->
 				<div class="form-group">
-					<label class="col-md-3 control-label">Images</label>
+					<label class="col-md-3 control-label">Image</label>
 					<div class="col-md-7">
+						{% if modification is defined %}
+							{% if modification.image_1 is not empty %}
+								<div class="alert alert-info" role="alert">
+								<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
+								<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>								
+								</div>
+							{% endif %}
+						{% endif %}
 						<input  type="file" class="dropify" name="image_1">
+						<input type="hidden" name="image_1-hidden"	
+						{% if modification is defined %}
+							 value="{{modification.image_1}}"
+						{% endif %}>
 					</div>
-					<label class="col-md-3 control-label">Images2</label>
+					<label class="col-md-3 control-label">Image 2</label>
 					<div class="col-md-7">
+						{% if modification is defined %}
+							{% if modification.image_2 is not empty %}
+								<div class="alert alert-info" role="alert">
+								<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
+								<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
+								</div>
+							{% endif %}
+						{% endif %}
 						<input type="file" class="dropify" name="image_2">
+						<input type="hidden" name="image_2-hidden"	
+						{% if modification is defined %}
+							 value="{{modification.image_2}}"
+						{% endif %}>
 					</div>
-					<label class="col-md-3 control-label">Images3</label>
+					<label class="col-md-3 control-label">Image 3</label>
 					<div class="col-md-7">
+						{% if modification is defined %}
+
+							{% if modification.image_3 is not empty %}
+								<div class="alert alert-info" role="alert">
+								<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
+								<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
+								</div>
+							{% endif %}
+						{% endif %}
 						<input type="file" class="dropify" name="image_3">
+						<input type="hidden" name="image_3-hidden"	
+						{% if modification is defined %}
+							 value="{{modification.image_3}}"
+						{% endif %}>
 					</div>
 				</div>
 				<div class="form-group">
@@ -115,6 +188,7 @@
 					</div>
 				</div>
 			</form>
+
 
 	</div>
 </div>

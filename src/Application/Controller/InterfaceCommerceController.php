@@ -39,18 +39,33 @@ class InterfaceCommerceController
 		]);
 	}
 
-  public function newAdAction(Application $app){
+  public function newAdAction(Application $app, $ID_product){
 
+
+    if($ID_product>0){
+
+      //appel de base pour afficher les données pour retrouver l'article a modifier
+      $modification = $app['idiorm.db']->for_table('products')
+      ->find_one($ID_product);
+
+    }else{
+
+      $modification ='';
+    }
 
     return $app['twig']->render('commerce/ajout_produit.html.twig', [
-        'categories' => $app['categories'],      
-            'error'  => [] ,
-            'errors' => []
+        'categories'      => $app['categories'],      
+            'error'       => [] ,
+            'errors'      => [],
+            'modification'=> $modification,
          ]);
   }
 
 
   public function newAdPostAction(Application $app, Request $request){
+
+
+
 
 //utilisation de la fonction de vérification dans Model\Vérifications
     $Verifications = new Verifications;
@@ -67,53 +82,118 @@ class InterfaceCommerceController
 
 
     if(empty($errors) && empty($error)){
-      //Connexion à la bdd
-    		$product = $app['idiorm.db']->for_table('products')->create();
+      
 
+        //SI c'est une modification d'article :
+        if($request->get('ID_product')!=null){
 
+          $modification = $app['idiorm.db']->for_table('products')
+          ->find_one($request->get('ID_product'))
+          ->set(array(
 
-    		//Affectation des valeurs
-    		$product->name 			   = $request->get('name');
-    		$product->brand    		 = $request->get('brand');
-    		$product->price 		   = $request->get('price');
-    		$product->description	 = $request->get('description');
-    		$product->image_1		   = $finalFileName1;
-    		$product->image_2		   = $finalFileName2;
-    		$product->image_3		   = $finalFileName3;
-        $product->ID_category  = $request->get('category');
-        $product->creation_date= strtotime('now');
+          'name'             => $request->get('name'),
+          'brand'            => $request->get('brand'),
+          'price'            => $request->get('price'),
+          'description'      => $request->get('description'),
+          'image_1'          => $finalFileName1,
+          'image_2'          => $finalFileName2,
+          'image_3'          => $finalFileName3,
+          'ID_category'      => $request->get('category'),
+          'shipping_charges' => $request->get('shipping_charges')
+            ));
 
-          //Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
-        if((float)$request->get('shipping_charges') == 0.0){
+            $modification->save();
 
-          $product->shipping_charges = 0.0;
+            $success = "Votre produit a bien été modifié";
 
         }else{
 
-    		  $product->shipping_charges  = $request->get('shipping_charges');
-      }
+          //Connexion à la bdd
+          $product = $app['idiorm.db']->for_table('products')->create();
 
-    		//ON persiste en bdd
-    		$product->save();
+      		//Affectation des valeurs
+      		$product->name 			       = $request->get('name');
+      		$product->brand    		     = $request->get('brand');
+      		$product->price 		       = $request->get('price');
+      		$product->description	     = $request->get('description');
+      		$product->image_1		       = $finalFileName1;
+      		$product->image_2		       = $finalFileName2;
+      		$product->image_3		       = $finalFileName3;
+          $product->ID_category      = $request->get('category');
+          $product->creation_date    = strtotime('now');
 
-        return $app['twig']->render('commerce/ajout_produit.html.twig',[
-                  'success'    => true,
-                  'errors'     => [] ,
-                  'error'      => [] ,
-                  'categories' => $app['categories']
-                ]);
+              //Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
+            if((float)$request->get('shipping_charges') == 0.0){
 
-    		}else{
+              $product->shipping_charges = 0.0;
 
-    			return $app['twig']->render('commerce/ajout_produit.html.twig',[
-    				'errors'    => $errors,
-    				'error'     => $error,
-            'categories'=> $app['categories']
-    			]);
+            }else{
 
-    		}
+        		  $product->shipping_charges  = $request->get('shipping_charges');
+            }
+
+        		//ON persiste en bdd
+        		$product->save();
+
+            $success = "Votre produit a bien été ajouté";
+          }
+            return $app['twig']->render('commerce/ajout_produit.html.twig',[
+                      'success'    => $success,
+                      'errors'     => [] ,
+                      'error'      => [] ,
+                      'categories' => $app['categories'],
+                      'modification'=> $modification,
+                    ]);
+
+      		}else{
+
+      			return $app['twig']->render('commerce/ajout_produit.html.twig',[
+      				'errors'    => $errors,
+      				'error'     => $error,
+              'categories'=> $app['categories']
+      			]);
+
+      		}
     	
-  	}
+  	 
+
+  }
+
+  public function listProducts(Application $app, $ID_user){
+
+    $products = $app['idiorm.db']->for_table('view_products')
+      ->where('ID_USER', )
+      ->find_result_set();
+
+    return $app['twig']->render('commerce/list_products.html.twig',[
+              'products' => $products
+    ]);
+
+  }
+
+  public function deleteProduct(Application $app, $ID_product, $token){
+
+    if($token == $app['session']->get('token')[0]){
+
+      $success =  'Uiiiiiiiiiiiiiiiiiii';
+      $app->redirect('/listProducts');
+
+    }else{
+      $success = 'nooooooooooooon';
+      $app->redirect('/listProducts');
+    }
+
+     /* $suppression = $app['idiorm.db']->for_table('products')
+      ->where('ID_product', $ID_product)
+      ->find_one();
+
+      $suppression->delete();
+
+      return $app['twig']->render('commerce/list_products.html.twig',[
+                'products' => $products,
+                'delete'   => $delete
+      ]);*/
+  }
 
 
 }
