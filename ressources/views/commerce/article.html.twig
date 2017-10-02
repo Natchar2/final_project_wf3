@@ -32,17 +32,24 @@
             <li>coordonnées GPS : {{ product.tracking_number }}</li>
         </ul>
 
-        <button class="add_product" ID-product="{{ product.ID_product }}">Ajouter au panier</button>
-        <button class="remove_one_product" ID-product="{{ product.ID_product }}">Retirer une unité</button>
-        <button class="remove_all_product" ID-product="{{ product.ID_product }}">Retirer du panier</button>
+        <div id="thepanier">
+            {% if app.session.get('panier')[product.ID_product] is defined %}
 
+                <button class="btn btn-danger remove_one_product" ID-product="{{ product.ID_product }}">-</button>&nbsp;&nbsp;
+                {{ app.session.get('panier')[product.ID_product]  }}&nbsp;&nbsp;
+                <button class="btn btn-success add_product" ID-product="{{ product.ID_product }}">+</button>&nbsp;&nbsp;
+                <button class="btn btn-danger remove_all_product" ID-product="{{ product.ID_product }}">Retirer du panier</button>
+            {% else %}
+                <button class="btn btn-success add_product" ID-product="{{ product.ID_product }}">Ajouter au panier</button>
+            {% endif %}  
+        </div>
 
         <div class="row">
             <div class="col-md-8 col-sm-12">
 
                 <div class="row">
                     <figure class="col-sm-12 col-md-8" style="height:350px;border:1px solid black;display:inline-block;text-align:center;">
-                        <img id="selectedpic" src="{{ asset('../assets/images/'~product.image_1) }}" alt="" style="width:auto;height:100%;" />   
+                        <img id="selectedpic" src="{{ asset('assets/images/'~product.image_1) }}" alt="" style="width:auto;height:100%;" />   
                     </figure>
                 </div>
 
@@ -53,21 +60,21 @@
 
                     {% if product.image_1 is not empty %}
 
-                        <img src="{{ asset('../assets/images/'~product.image_1) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('../assets/images/'~product.image_1) }}';"/>   
+                        <img src="{{ asset('assets/images/'~product.image_1) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('assets/images/'~product.image_1) }}';"/>   
 
                     {% endif %}
 
 
                     {% if product.image_2 is not empty %}
 
-                        <img src="{{ asset('../assets/images/'~product.image_2) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('../assets/images/'~product.image_2) }}';"/>   
+                        <img src="{{ asset('assets/images/'~product.image_2) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('assets/images/'~product.image_2) }}';"/>   
 
                     {% endif %}
 
 
                     {% if product.image_3 is not empty %}
 
-                        <img src="{{ asset('../assets/images/'~product.image_3) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('../assets/images/'~product.image_3) }}';"/>   
+                        <img src="{{ asset('assets/images/'~product.image_3) }}" alt="" style="width:80px;height:80px;margin:10px;border:1px solid black;display:inline-block;" onclick="getElementById('selectedpic').src='{{ asset('assets/images/'~product.image_3) }}';"/>   
 
                     {% endif %}
                 </div>
@@ -109,6 +116,12 @@
 
 
     {% block javascripts %}
+
         {{ parent() }}
+
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script src="{{ asset('js/paypalPay.js') }}"></script>
+        <script src="{{ asset('js/panier.js') }}"></script>
+
     {% endblock %}
 
