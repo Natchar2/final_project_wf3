@@ -28,9 +28,38 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('categorie');
 
 
-    	$controllers
-    		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-    		->bind('addItem');
+		$controllers
+		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+		->bind('addItem');
+
+
+		$controllers
+		->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
+		->bind('faq');
+
+		$controllers
+		->get('/about', 'Application\Controller\InterfaceCommerceController::aboutAction')
+		->bind('about');
+
+		$controllers
+		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
+		->bind('forumAjoutPost');
+
+		$controllers
+		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
+		->bind('forumIndex');
+
+		$controllers
+		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
+		->bind('forumPostDetail');
+
+		$controllers
+		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
+		->bind('item');
+
+		$controllers
+		->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
+		->bind('shop');
 
     	$controllers
     		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
@@ -64,6 +93,19 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
     		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
     		->assert('ID_product', '\d+')
 			->bind('deleteProduct');
+
+		$controllers
+		->get('/shoppingCard', 'Application\Controller\InterfaceCommerceController::shoppingCardAction')
+		->bind('shoppingCard');
+
+		$controllers
+		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
+		->bind('connexion');
+
+		$controllers
+		->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
+		->bind('inscription');
+
 
 		return $controllers;
 	}

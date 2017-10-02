@@ -1,0 +1,410 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {
+  padding-bottom: 40px;
+  color: #5a5a5a;
+}
+
+
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+
+header{
+  background-color: black;
+  background-size: 100px 10000px;
+  background-image: url('../../img/geo.png');
+}
+
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
+
+/* Flip around the padding for proper display in narrow viewports */
+.navbar-wrapper > .container {
+  padding-right: 0;
+  padding-left: 0;
+}
+.navbar-wrapper .navbar {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.navbar-wrapper .navbar .container {
+  width: auto;
+}
+
+.navbar-default {
+  background-color: black;
+  border-color: RGBA(51, 51, 51, 1.00);
+}
+
+.navbar-default .navbar-brand {
+  color: rgba(240,190,64,1);
+}
+
+.navbar-default .navbar-nav>li>a {
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a:hover{
+  color: rgba(240,190,64,1);
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+  color: white;
+  background-color: RGBA(51, 51, 51, 1.00);
+}
+
+.navbar-nav>li>.dropdown-menu {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+  background: black;
+  border-top: none;
+}
+
+.dropdown-menu{
+  background-color: transparent;
+}
+
+.dropdown-menu>li>a{
+  color: white;
+}
+
+.logo{
+  letter-spacing: 1px;
+  font-family: 'Monoton', cursive;
+}
+
+.jumbotron {
+  text-align: center;
+  background: none;
+  margin-bottom: 0;
+  margin: none;
+  min-width: 100px;
+}
+
+.jumbotron h1{
+  background-color: black;
+  color: rgba(240,190,64,1);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  letter-spacing: 3px;
+  font-size: 6rem;
+  font-family: 'Monoton', cursive;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+  height: 500px;
+  margin-bottom: 100px;
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+  z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+
+.carousel-inner{
+  border: 2px solid gold;
+}
+
+.carousel .item {
+  height: 500px;
+  background-color: #777;
+}
+.carousel-inner > .item > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  height: 500px;
+}
+
+.carousel-caption .btn {
+  background-color: black;
+  color: white;
+  border:  none;
+}
+
+
+/* NEWSLETTER */
+
+.newsletter{
+  text-align: center;
+  background-color: black;
+  background-size: 100px 10000px;
+  background-image: url('../../img/geo.png');
+  padding-top: 90px;
+  padding-bottom: 90px;
+}
+
+.newsletter h2{
+  color: white;
+  background-color: none;
+}
+
+.newsletter p{
+  color: white;
+}
+
+.newsletter a{
+  color: rgba(240,190,64,1);
+}
+
+.newsletter a :hover{
+  color: rgba(240,190,64,1);
+}
+
+.newsletter .btn-default {
+  color: white;
+  background-color: RGBA(51, 51, 51, 1.00);
+  border-color: RGBA(51, 51, 51, 1.00);
+}
+
+.input-group .form-control {
+  z-index: 2;
+  width: 200px;
+  margin-bottom: 0;
+}
+
+/* MARKETING CONTENT
+-------------------------------------------------- */
+
+/* Center align the text within the three columns below the carousel */
+
+.marketing{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.marketing .col-lg-4 {
+  margin-bottom: 20px;
+  margin-top: 40px;
+  text-align: center;
+}
+.marketing h2 {
+  font-weight: normal;
+}
+.marketing .col-lg-4 p {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.titleAnnonces{
+  padding: 40px 15px;
+  text-align: center;
+  font-size: 40px;
+}
+
+/* Featurettes
+------------------------- */
+
+.featurette-divider {
+  margin: 80px 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+
+/* FORUM
+-------------------------------------------------- */
+.container .forum{
+  padding: 40px;
+  background: black;
+}
+
+.tableau{
+  background-color: black !important;
+  border: solid 1px gold;
+  border-radius: 5px;
+}
+
+.forum h2{
+  font-size: 60px;
+  text-align: center;
+  padding: 50px;
+  color: RGBA(238, 181, 56, 1.00);
+}
+
+.forum h4{
+  font-size: 20px;
+  color: white;
+}
+
+.forum>a{
+  font-size: 20px;
+  color: white !important;
+}
+
+.forum >span{
+  color: gold;
+  background-color: white;
+  border-color: none;
+}
+
+.line{
+  background-color: white;
+  height: 1px;
+  margin: 25px;
+}
+
+.table{
+  background-color: black;
+  color: white
+}
+
+.divTableCell{
+  margin: 20px;
+}
+
+/* AGENDA
+-------------------------------------------------- */
+
+.agenda h2{
+  font-size: 60px;
+  text-align: center;
+  padding: 50px;
+  color: RGBA(51, 51, 51, 1.00);
+}
+
+/* PARTENAIRES
+-------------------------------------------------- */
+
+.partenaires{
+  background-color: black;
+  background-size: 100px 10000px;
+  background-image: url('../../img/geo.png');
+}
+
+.partenaires h2{
+  color: white;
+  font-size: 60px;
+}
+
+.partenaires p{
+  color: white;
+  font-size: 15px;
+}
+
+/* SOCIAL MEDIA
+-------------------------------------------------- */
+
+.social {
+  text-align: center;
+  background-color: black;
+}
+
+.social h2{
+  padding: 20px;
+}
+
+.reseaux{
+  margin: 40px;
+  margin-bottom: 20px;
+  background-color: black;
+  border-radius: 10px 10px;
+}
+
+.reseaux i{
+  letter-spacing: 20px;
+  color: rgba(240,190,64,1);
+  padding-bottom: 10px;
+}
+
+#triangle-code{
+ display : inline-block;
+ height : 0;
+ width : 0;
+ border-top : 150px solid RGBA(51, 51, 51, 1.00);
+ border-right : 150px solid transparent;
+}
+
+/* FOOTER
+-------------------------------------------------- */
+
+footer{
+  background-color: black;
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 10px;
+  border-style: 
+}
+
+footer h4{
+  color: rgba(240,190,64,1);
+}
+
+footer p{
+  color: white;
+}
+
+footer span{
+  color: white;
+}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 768px) {
+  /* Navbar positioning foo */
+  .navbar-wrapper {
+    margin-top: 20px;
+  }
+  .navbar-wrapper .container {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  .navbar-wrapper .navbar {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  /* The navbar becomes detached from the top, so we round the corners */
+  .navbar-wrapper .navbar {
+    border-radius: 4px;
+  }
+
+  /* Bump up size of carousel content */
+  .carousel-caption p {
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: 1.4;
+  }
+
+  .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+@media (min-width: 992px) {
+  .featurette-heading {
+    margin-top: 120px;
+  }
+}
+
+@media all and (max-device-width: 480px)
+
+{
+
+}
