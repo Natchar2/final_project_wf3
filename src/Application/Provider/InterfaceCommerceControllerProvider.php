@@ -32,14 +32,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 			->bind('addItem');
 
 		$controllers
-			->get('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdAction')
-			->bind('view_newAd');
-
-		$controllers
-			->post('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
-			->bind('newAd');
-
-		$controllers
 			->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
 			->bind('faq');
 
@@ -48,10 +40,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 			->bind('about');
 
 		$controllers
-			->get('/ajoutArticle', 'Application\Controller\InterfaceCommerceController::ajoutArticleAction')
-			->bind('ajoutArticle');
 
-		$controllers
 			->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
 			->bind('forumAjoutPost');
 
@@ -80,8 +69,37 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
     		->bind('removeAllItem');
 
     	$controllers
-    		->get('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdAction')
+    		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
+    		->assert('ID_product', '\d+')
+    		->value('ID_product', '0')
 			->bind('view_newAd');
+
+    	$controllers
+    		->post('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
+    		->assert('ID_product', '\d+')
+    		->value('ID_product', '0')
+			->bind('newAd');
+
+		$controllers
+    		->get('/contact', 'Application\Controller\GlobalController::contactAction')
+			->bind('contact_page');
+
+		$controllers
+    		->post('/contact', 'Application\Controller\GlobalController::contactPostAction')
+			->bind('contactPost');
+
+		$controllers
+			->get('/conditions_generales', 'Application\Controller\GlobalController::conditionsAction')
+			->bind('conditions_page');
+
+		$controllers
+    		->get('/produit/liste', 'Application\Controller\InterfaceCommerceController::listProducts')
+    		->bind('listProducts');
+
+    	$controllers
+    		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
+    		->assert('ID_product', '\d+')
+			->bind('deleteProduct');
 
 		$controllers
 			->get('/shoppingCard', 'Application\Controller\InterfaceCommerceController::shoppingCardAction')
@@ -94,6 +112,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		$controllers
 			->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
 			->bind('inscription');
+
 
 		return $controllers;
 	}
