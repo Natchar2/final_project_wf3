@@ -118,18 +118,6 @@ public function shopAction(Application $app)
 
 
 
-
-public function newAdAction(Application $app){
-
-
-  return $app['twig']->render('commerce/ajout_produit.html.twig', [
-    'categories' => $app['categories'],      
-    'error'  => [] ,
-    'errors' => []
-  ]);
-}
-
-
 public function newAdPostAction(Application $app, Request $request){
 
 
@@ -234,7 +222,7 @@ public function newAdPostAction(Application $app, Request $request){
   public function listProducts(Application $app, $ID_user){
 
     $products = $app['idiorm.db']->for_table('view_products')
-      ->where('ID_USER', )
+      ->where('ID_USER')
       ->find_result_set();
 
     return $app['twig']->render('commerce/list_products.html.twig',[
