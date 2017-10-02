@@ -27,9 +27,49 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 			->get('/categorie', 'Application\Controller\InterfaceCommerceController::categorieAction')
 			->bind('categorie');
 
-    	$controllers
-    		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-    		->bind('addItem');
+		$controllers
+			->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+			->bind('addItem');
+
+		$controllers
+			->get('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdAction')
+			->bind('view_newAd');
+
+		$controllers
+			->post('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
+			->bind('newAd');
+
+		$controllers
+			->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
+			->bind('faq');
+
+		$controllers
+			->get('/about', 'Application\Controller\InterfaceCommerceController::aboutAction')
+			->bind('about');
+
+		$controllers
+			->get('/ajoutArticle', 'Application\Controller\InterfaceCommerceController::ajoutArticleAction')
+			->bind('ajoutArticle');
+
+		$controllers
+			->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
+			->bind('forumAjoutPost');
+
+		$controllers
+			->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
+			->bind('forumIndex');
+
+		$controllers
+			->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
+			->bind('forumPostDetail');
+
+		$controllers
+			->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
+			->bind('item');
+
+		$controllers
+			->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
+			->bind('shop');
 
     	$controllers
     		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
@@ -43,9 +83,17 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
     		->get('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdAction')
 			->bind('view_newAd');
 
-    	$controllers
-    		->post('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
-			->bind('newAd');
+		$controllers
+			->get('/shoppingCard', 'Application\Controller\InterfaceCommerceController::shoppingCardAction')
+			->bind('shoppingCard');
+
+		$controllers
+			->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
+			->bind('connexion');
+
+		$controllers
+			->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
+			->bind('inscription');
 
 		return $controllers;
 	}
