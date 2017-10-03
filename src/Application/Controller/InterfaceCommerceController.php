@@ -302,104 +302,103 @@ class InterfaceCommerceController
 		]);
 	}
 
-
 	public function newAdPostAction(Application $app, Request $request){
 
 
-		//utilisation de la fonction de vérification dans Model\Vérifications
-		$Verifications = new Verifications;
+	    //utilisation de la fonction de vérification dans Model\Vérifications
+	    $Verifications = new Verifications;
 
-		$verifs =  $Verifications->VerificationNewAd($request, $app);
-
-
-		//Retour des variables de VerificationNewAd
-		$errors         = $verifs['errors'];
-		$error          = $verifs['error'];
-		$finalFileName1 = $verifs['finalFileName1'];
-		$finalFileName2 = $verifs['finalFileName2'];
-		$finalFileName3 = $verifs['finalFileName3'];
+	    $verifs =  $Verifications->VerificationNewAd($request, $app);
 
 
-		if(empty($errors) && empty($error))
-		{
+	    
+	     //Retour des variables de VerificationNewAd
+	    $errors         = $verifs['errors'];
+	    $error          = $verifs['error'];
+	    $finalFileName1 = $verifs['finalFileName1'];
+	    $finalFileName2 = $verifs['finalFileName2'];
+	    $finalFileName3 = $verifs['finalFileName3'];
+
+	    if(empty($errors) && empty($error))
+	    {
 			//SI c'est une modification d'article :
-			if($request->get('ID_product')!=null)
-			{
+	    	if($request->get('ID_product')!=null)
+	    	{
+	    		$modification = $app['idiorm.db']->for_table('products')
+	    		->find_one($request->get('ID_product'))
+	    		->set(array(
 
-				$modification = $app['idiorm.db']->for_table('products')
-				->find_one($request->get('ID_product'))
-				->set(array(
+	    			'name'             => $request->get('name'),
+	    			'brand'            => $request->get('brand'),
+	    			'price'            => $request->get('price'),
+	    			'description'      => $request->get('description'),
+	    			'image_1'          => $finalFileName1,
+	    			'image_2'          => $finalFileName2,
+	    			'image_3'          => $finalFileName3,
+	    			'ID_category'      => $request->get('category'),
+	    			'shipping_charges' => $request->get('shipping_charges')
+	    		));
 
-					'name'             => $request->get('name'),
-					'brand'            => $request->get('brand'),
-					'price'            => $request->get('price'),
-					'description'      => $request->get('description'),
-					'image_1'          => $finalFileName1,
-					'image_2'          => $finalFileName2,
-					'image_3'          => $finalFileName3,
-					'ID_category'      => $request->get('category'),
-					'shipping_charges' => $request->get('shipping_charges')
-				));
 
-				$modification->save();
 
-				$success = "Votre produit a bien été modifié";
-			}
-			else
-			{
+	    		$modification->save();
+
+	    		$success = "Votre produit a bien été modifié";
+	    	}
+	    	else
+	    	{
 
 				//Connexion à la bdd
-				$product = $app['idiorm.db']->for_table('products')->create();
+	    		$product = $app['idiorm.db']->for_table('products')->create();
 
 				//Affectation des valeurs
-				$product->name             = $request->get('name');
-				$product->brand            = $request->get('brand');
-				$product->price            = $request->get('price');
-				$product->description      = $request->get('description');
-				$product->image_1          = $finalFileName1;
-				$product->image_2          = $finalFileName2;
-				$product->image_3          = $finalFileName3;
-				$product->ID_category      = $request->get('category');
-				$product->creation_date    = strtotime('now');
+	    		$product->name             = $request->get('name');
+	    		$product->brand            = $request->get('brand');
+	    		$product->price            = $request->get('price');
+	    		$product->description      = $request->get('description');
+	    		$product->image_1          = $finalFileName1;
+	    		$product->image_2          = $finalFileName2;
+	    		$product->image_3          = $finalFileName3;
+	    		$product->ID_category      = $request->get('category');
+	    		$product->creation_date    = strtotime('now');
 
 				//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
-				if((float)$request->get('shipping_charges') == 0.0)
-				{
+	    		if((float)$request->get('shipping_charges') == 0.0)
+	    		{
 
-					$product->shipping_charges = 0.0;
+	    			$product->shipping_charges = 0.0;
 
-				}
-				else
-				{
+	    		}
+	    		else
+	    		{
 
-					$product->shipping_charges  = $request->get('shipping_charges');
-				}
+	    			$product->shipping_charges  = $request->get('shipping_charges');
+	    		}
 
 				//ON persiste en bdd
-				$product->save();
+	    		$product->save();
 
-				$success = "Votre produit a bien été ajouté";
-			}
-			
-			return $app['twig']->render('commerce/ajout_produit.html.twig',[
-				'success'    => $success,
-				'errors'     => [] ,
-				'error'      => [] ,
-				'categories' => $app['categories'],
-				'modification'=> $modification,
-			]);
+	    		$success = "Votre produit a bien été ajouté";
+	    	}
 
-		}
-		else
-		{
+	    	return $app['twig']->render('commerce/ajout_produit.html.twig',[
+	    		'success'    => $success,
+	    		'errors'     => [] ,
+	    		'error'      => [] ,
+	    		'categories' => $app['categories'],
+	    		'modification'=> $modification,
+	    	]);
+	    }
+	    else
+	    {
 
-			return $app['twig']->render('commerce/ajout_produit.html.twig',[
-				'errors'    => $errors,
-				'error'     => $error,
-				'categories'=> $app['categories']
-			]);
+	    	return $app['twig']->render('commerce/ajout_produit.html.twig',[
+	    		'errors'    => $errors,
+	    		'error'     => $error,
+	    		'categories'=> $app['categories']
+	    	]);
 
-		}
+	    }
 
 	}
 
@@ -433,16 +432,18 @@ class InterfaceCommerceController
 			$app->redirect('/listProducts');
 		}
 
-		/* $suppression = $app['idiorm.db']->for_table('products')
-		->where('ID_product', $ID_product)
-		->find_one();
+	/* $suppression = $app['idiorm.db']->for_table('products')
+	->where('ID_product', $ID_product)
+	->find_one();
 
-		$suppression->delete();
 
-		return $app['twig']->render('commerce/list_products.html.twig',[
-		'products' => $products,
-		'delete'   => $delete
-		]);*/
+	$suppression->delete();
+
+
+	return $app['twig']->render('commerce/list_products.html.twig',[
+	'products' => $products,
+	'delete'   => $delete
+	]);*/
 	}  
 }
 

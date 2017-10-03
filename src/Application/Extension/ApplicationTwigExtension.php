@@ -1,16 +1,41 @@
 <?php
-	namespace Application\Extension;
+namespace Application\Extension;
 
-	class ApplicationTwigExtension extends \Twig_Extension
+class ApplicationTwigExtension extends \Twig_Extension 
+{
+	public function getFilters()
 	{
-		public function get_filter()
-		{
-			return array(
-				new \Twig_Filter('name_filter', function($variable){
-					
-				}),
-			);
-		}
+		return array(
+			new \Twig_Filter('slug', function($text){
+				$strRetour=strip_tags($text);
+
+			    // replace non letter or digits by -
+				$text = preg_replace('~[^\pL\d]+~u', '-', $text);
+
+				// transliterate
+				$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+				// remove unwanted characters
+				$text = preg_replace('~[^-\w]+~', '', $text);
+
+				// trim
+				$text = trim($text, '-');
+
+				// remove duplicate -
+				$text = preg_replace('~-+~', '-', $text);
+
+				// lowercase
+				$text = strtolower($text);
+
+				if (empty($text)) {
+					return 'n-a';
+				}
+
+				return $text;
+
+			}), #fin twig_filter slug
+		);
 	}
-	
+}
+
 ?>

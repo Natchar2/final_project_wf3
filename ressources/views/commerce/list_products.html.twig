@@ -29,52 +29,54 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>{{products.ID_product}}</td>
-					</tr>
-					<tr>
-						<td>{{products.name}}</td>
-					</tr>
-					<tr>
-						<td>{{products.brand}}</td>
-					</tr>
-					<tr>
-						<td>{{products.category_name}}</td>
-					</tr>
-					<tr>
-						<td>{{products.sub_category}}</td>
-					</tr>
-					<tr>
-						<td>{{products.price}}</td>
-					</tr>
-					<tr>
-						<td>{{products.shipping_charges}}</td>
-					</tr>
-					<tr>
-						<td>{{products.description}}</td>
-					</tr>
-					<tr>
-						<td>{{products.image_1}}</td>
-					</tr>
-					<tr>
-						<td>{{products.image_2}}</td>
-					</tr>
-					<tr>
-						<td>{{products.image_3}}</td>
-					</tr>
-					<tr>
-						<td>{{products.creation_date}}</td>
-					</tr>
-					<tr>
-						<td>{{products.tracking_number}}</td>
-					</tr>
-					<tr>
-						<td>
-							<a href="{{ url('deleteProduct',{'ID_product' : products.ID_product,'token' :  app.session.get('token')} ) }}" onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger">Suppr.</a>
-							{# <input type="hidden" name="edit_id" value="{{products.ID_product}}">#}
-							<a href="{{ url('view_newAd',,{'ID_product' : products.ID_product}) }}" class="btn btn-warning">Modifier</a>
-						</td>
-					</tr>
+					{% for value in products %}
+						<tr>
+							<td>{{value.ID_product}}</td>
+						</tr>
+						<tr>
+							<td>{{value.name}}</td>
+						</tr>
+						<tr>
+							<td>{{value.brand}}</td>
+						</tr>
+						<tr>
+							<td>{{value.category_name}}</td>
+						</tr>
+						<tr>
+							<td>{{value.sub_category}}</td>
+						</tr>
+						<tr>
+							<td>{{value.price}}</td>
+						</tr>
+						<tr>
+							<td>{{value.shipping_charges}}</td>
+						</tr>
+						<tr>
+							<td>{{value.description}}</td>
+						</tr>
+						<tr>
+							<td>{{value.image_1}}</td>
+						</tr>
+						<tr>
+							<td>{{value.image_2}}</td>
+						</tr>
+						<tr>
+							<td>{{value.image_3}}</td>
+						</tr>
+						<tr>
+							<td>{{value.creation_date}}</td>
+						</tr>
+						<tr>
+							<td>{{value.tracking_number}}</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="{{ url('deleteProduct',{'ID_product' : products.ID_product,'token' :  app.session.get('token')} ) }}" onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger">Suppr.</a>
+								{# <input type="hidden" name="edit_id" value="{{products.ID_product}}">#}
+								<a href="{{ url('view_newAd',,{'ID_product' : products.ID_product}) }}" class="btn btn-warning">Modifier</a>
+							</td>
+						</tr>
+					{% endfor %}
 				</tbody>
 			</table>
 		{% elseif %}

@@ -28,19 +28,23 @@
 {% endblock %}
 
 {# -- HEADER BODY -- #}
-{% block header %}{% endblock %}
+{% block header %}	{{ render (controller('Application\\Controller\\InterfaceCommerceController::menu', { 'active':active } )) }}	{% endblock %}
 
-{# -- CONTENU BODY -- #}
-{% block body %}
-	{% block contenu %}{% endblock %}
-{% endblock %}
-
-{# -- FOOTER BODY -- #}
-{% block footer %}{% endblock %}
+	{# -- CONTENU BODY -- #}
+	{% block body %}
 
 
-{% block javascripts %}
-	{{ parent() }}
+		{% block contenu %}
+		{% endblock %}
+
+	{% endblock %}
+
+	{# -- FOOTER BODY -- #}
+	{% block footer %}{% endblock %}
+
+
+		{% block javascripts %}
+			{{ parent() }}
 	<!-- Bootstrap core JavaScript
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->

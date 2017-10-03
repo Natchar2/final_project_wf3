@@ -24,12 +24,3 @@
 	<button class="remove_one_product" ID-product="4">REMOVE 4</button>
 	<button class="remove_all_product" ID-product="4">REMOVE ALL 4</button>
 {% endblock %}
-
-{% block javascripts %}
-	{{ parent() }}
-
-	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
-	<script src="{{ asset("js/notify.min.js")}}"></script>
-	<script src="{{ asset('js/paypalPay.js') }}"></script>
-	<script src="{{ asset('js/panier.js') }}"></script>
-{% endblock %}

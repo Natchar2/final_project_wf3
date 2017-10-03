@@ -16,102 +16,129 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		});
 
 		$controllers
-			->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
-			->bind('accueil');
+		->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
+		->bind('accueil');
 
 		$controllers
-			->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
-			->bind('panier');
+		->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
+		->bind('panier');
+
 
 		$controllers
-			->get('/categorie', 'Application\Controller\InterfaceCommerceController::categorieAction')
-			->bind('categorie');
+		->get('/categorie/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
+		->assert('category_name','[^/]+')
+		->value('category_name','skate')
+		->assert('page','[0-9]+')	
+		->value('page','1')		
+		->bind('categorie_page');
 
 		$controllers
-			->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-			->bind('addItem');
+		->get('/{category_name}/{slugproduct}_{ID_product}.html','Application\Controller\InterfaceCommerceController::articleAction')
+		->assert('category_name','[^/]+')
+		->assert('ID_product','[0-9]+')
+
+		->bind('article');
+
 
 		$controllers
-			->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
-			->bind('faq');
+		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+		->bind('addItem');
 
 		$controllers
-			->get('/about', 'Application\Controller\InterfaceCommerceController::aboutAction')
-			->bind('about');
+		->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
+		->bind('faq');
+
+		$controllers
+		->get('/about', 'Application\Controller\InterfaceCommerceController::aboutAction')
+		->bind('about');
+
+
+		$controllers
+		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
+		->bind('removeOneItem');
+
+		$controllers
+		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
+		->bind('removeAllItem');
+
 
 		$controllers
 
-			->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
-			->bind('forumAjoutPost');
+		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
+		->bind('forumAjoutPost');
 
 		$controllers
-			->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
-			->bind('forumIndex');
+		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
+		->bind('forumIndex');
+
 
 		$controllers
-			->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
-			->bind('forumPostDetail');
+		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
+		->bind('forumPostDetail');
+
 
 		$controllers
-			->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
-			->bind('item');
+		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
+		->bind('item');
 
 		$controllers
-			->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
-			->bind('shop');
-
-    	$controllers
-    		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
-    		->bind('removeOneItem');
-
-    	$controllers
-    		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
-    		->bind('removeAllItem');
-
-    	$controllers
-    		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
-    		->assert('ID_product', '\d+')
-    		->value('ID_product', '0')
-			->bind('view_newAd');
-
-    	$controllers
-    		->post('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
-    		->assert('ID_product', '\d+')
-    		->value('ID_product', '0')
-			->bind('newAd');
+		->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
+		->bind('shop');
 
 		$controllers
-    		->get('/contact', 'Application\Controller\GlobalController::contactAction')
-			->bind('contact_page');
+		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
+		->bind('removeOneItem');
 
 		$controllers
-    		->post('/contact', 'Application\Controller\GlobalController::contactPostAction')
-			->bind('contactPost');
+		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
+		->bind('removeAllItem');
 
 		$controllers
-			->get('/conditions_generales', 'Application\Controller\GlobalController::conditionsAction')
-			->bind('conditions_page');
+		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
+		->assert('ID_product', '\d+')
+		->value('ID_product', '0')
+		->bind('view_newAd');
 
 		$controllers
-    		->get('/produit/liste', 'Application\Controller\InterfaceCommerceController::listProducts')
-    		->bind('listProducts');
-
-    	$controllers
-    		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
-    		->assert('ID_product', '\d+')
-			->bind('deleteProduct');
+		->post('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
+		->assert('ID_product', '\d+')
+		->value('ID_product', '0')
+		->bind('newAd');
 
 		$controllers
-			->get('/shoppingCard', 'Application\Controller\InterfaceCommerceController::shoppingCardAction')
-			->bind('shoppingCard');
+		->get('/contact', 'Application\Controller\GlobalController::contactAction')
+		->bind('contact_page');
 
 		$controllers
-			->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
-			->bind('connexion');
+		->post('/contact', 'Application\Controller\GlobalController::contactPostAction')
+		->bind('contactPost');
 
 		$controllers
-			->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
-			->bind('inscription');
+		->get('/conditions_generales', 'Application\Controller\GlobalController::conditionsAction')
+		->bind('conditions_page');
+
+		$controllers
+		->get('/produit/liste', 'Application\Controller\InterfaceCommerceController::listProducts')
+		->bind('listProducts');
+
+		$controllers
+		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
+		->assert('ID_product', '\d+')
+		->bind('deleteProduct');
+
+		$controllers
+		->get('/shoppingCard', 'Application\Controller\InterfaceCommerceController::shoppingCardAction')
+		->bind('shoppingCard');
+
+		$controllers
+		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
+		->bind('connexion');
+
+
+		$controllers
+		->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
+		->bind('inscription');
+
 
 
 		return $controllers;
