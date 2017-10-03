@@ -1,80 +1,96 @@
 <?php
-	# -- CONFIG APP
-	$app['debug'] = true;
 
-	$app['controllers']
-		->value('id', '1')
-		->assert('id', '\d+');
+
+use Application\Extension\ApplicationTwigExtension;
+
+	# -- CONFIG APP
+$app['debug'] = true;
+
+$app['controllers']
+->value('id', '1')
+->assert('id', '\d+');
 	#----------------------------------------------------------------------
 
 	# -- TWIG
-	$app->register(new Silex\Provider\TwigServiceProvider(), array(
-		'twig.path' => array(
-			RESSOURCES_ROOT . 'views',
-			RESSOURCES_ROOT . 'layout',
-		),
-	));
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+	'twig.path' => array(
+		RESSOURCES_ROOT . 'views',
+		RESSOURCES_ROOT . 'layout',
+	),
+));
 
-	$app->register(new Silex\Provider\HttpFragmentServiceProvider());
+$app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
-	$app->extend('twig', function($twig, $app){
-		$twig->addExtension(new \Application\Extension\ApplicationTwigExtension());
-		return $twig;
-	});
+$app->extend('twig', function($twig, $app){
+	$twig->addExtension(new ApplicationTwigExtension());
+	return $twig;
+});
+
+
+
+
 	#----------------------------------------------------------------------
 
 	# -- ASSET
-	$app->register(new Silex\Provider\AssetServiceProvider());
+$app->register(new Silex\Provider\AssetServiceProvider());
 	#----------------------------------------------------------------------
 
 	# -- SESSION
-	$app->register(new Silex\Provider\SessionServiceProvider());
+$app->register(new Silex\Provider\SessionServiceProvider());
+	#----------------------------------------------------------------------
 
-	if($app['session']->get('panier') == null)
-	{
-		$app['session']->set('panier', 0);
-	}
+	# -- SESSION
 
-	if($app['session']->get('total_price') == null)
-	{
-		$app['session']->set('total_price', 0);
-	}
+$app->register(new Silex\Provider\SessionServiceProvider());
 
-	if($app['session']->get('total_product') == null)
-	{
-		$app['session']->set('total_product', 0);
-	}
+if($app['session']->get('panier') == null)
+{
+	$app['session']->set('panier', 0);
+}
 
-	if($app['session']->get('total_product_by_id') == null)
-	{
-		$app['session']->set('total_product_by_id', array());
-	}
+if($app['session']->get('total_price') == null)
+{
+	$app['session']->set('total_price', 0);
+}
 
-	if($app['session']->get('token') == null)
-	{
-		$app['session']->set('token', null);
-	}
+if($app['session']->get('total_product') == null)
+{
+	$app['session']->set('total_product', 0);
+}
+
+if($app['session']->get('total_product_by_id') == null)
+{
+	$app['session']->set('total_product_by_id', array());
+}
+
+if($app['session']->get('token') == null)
+{
+	$app['session']->set('token', null);
+}
+
 	#----------------------------------------------------------------------
 
 	# -- SWIFT MAILER
-	$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
-		'swiftmailer.use_spool' => false,
-		'swiftmailer.options' => array(
-			'host' => 'localhost',
-			'port' => 25,
-			'username' => 'root',
-			'password' => '',
-		),
-	));
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
+	'swiftmailer.use_spool' => false,
+	'swiftmailer.options' => array(
+		'host' => 'localhost',
+		'port' => 25,
+		'username' => 'root',
+		'password' => '',
+	),
+));
 	#----------------------------------------------------------------------
 
 	# -- CSRF
-	$app->register(new Silex\Provider\CsrfServiceProvider());
+$app->register(new Silex\Provider\CsrfServiceProvider());
 	#----------------------------------------------------------------------
 
 	# -- PAYPAL
+
 	// $apiContext = new \PayPal\Rest\ApiContext(
 	/*$apiContext = new \PayPal\Rest\ApiContext(
+
         new \PayPal\Auth\OAuthTokenCredential(
             'AbB8aZ2BYsMvDfrV9MFhOxkhnwgaUawUSka2QPVwNfOrU5CU7h6ubG9BRiSx3UQ8233Ip-XgxYGhvnkg',
             'EHdrwuNnzTp98c6UpIaVpAYD00wBKiUNXNQXmWHUXDrKQJWSIi-Jx4Kz13h7gWJsjmuLWrKrKm7yOfqV'
@@ -107,7 +123,7 @@
 	$app->register(new Silex\Provider\LocaleServiceProvider());
 	$app->register(new Silex\Provider\ValidatorServiceProvider());
 	$app->register(new Silex\Provider\TranslationServiceProvider(), array(
-	    'translator.domains' => array(),
+		'translator.domains' => array(),
 	));
 	#----------------------------------------------------------------------
 
@@ -126,4 +142,4 @@
 	require_once 'routes.php';
 
 	return $app;
-?>
+	?>
