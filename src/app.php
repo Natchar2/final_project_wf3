@@ -65,7 +65,7 @@ if($app['session']->get('total_product_by_id') == null)
 
 if($app['session']->get('token') == null)
 {
-	$app['session']->set('token', null);
+	$app['session']->set('token', 'azerty');
 }
 
 	#----------------------------------------------------------------------

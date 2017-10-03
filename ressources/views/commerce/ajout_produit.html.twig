@@ -5,28 +5,16 @@
 	{{ parent() }}
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
 	<link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet">
+	<link rel="stylesheet" href="{{asset('css/ajoutArticle.css')}}">
 
 {% endblock %}
 
 
-{#{% block header %}
+{% block header %}
 	{% include 'commerce/menu.html.twig' %}
-{% endblock %}#}
+{% endblock %}
 
 {% block contenu %}
-	<div class="container">
-		<div class="row">
-			<div class="col-md-3">
-				<h4 class="lead">Street Connect</h4>
-				<div class="list-group">
-					<a href="#" class="list-group-item">Skate</a>
-					<a href="#" class="list-group-item">Bmx</a>
-					<a href="#" class="list-group-item">Parkour</a>
-					<a href="#" class="list-group-item">Roller</a>
-				</div>
-			</div>
-		</div>
-	</div>
 	<div class="col-md-9">
 		<div class="row">
 			{% if error is not empty %}
@@ -67,18 +55,18 @@
 
 					<!-- nom et marque -->
 					<div class="form-group">
-						<label class="col-md-3 control-label">Nom ou modèle</label>
-						<div class="col-md-7">
-							<input class="form-control" type="text" name="name" required 
+						<label class="col-md-4 control-label">Nom ou modèle</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="name" required 
 							{% if modification is not empty %}
 								value="{{modification.name}}"
 							{% endif %}>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-3 control-label">Marque</label>
-						<div class="col-md-7">
-							<input class="form-control" type="text" name="brand" required
+						<label class="col-md-4 control-label">Marque</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="brand" required
 							{% if modification is not empty %}
 								value="{{modification.brand}}"
 							{% endif %}>
@@ -87,10 +75,10 @@
 
 					<!-- Categorie -->
 					<div class="form-group">
-						<label class="col-md-3 control-label">
+						<label class="col-md-4 control-label">
 							Catégorie
 						</label>
-						<div class="col-md-7">
+						<div class="col-md-4">
 							<select name="category" class="form-control">
 								{% for value in categories %}
 
@@ -106,9 +94,9 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-3 control-label">Sous-catégorie</label>
-						<div class="col-md-7">
-							<input class="form-control" type="text" name="sub_category" 
+						<label class="col-md-4 control-label">Sous-catégorie</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="sub_category" 
 							{% if modification is not empty %}
 								value="{{modification.sub_category}}"
 							{% endif %}
@@ -118,9 +106,9 @@
 
 					<!-- prix et frais de livraisons-->
 					<div class="form-group">
-						<label class="col-md-3 control-label">Prix</label>
-						<div class="col-md-7">
-							<input class="form-control" type="text" name="price" required 
+						<label class="col-md-4 control-label">Prix</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="price" required 
 							{% if modification is not empty %}
 								value="{{modification.price}}"
 							{% endif %}
@@ -128,9 +116,9 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-3 control-label">Frais de livraison</label>
-						<div class="col-md-7">
-							<input class="form-control" type="text" name="shipping_charges" 
+						<label class="col-md-4 control-label">Frais de livraison</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="shipping_charges" 
 							{% if modification is not empty %}
 								value="{{modification.shipping_charges}}"
 							{% endif %}
@@ -140,8 +128,8 @@
 
 					<!-- Description -->
 					<div class="form-group">
-						<label class="col-md-3 control-label">Description</label>
-						<div class="col-md-7">
+						<label class="col-md-4 control-label">Description</label>
+						<div class="col-md-4">
 							<textarea name="description" class="form-control" placeholder="Saisissez une description du produit"						
 							>
 							{% if modification is not empty %}
@@ -153,8 +141,8 @@
 
 				<!-- Images -->
 				<div class="form-group">
-					<label class="col-md-3 control-label">Image</label>
-					<div class="col-md-7">
+					<label class="col-md-4 control-label">Image</label>
+					<div class="col-md-4">
 						{% if modification is not empty %}
 							{% if modification.image_1 is not empty %}
 								<div class="alert alert-info" role="alert">
@@ -169,8 +157,8 @@
 							value="{{modification.image_1}}"
 						{% endif %}>
 					</div>
-					<label class="col-md-3 control-label">Image 2</label>
-					<div class="col-md-7">
+					<label class="col-md-4 control-label">Image 2</label>
+					<div class="col-md-4">
 						{% if modification is not empty %}
 							{% if modification.image_2 is not empty %}
 								<div class="alert alert-info" role="alert">
@@ -185,8 +173,8 @@
 							value="{{modification.image_2}}"
 						{% endif %}>
 					</div>
-					<label class="col-md-3 control-label">Image 3</label>
-					<div class="col-md-7">
+					<label class="col-md-4 control-label">Image 3</label>
+					<div class="col-md-4">
 						{% if modification is not empty %}
 
 							{% if modification.image_3 is not empty %}
@@ -204,7 +192,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-md-7 col-md-push-3">
+					<div class="col-md-4">
 						<input  type="submit" class="btn btn-primary" value="Ajouter">
 					</div>
 				</div>
@@ -219,9 +207,9 @@
 
 {% endblock %}
 
-{#{% block footer %}
+{% block footer %}
 	{% include 'commerce/footer.html.twig' %}
-{% endblock %}#}
+{% endblock %}
 
 {% block javascripts %}
 	<script src="{{asset('dist/js/bootstrap.min.js')}}"></script>

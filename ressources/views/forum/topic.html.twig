@@ -1,0 +1,104 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/forumAjoutPost.css')}}">
+{% endblock %}
+
+{% block header %}
+	{% include 'commerce/menu.html.twig' %}
+{% endblock %}
+
+{% block contenu %}
+
+	<!-- Include menu -->
+
+
+	<!-- Page Content -->
+	<div class="container">
+		<div class="row">
+	
+			<!-- Blog Entries Column -->
+			<div class="col-md-8">
+				<h1 class="my-4">Forum</h1>
+				<!-- Blog Post -->
+				<div class="card mb-4">
+					<div class="card-body">
+						<h2 class="card-title">Titre post</h2>
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse obcaecati, totam aspernatur amet at excepturi. Nemo nihil tempora porro, distinctio atque dolores aliquid, quo doloribus, illo velit amet. Magni, dignissimos! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus sed dolore, delectus soluta aspernatur quisquam voluptatem dolores ullam magnam facilis alias. Quasi sequi, laudantium iure quas impedit magni harum assumenda! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio quis, quibusdam rerum iure veritatis eius dolorem hic debitis reprehenderit reiciendis nulla, dicta, adipisci fugiat quia quas tenetur. Sint, obcaecati, officiis! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur error laborum, inventore aliquam consequatur atque tempora eaque omnis nostrum accusamus beatae excepturi expedita consectetur aperiam, mollitia voluptatibus, vel consequuntur corporis.
+						</p>
+						<span class="input-group-btn">
+							<button class="btn btn-primary" type="button">Revenir au forum</button>
+						</span>
+					</div>
+				</div>
+			</div>
+
+				<!-- Blog Post -->
+				<div class="card mb-4">
+					<div class="card-body">
+						<h2 class="card-title">Ajoutez un commentaire</h2>
+						<p class="card-text">
+							<form action="" method="POST" class="form-horizontal itemForm">
+								<fieldset>
+									<!-- Text input-->
+									<!-- <div class="form-group">
+										<label class="col-md-4 control-label" for="textinput">Sujet</label>  
+										<div class="col-md-4">
+											<input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md">
+										</div>
+									</div> -->
+
+									<!-- champ caché -->
+									<input type="hidden" name="ID_topic">
+									<!-- Textarea -->
+									<div class="form-group">
+										<label class="col-md-4 control-label" for="text">Texte</label>
+										<div class="col-md-4">                     
+											<textarea class="form-control" id="text" name="content"></textarea>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</p>
+						<a href="#" type="submit" class="btn btn-success">Poster</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- Sidebar Widgets Column -->
+			<div class="col-md-4">
+				<div class="card my-4">
+					<h5 class="card-header">Profil</h5>
+					<div class="card-body">
+						<div class="input-group">
+							<div class="text-center mb-4">
+								<img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+								<br>
+								<h4>User Name</h4>
+								<p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
+								<span>
+									<button class="btn btn-success" type="button">Profil</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Side Widget -->
+				<div class="card my-4">
+					<h5 class="card-header">Publicité</h5>
+					<div class="card-body">
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}

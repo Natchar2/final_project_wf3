@@ -17,13 +17,20 @@ $app->register(new \Idiorm\Silex\Provider\IdiormServiceProvider(), array(
 		),
 	),
 ));
+
+#----------------------------------------------------------------------
+
+$app['categories'] = function() use($app){
+
+		$categories = $app['idiorm.db']->for_table('category')
+		->find_result_set();
+
+	return $categories;
+
+	}
 	#----------------------------------------------------------------------
 
 
-
-# permet le rendu d'un controleur dans la vue 
-# https://silex.symfony.com/doc/2.0/providers/twig.html#rendering-a-controller
-$app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
 
 
