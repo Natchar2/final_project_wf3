@@ -377,14 +377,17 @@ class InterfaceCommerceController
       }
 
 
-    public function listProducts(Application $app, $ID_user){
+    public function listProducts(Application $app, $ID_user=1){
+
+
 
       $products = $app['idiorm.db']->for_table('view_products')
-        ->where('ID_USER')
+        ->where('ID_user',1)
         ->find_result_set();
 
       return $app['twig']->render('commerce/list_products.html.twig',[
-                'products' => $products
+                'products' => $products,
+
       ]);
 
     }

@@ -3,7 +3,7 @@
 {% block stylesheets %}
 	{{ parent() }}
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
-	 <link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet">
 
 {% endblock %}
 
@@ -14,28 +14,38 @@
 {% block contenu %}
 	<div class="container">
 		<div class="row">
-			<div class="col-xs-6 col-xs-push-3">
-				<h2 class="text-center">Vendre un objet</h2>
+			<div class="col-md-3">
+				<h4 class="lead">Street Connect</h4>
+				<div class="list-group">
+					<a href="#" class="list-group-item">Skate</a>
+					<a href="#" class="list-group-item">Bmx</a>
+					<a href="#" class="list-group-item">Parkour</a>
+					<a href="#" class="list-group-item">Roller</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div class="row">
+			{% if error is not empty %}
+				<div class="alert alert-danger" role=alert>
+					{% for value in error %}
 
-				{% if error is not empty %}
-					<div class="alert alert-danger" role=alert>
-						{% for value in error %}
-							
-							<p>{{value}}</p><br>
-							
-						{% endfor %}
-					</div><br>
-				{% endif %}
+						<p>{{value}}</p><br>
 
-				{% if  errors is not empty %}
-					<div class="alert alert-danger" role=alert>
-						{% for value in errors %}
-							
-							<p>{{value}}</p><br>
-							
-						{% endfor %}
-					</div><br>
-				{% endif %}
+					{% endfor %}
+				</div><br>
+			{% endif %}
+
+			{% if  errors is not empty %}
+				<div class="alert alert-danger" role=alert>
+					{% for value in errors %}
+
+						<p>{{value}}</p><br>
+
+					{% endfor %}
+				</div><br>
+			{% endif %}
 
 
 			{% if success is defined %}
@@ -44,14 +54,14 @@
 				</div><br>
 			{% endif %}
 
-
-				<form action=""  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
-					
+			<form action=""  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
+				<fieldset>
+					<legend>Vendre un objet</legend>
 					<!-- champ caché pour l'id-->
 					<input type="hidden" name="ID_product"	
 					{% if modification is not empty %}
 						{{dump(modification) }}
-						 value="{{modification.ID_product}}"
+						value="{{modification.ID_product}}"
 					{% endif %}>
 
 					<!-- nom et marque -->
@@ -69,7 +79,7 @@
 						<div class="col-md-7">
 							<input class="form-control" type="text" name="brand" required
 							{% if modification is not empty %}
-							 	value="{{modification.brand}}"
+								value="{{modification.brand}}"
 							{% endif %}>
 						</div>
 					</div>
@@ -89,7 +99,7 @@
 											{{' selected '}}
 										{% endif %}
 									{% endif %}
-										>{{value.category_name}}</option>
+									>{{value.category_name}}</option>
 								{% endfor %}
 							</select>
 						</div>
@@ -136,75 +146,74 @@
 							{% if modification is not empty %}
 								{{modification.description}}
 							{% endif %}
-							</textarea>
-						</div>
+						</textarea>
 					</div>
+				</div>
 
-					<!-- Images -->
-					<div class="form-group">
-						<label class="col-md-3 control-label">Image</label>
-						<div class="col-md-7">
-							{% if modification is not empty %}
-								{% if modification.image_1 is not empty %}
-									<div class="alert alert-info" role="alert">
+				<!-- Images -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Image</label>
+					<div class="col-md-7">
+						{% if modification is not empty %}
+							{% if modification.image_1 is not empty %}
+								<div class="alert alert-info" role="alert">
 									<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
 									<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>								
-									</div>
-								{% endif %}
+								</div>
 							{% endif %}
-							<input  type="file" class="dropify" name="image_1">
-							<input type="hidden" name="image_1-hidden"	
-							{% if modification is not empty %}
-								 value="{{modification.image_1}}"
-							{% endif %}>
-						</div>
-						<label class="col-md-3 control-label">Image 2</label>
-						<div class="col-md-7">
-							{% if modification is not empty %}
-								{% if modification.image_2 is not empty %}
-									<div class="alert alert-info" role="alert">
+						{% endif %}
+						<input  type="file" class="dropify" name="image_1">
+						<input type="hidden" name="image_1-hidden"	
+						{% if modification is not empty %}
+							value="{{modification.image_1}}"
+						{% endif %}>
+					</div>
+					<label class="col-md-3 control-label">Image 2</label>
+					<div class="col-md-7">
+						{% if modification is not empty %}
+							{% if modification.image_2 is not empty %}
+								<div class="alert alert-info" role="alert">
 									<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
 									<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
-									</div>
-								{% endif %}
+								</div>
 							{% endif %}
-							<input type="file" class="dropify" name="image_2">
-							<input type="hidden" name="image_2-hidden"	
-							{% if modification is not empty %}
-								 value="{{modification.image_2}}"
-							{% endif %}>
-						</div>
-						<label class="col-md-3 control-label">Image 3</label>
-						<div class="col-md-7">
-							{% if modification is not empty %}
+						{% endif %}
+						<input type="file" class="dropify" name="image_2">
+						<input type="hidden" name="image_2-hidden"	
+						{% if modification is not empty %}
+							value="{{modification.image_2}}"
+						{% endif %}>
+					</div>
+					<label class="col-md-3 control-label">Image 3</label>
+					<div class="col-md-7">
+						{% if modification is not empty %}
 
-								{% if modification.image_3 is not empty %}
-									<div class="alert alert-info" role="alert">
+							{% if modification.image_3 is not empty %}
+								<div class="alert alert-info" role="alert">
 									<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
 									<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
-									</div>
-								{% endif %}
+								</div>
 							{% endif %}
-							<input type="file" class="dropify" name="image_3">
-							<input type="hidden" name="image_3-hidden"	
-							{% if modification is not empty %}
-								 value="{{modification.image_3}}"
-							{% endif %}>
-						</div>
+						{% endif %}
+						<input type="file" class="dropify" name="image_3">
+						<input type="hidden" name="image_3-hidden"	
+						{% if modification is not empty %}
+							value="{{modification.image_3}}"
+						{% endif %}>
 					</div>
-					<div class="form-group">
-						<div class="col-md-7 col-md-push-3">
-							<input  type="submit" class="btn btn-primary" value="Ajouter">
-						</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-7 col-md-push-3">
+						<input  type="submit" class="btn btn-primary" value="Ajouter">
 					</div>
-				</form>
+				</div>
+			</fieldset>
+		</form>
 
 
-
-
-			</div>
-		</div>
 	</div>
+</div>
+
 
 {% endblock %}
 
@@ -213,7 +222,7 @@
 {% endblock %}#}
 
 {% block javascripts %}
-      <script src="{{asset('dist/js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('dist/js/bootstrap.min.js')}}"></script>
 	{{parent()}}
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
