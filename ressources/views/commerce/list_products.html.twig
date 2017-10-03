@@ -1,0 +1,88 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block contenu %}
+	<div class="row">
+		{% if delete is defined %}
+			<div class="alert alert-danger" role=alert>
+				<p>Vous n'avez pas encore de produits à afficher{{ success }}</p>
+			</div>	
+		{% endif %}
+
+		{% if products is defined %}
+			<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
+				<thead>
+					<tr>
+						<th>Numéro du produit</th>
+						<th>Nom ou Modèle</th>
+						<th>Marque</th>
+						<th>Catégorie</th>
+						<th>Sous-Catégorie</th>
+						<th>Prix</th>
+						<th>Frais de livraisons</th>
+						<th>Description</th>
+						<th>Image 1</th>
+						<th>Image 2</th>
+						<th>Image 3</th>
+						<th>Date de création</th>
+						<th>Numéro de colis</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for value in products %}
+						<tr>
+							<td>{{value.ID_product}}</td>
+						</tr>
+						<tr>
+							<td>{{value.name}}</td>
+						</tr>
+						<tr>
+							<td>{{value.brand}}</td>
+						</tr>
+						<tr>
+							<td>{{value.category_name}}</td>
+						</tr>
+						<tr>
+							<td>{{value.sub_category}}</td>
+						</tr>
+						<tr>
+							<td>{{value.price}}</td>
+						</tr>
+						<tr>
+							<td>{{value.shipping_charges}}</td>
+						</tr>
+						<tr>
+							<td>{{value.description}}</td>
+						</tr>
+						<tr>
+							<td>{{value.image_1}}</td>
+						</tr>
+						<tr>
+							<td>{{value.image_2}}</td>
+						</tr>
+						<tr>
+							<td>{{value.image_3}}</td>
+						</tr>
+						<tr>
+							<td>{{value.creation_date}}</td>
+						</tr>
+						<tr>
+							<td>{{value.tracking_number}}</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="{{ url('deleteProduct',{'ID_product' : products.ID_product,'token' :  app.session.get('token')} ) }}" onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger">Suppr.</a>
+								{# <input type="hidden" name="edit_id" value="{{products.ID_product}}">#}
+								<a href="{{ url('view_newAd',,{'ID_product' : products.ID_product}) }}" class="btn btn-warning">Modifier</a>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% elseif %}
+			<div class="alert alert-waring" role=alert>
+				<p>Vous n'avez pas encore de produits à afficher</p>
+			</div>		
+		{% endif %}
+	</div>
+{% endblock %}

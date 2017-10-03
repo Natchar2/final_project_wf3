@@ -1,6 +1,7 @@
 {% extends 'defaultLayout.html.twig' %}
 
 
+
 {% block stylesheets %}
 	{{ parent() }}
 	<link rel="stylesheet" href="cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
@@ -23,11 +24,14 @@
 
 				{{ iTotalPanier ~ ' éléments' }}
 				<br><br>
+				
 				<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
 				<div id="paypal-button"></div>
 
-				<h1>total price: <span class="get_total_price">{% if app.session.get('total_price') is defined %} {{ app.session.get('total_price') }} EUR {% else %} 0 EUR {% endif %}</span></h1>
-
+				<h1><div> <span class="total_price">{{ app.session.get('total_price') }}</span> <span>EUR</span> </div></h1>
+				<h1><div> <span class="total_product"> {{ app.session.get('total_product') }} </span><span> produits</span> </div></h1>
+				<h1><div> <span class="total_by_id" ID-product="1"> {% if app.session.get('total_product_by_id')["1"] is defined %} {{ app.session.get('total_product_by_id')["1"] }} {% else %} 0{% endif %} </span><span> ID: 1</span> </div></h1>
+				<h1><div> <span class="total_by_id" ID-product="2"> {% if app.session.get('total_product_by_id')["2"] is defined %} {{ app.session.get('total_product_by_id')["2"] }} {% else %} 0{% endif %} </span><span> ID: 2</span> </div></h1>
 
 				<button class="add_product" ID-product="1">ADD</button>
 				<button class="remove_one_product" ID-product="1">REMOVE 1</button>
@@ -35,6 +39,8 @@
 				<button class="remove_one_product" ID-product="2">REMOVE 2</button>
 				<button class="remove_all_product" ID-product="2">REMOVE ALL 2</button>
 				<button class="add_product" ID-product="2">ADD</button>
+
+
 
 				<br><br>
 
@@ -119,5 +125,5 @@
 
 				</script>
 
-
 			{% endblock %}
+

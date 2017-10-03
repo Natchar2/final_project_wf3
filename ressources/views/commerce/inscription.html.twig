@@ -1,0 +1,133 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/about.css')}}">
+{% endblock %}
+
+{% block header %}
+	{% include 'commerce/menu.html.twig' %}
+{% endblock %}
+
+{% block contenu %}
+	<div class="row">
+		<div class="col-xs-6 col-xs-push-3">
+			<h2 class="texte-center">Inscription</h2>
+
+			{% if  errors is defined %}
+				{% if  errors is not empty %}
+					<div class="alert alert-danger" role=alert>
+						{% for value in errors %}
+							<p>{{value}}</p><br>
+						{% endfor %}
+					</div><br>
+				{% endif %}
+			{% endif %}
+
+			{% if success is defined %}
+				<div class="alert alert-success" role=alert>
+					<p>Inscription validée</p>
+				</div><br>
+			{% endif %}
+
+			<form class="form-horizontal" action="" method="POST">
+				<!-- Nom -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Nom</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control" name="name" required>
+					</div>
+				</div>
+
+				<!-- Prénom -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Prénom</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control" name="surname" required>
+					</div>
+				</div>
+
+				<!-- Pseudo -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Pseudo</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control" name="pseudo" required>
+					</div>
+				</div>
+
+				<!-- Adresse -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Rue</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control" name="street" required>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Code Postal</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control" name="zip_code" required>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-md-3 control-label">Ville</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control" name="city" required>
+					</div>
+				</div>
+
+				<!-- Email -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Email</label>
+					<div class="col-md-7">
+						<input type="email" class="form-control" name="mail" required>
+					</div>
+				</div>
+
+				<!-- Telephone -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Numéro de télephone</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control" name="phone" required>
+					</div>
+				</div>
+
+				<!-- Nom de la société -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Nom de la société</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control" name="society_name" required>
+					</div>
+				</div>
+
+				<!-- Password -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Mot de passe</label>
+					<div class="col-md-7">
+						<input type="password" class="form-control" name="password" required>
+					</div>
+				</div>
+
+				<!-- Confirm-Password -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Confirmez votre mot de passe</label>
+					<div class="col-md-7">
+						<input type="password" class="form-control" name="password2" required>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-md-7 col-md-push-3">
+						<input  type="submit" class="btn btn-primary" value="S'inscrire">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{asset('css/about.css')}}">
+{% endblock %}
+
+{% block header %}
+	{% include 'commerce/menu.html.twig' %}
+{% endblock %}
+
+{% block contenu %}
+	<!-- include menu -->
+	<div class="container-fluid aboutus">
+		<div class="starter-template">
+			<h1>Qui sommes-nous ?</h1>
+			<br>
+			<p class="lead">Street Connect est une grande communauté de passionnés de sports de rue.
+				<br>
+				Skate, Roller, Parkour et Bmx, rejoins-nous dès aujourd'hui pour trouver des pièces uniques ou donner une seconde vie à tes vêtements et accessoires.
+				<br>
+				Crée un compte et commence l'aventure !</p>
+			</div>
+		</div>
+
+		<br>
+
+		<div class="container-fluid marketing">
+			<h2 class="titleAnnonces">Comment ça marche ?</h2>
+			<!-- Three columns of text below the carousel -->
+			<div class="col-lg-4">
+				<i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
+				<h3>Vendre</h3>
+				<p>Quelques photos, une bonne description et le prix de ton choix, c'est tout ce que tu as à faire pour mettre en ligne ton produit. Lorsque tu prépares une commande, ajoute une touche personnelle, un petit mot pour accompagner la vente.</p>
+				<p><a class="btn btn-default" href="#" role="button">C'est parti &raquo;</a></p>
+			</div><!-- /.col-lg-4 -->
+
+			<div class="col-lg-4">
+				<i class="fa fa-shopping-cart fa-4x" aria-hidden="true"></i>
+				<h3>Acheter</h3>
+				<p>Moins chère qu'en magasin, des millions d'articles à acquérir sur Street Connect ! Achète en toute sérénité sur notre plateforme. Si l'article n'est pas livré ou s'il ne correspond pas à la description, nous te remboursons.</p>
+				<p><a class="btn btn-default" href="#" role="button">C'est parti &raquo;</a></p>
+			</div><!-- /.col-lg-4 -->
+
+			<div class="col-lg-4">
+				<i class="fa fa-user-circle-o fa-4x" aria-hidden="true"></i>
+				<h3>Contribuez</h3>
+				<p>Rejoignez la communauté et échangez dès maintenant sur notre réseau social spécialisé dans les sports de rue. Tenez vous au courant des prochains évènements dans votre région</p>
+				<p><a class="btn btn-default" href="#" role="button">C'est parti &raquo;</a></p>
+			</div><!-- /.col-lg-4 -->
+		</div>
+
+		<br>
+
+		<div class="container-fluid marketing">
+			<h2 class="titleAnnonces">Notre mission</h2>
+			<h3 class="mission">Faire de la seconde main le premier reflexe dans le monde</h3>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="container-fluid average">
+		<h2 class="titleAnnonces">Street Connect en quelques chiffres</h2>
+		<!-- Three columns of text below the carousel -->
+		<div class="col-lg-3">
+			<i class="fa fa-users fa-4x" aria-hidden="true"></i>
+			<br>
+			<h4>740 membres</h4>
+		</div>
+
+		<div class="col-lg-3">
+			<i class="fa fa-handshake-o fa-4x" aria-hidden="true"></i>
+			<br>
+			<h4>400 transactions réalisés</h4>
+		</div>
+
+		<div class="col-lg-3">
+			<i class="fa fa-recycle fa-4x" aria-hidden="true"></i>
+			<br>
+			<h4>200 produits recyclés</h4>
+		</div>
+
+		<div class="col-lg-3">
+			<i class="fa fa-comments-o fa-4x" aria-hidden="true"></i>
+			<br>
+			<h4>150 topics sur le forum</h4>
+		</div>
+	</div>
+
+	<br>
+
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}

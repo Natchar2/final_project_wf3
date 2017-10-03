@@ -40,7 +40,34 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 	#----------------------------------------------------------------------
 
 	# -- SESSION
+
 $app->register(new Silex\Provider\SessionServiceProvider());
+
+if($app['session']->get('panier') == null)
+{
+	$app['session']->set('panier', 0);
+}
+
+if($app['session']->get('total_price') == null)
+{
+	$app['session']->set('total_price', 0);
+}
+
+if($app['session']->get('total_product') == null)
+{
+	$app['session']->set('total_product', 0);
+}
+
+if($app['session']->get('total_product_by_id') == null)
+{
+	$app['session']->set('total_product_by_id', array());
+}
+
+if($app['session']->get('token') == null)
+{
+	$app['session']->set('token', null);
+}
+
 	#----------------------------------------------------------------------
 
 	# -- SWIFT MAILER
@@ -60,11 +87,13 @@ $app->register(new Silex\Provider\CsrfServiceProvider());
 	#----------------------------------------------------------------------
 
 	# -- PAYPAL
+
+	// $apiContext = new \PayPal\Rest\ApiContext(
 	/*$apiContext = new \PayPal\Rest\ApiContext(
 
         new \PayPal\Auth\OAuthTokenCredential(
-            'AbB8aZ2BYsMvDfrV9MFhOxkhnwgaUawUSka2QPVwNfOrU5CU7h6ubG9BRiSx3UQ8233Ip-XgxYGhvnkg',     // ClientID
-            'EHdrwuNnzTp98c6UpIaVpAYD00wBKiUNXNQXmWHUXDrKQJWSIi-Jx4Kz13h7gWJsjmuLWrKrKm7yOfqV'      // ClientSecret
+            'AbB8aZ2BYsMvDfrV9MFhOxkhnwgaUawUSka2QPVwNfOrU5CU7h6ubG9BRiSx3UQ8233Ip-XgxYGhvnkg',
+            'EHdrwuNnzTp98c6UpIaVpAYD00wBKiUNXNQXmWHUXDrKQJWSIi-Jx4Kz13h7gWJsjmuLWrKrKm7yOfqV'
         )
 	);
 	// 3. Lets try to save a credit card to Vault using Vault API mentioned here
@@ -87,7 +116,6 @@ $app->register(new Silex\Provider\CsrfServiceProvider());
 	    //REALLY HELPFUL FOR DEBUGGING
 	    echo $ex->getData();
 	}*/
-
 	#----------------------------------------------------------------------
 
 	# -- FORM

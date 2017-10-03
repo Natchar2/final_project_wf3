@@ -1,0 +1,87 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/item.css')}}">
+{% endblock %}
+
+{% block header %}
+	{% include 'commerce/menu.html.twig' %}
+{% endblock %}
+
+{% block contenu %}
+	<!-- include menu -->
+
+	<!-- Page Content -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<h4 class="lead">Street Connect</h4>
+				<div class="list-group">
+					<a href="#" class="list-group-item">Skate</a>
+					<a href="#" class="list-group-item">Bmx</a>
+					<a href="#" class="list-group-item">Parkour</a>
+					<a href="#" class="list-group-item">Roller</a>
+				</div>
+			</div>
+
+			<div class="col-lg-9">
+				<div class="card mt-4">
+					<div class="row carousel-holder">
+						<div class="col-md-12">
+							<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+								<ol class="carousel-indicators">
+									<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+									<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+									<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+								</ol>
+								<div class="carousel-inner">
+									<div class="item active">
+										<img class="slide-image" src="http://placehold.it/800x300" alt="">
+									</div>
+									<div class="item">
+										<img class="slide-image" src="http://placehold.it/800x300" alt="">
+									</div>
+									<div class="item">
+										<img class="slide-image" src="http://placehold.it/800x300" alt="">
+									</div>
+								</div>
+								<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+									<span class="glyphicon glyphicon-chevron-left"></span>
+								</a>
+								<a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+									<span class="glyphicon glyphicon-chevron-right"></span>
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<h3 class="card-title">Product Name</h3>
+						<h4>$24.99</h4>
+						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
+						<span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
+						4.0 stars
+					</div>
+				</div>
+
+				<div class="card card-outline-secondary my-4">
+					<div class="card-header">
+						Product Reviews
+					</div>
+
+					<div class="card-body">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+						<small class="text-muted">Posted by Anonymous on 3/1/17</small>
+						<hr>
+						<a href="#" class="btn btn-success">Ajouter au panier</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}

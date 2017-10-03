@@ -2,37 +2,58 @@
 
 {% block stylesheets %}
 	{{ parent() }}
+	<link rel="icon" href="favicon.ico">
+	<!-- Bootstrap core CSS -->
+	<link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet">
+	<script src="https://use.fontawesome.com/eb11e3ef15.js"></script>
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<link href="{{asset('assets/css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
+
+	<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+	<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+	<script src="{{asset('assets/js/ie-emulation-modes-warning.js')}}"></script>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- Custom styles for this template -->
+	<link href="{{asset('assets/css/carousel.css')}}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" href="{{ asset('css/style.css') }} ">
-
 {% endblock %}
 
-{% block header %}
-	{# version avec le HttpFragmentServiceProvider pour faire le rendu direct depuis un controleur #}
-	{{ render (controller('Application\\Controller\\InterfaceCommerceController::menu', { 'active':active } )) }}	
-{% endblock %}
+{# -- HEADER BODY -- #}
+{% block header %}	{{ render (controller('Application\\Controller\\InterfaceCommerceController::menu', { 'active':active } )) }}	{% endblock %}
 
-{% block body %}
-	<div class="row">
+	{# -- CONTENU BODY -- #}
+	{% block body %}
 
-		{% block menushop %}
-			<div class="col-xs-12 col-sm-2">
-				{# version avec le HttpFragmentServiceProvider pour faire le rendu direct depuis un controleur #}
-				{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}   
-			</div>
+
+		{% block contenu %}
 		{% endblock %}
-		<div class="col-xs-12 col-sm-10">
-			{% block contenu %}
-			{% endblock %}
-		</div>
-	</div>
-{% endblock %}
 
-{% block footer %}
+	{% endblock %}
 
-{% endblock %}
+	{# -- FOOTER BODY -- #}
+	{% block footer %}{% endblock %}
 
 
-{% block javascripts %}
-	{{ parent() }}
+		{% block javascripts %}
+			{{ parent() }}
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="{{asset('dist/js/bootstrap.min.js')}}"></script>
+	<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+	<script src="{{asset('assets/js/vendor/holder.min.js')}}"></script>
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script src="{{asset('assets/js/ie10-viewport-bug-workaround.js')}}"></script>
+	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 	<script src="{{ asset('js/script.js') }}"></script>
 {% endblock %}

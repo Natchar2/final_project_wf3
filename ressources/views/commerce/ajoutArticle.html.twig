@@ -1,0 +1,116 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/ajoutArticle.css')}}">
+{% endblock %}
+
+{% block header %}
+	{% include 'commerce/menu.html.twig' %}
+{% endblock %}
+
+{% block contenu %}
+
+	<!-- include menu -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<h4 class="lead">Street Connect</h4>
+				<div class="list-group">
+					<a href="#" class="list-group-item">Skate</a>
+					<a href="#" class="list-group-item">Bmx</a>
+					<a href="#" class="list-group-item">Parkour</a>
+					<a href="#" class="list-group-item">Roller</a>
+				</div>
+			</div>
+
+			<div class="col-md-9">
+				<div class="row">
+					<form class="form-horizontal itemForm">
+						<fieldset>
+							<legend>Ajouter un article</legend>
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="categorie">Catégorie</label>
+								<div class="col-md-4">
+									<select id="categorie" name="categorie" class="form-control">
+										<option value="1">Choisir une catégorie</option>
+										<option value="2">Bmx</option>
+										<option value="3">Roller</option>
+										<option value="4">Skate</option>
+										<option value="5">Parkour</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="checkboxes">Vous êtes un</label>
+								<div class="col-md-4">
+									<div class="checkbox">
+										<label for="checkboxes-0">
+											<input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
+											Particulier
+										</label>
+									</div>
+									<div class="checkbox">
+										<label for="checkboxes-1">
+											<input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
+											Profesionnel
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="title">Titre de l'annonce</label>  
+								<div class="col-md-4">
+									<input id="title" name="title" type="text" placeholder="" class="form-control input-md">
+
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="description">Texte de l'annonce</label>
+								<div class="col-md-4">                     
+									<textarea class="form-control" id="description" name="description"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="localisation">Localisation</label>  
+								<div class="col-md-4">
+									<input id="localisation" name="localisation" type="text" placeholder="" class="form-control input-md">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="price">Prix</label>  
+								<div class="col-md-4">
+									<input id="price" name="price" type="text" placeholder="" class="form-control input-md">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="photo">Photo</label>
+								<div class="col-md-4">
+									<input id="photo" name="photo" class="input-file" type="file">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="button"></label>
+								<div class="col-md-4">
+									<button id="button" name="button" class="btn btn-primary">Ajouter</button>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}

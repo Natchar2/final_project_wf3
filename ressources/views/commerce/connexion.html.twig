@@ -1,0 +1,67 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/about.css')}}">
+{% endblock %}
+
+{% block header %}
+	{% include 'commerce/menu.html.twig' %}
+{% endblock %}
+
+{% block contenu %}
+	<div class="row">
+		<div class="col-xs-6 col-xs-push-3">
+			<h2 class="texte-center">Connection</h2>
+
+			{% if  errors is defined %}
+				{% if  errors is not empty %}
+					<div class="alert alert-danger" role=alert>
+						{% for value in errors %}
+							<p>{{value}}</p><br>
+						{% endfor %}
+					</div><br>
+				{% endif %}
+			{% endif %}
+
+			{% if success is defined %}
+
+			{% endif %}
+
+			<form class="form-horizontal" action="" method="POST">
+				<!-- Email -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Email</label>
+					<div class="col-md-7">
+						<input type="email" class="form-control" name="mail" required>
+					</div>
+				</div>
+
+				<!-- Password -->
+				<div class="form-group">
+					<label class="col-md-3 control-label">Mot de passe</label>
+					<div class="col-md-7">
+						<input type="password" class="form-control" name="password" required>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-md-7 col-md-push-3">
+						<input  type="submit" class="btn btn-primary" value="Se connecter">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-md-7 col-md-push-3">
+						<input  type="submit" class="btn btn-primary" value="Mot de passe oublié">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}
