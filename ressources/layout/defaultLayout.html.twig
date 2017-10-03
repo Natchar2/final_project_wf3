@@ -28,23 +28,20 @@
 {% endblock %}
 
 {# -- HEADER BODY -- #}
-{% block header %}	{% endblock %}
 
-	{# -- CONTENU BODY -- #}
-	{% block body %}
+{% block header %}{% endblock %}
 
+{# -- CONTENU BODY -- #}
+{% block body %}
+	{% block contenu %}{% endblock %}
+{% endblock %}
 
-		{% block contenu %}
-		{% endblock %}
-
-	{% endblock %}
-
-	{# -- FOOTER BODY -- #}
-	{% block footer %}{% endblock %}
+{# -- FOOTER BODY -- #}
+{% block footer %}{% endblock %}
 
 
-		{% block javascripts %}
-			{{ parent() }}
+{% block javascripts %}
+	{{ parent() }}
 	<!-- Bootstrap core JavaScript
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->

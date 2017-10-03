@@ -1,5 +1,23 @@
 {% extends 'defaultLayout.html.twig' %}
 
+
+{# titre de la page #}
+{% block title %}
+	Categorie {{ global.request.get('category_name') }} | Street Connexion
+{% endblock %}
+
+{# fil d'ariane #}
+{% set active = global.request.get('category_name')|lower %}
+
+
+	{% set pageMax = (totalProducts / nbPerPage)|round(0, 'ceil') %}
+
+		{# 'total : ' ~ totalProducts ~ '***<br>' #}
+		{# 'par page : ' ~ nbPerPage ~ '***<br>' #}
+		{# 'pagesmax : ' ~ pageMax ~ '***<br>' #}
+{# 'page : ' ~ pageMax ~ '***<br>' }}
+{# 'products : ' ~ products|length ~ '***<br>' #}
+
 {% block stylesheets %}
 	{{parent()}}
 	<link rel="stylesheet" href="{{asset('css/shop.css')}}">
@@ -17,12 +35,9 @@
 		<div class="row">
 			<div class="col-md-3">
 				<h4 class="lead">Street Connect</h4>
-				<div class="list-group">
-					<a href="#" class="list-group-item">Skate</a>
-					<a href="#" class="list-group-item">Bmx</a>
-					<a href="#" class="list-group-item">Parkour</a>
-					<a href="#" class="list-group-item">Roller</a>
-				</div>
+
+				{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
+
 			</div>
 
 			<div class="col-md-9">
@@ -55,337 +70,93 @@
 					</div>
 				</div>
 
+
+				<h3>
+					{% if global.request.get('category_name') == "all" %}
+						Tous les produits
+					{% else %}
+						{{ global.request.get('category_name') }}
+					{% endif %}
+				</h3>
+
 				<div class="row">
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$24.99</h4>
-								<h4><a href="#">First Product</a>
-								</h4>
-								<p>See more snippets like this online store item at</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-								</p>
-							</div>
-						</div>
-					</div>
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$64.99</h4>
-								<h4><a href="#">Scd Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
+					{% if products is empty %}
+						<div class="alert alert-warning">Il n'y a pas encore d'products dans cette catégorie</div>
+					{% else %}
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$74.99</h4>
-								<h4><a href="#">Third Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$84.99</h4>
-								<h4><a href="#">Fourth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
+						{% for product in products %}
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
+							<div class="col-sm-4 col-lg-4 col-md-4 {{ global.request.get('category_name') }}">
+								<div class="thumbnail">
+									{% if product.image_1 > "" %}
+										<img src="{{ asset('assets/images/'~product.image_1) }}" alt="" style="height:150px;width:auto;margin-left:auto;margin-right:auto;">
+									{% else %}
+										<img src="http://placehold.it/320x150" alt="">
+									{% endif %}		
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+									<div class="caption">
+										
+										<h4><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a>
+										</h4>
+										<p>{{ product.description|slice(0, 70) }}</p>
+									</div>
+									<div class="ratings">
+										<a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" class="btn btn-primary pull-right"> Details </a>
+										<h4>€ {{ (product.price)|number_format(2, '.', ' ') }}</h4>
+									</div>
+								</div>
 							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
+						{% endfor %}
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
+					{% endif %}
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
 
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-4 col-lg-4 col-md-4">
-						<div class="thumbnail">
-							<img src="http://placehold.it/320x150" alt="">
-							<div class="caption">
-								<h4 class="pull-right">$94.99</h4>
-								<h4><a href="#">Fifth Product</a>
-								</h4>
-								<p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-							</div>
-							<div class="ratings">
-								<button class="btn btn-primary pull-right" type="submit">Details</button>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
-							</div>
-						</div>
-					</div>
 				</div>
+
+
+				{% if page is defined %}
+
+					<div class="paging col-xs-12" style="text-align:center;margin:25px 0;">
+						{% if (pageMax) > 1 %}
+							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
+						{% endif %}
+
+						{% if (page - 1) > 1 %}
+							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>
+						{% endif %}
+						&nbsp;&nbsp;
+						{% if (page - 2) >= 1 %}
+							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>
+						{% endif %}
+						&nbsp;&nbsp;                       
+						{% if (page - 1) >= 1 %}
+							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>
+						{% endif %}
+						&nbsp;&nbsp;
+						<a href="#" class="btn btn-primary">{{ page }}</a>
+						&nbsp;&nbsp;
+						{% if (page + 1) <= pageMax %}
+							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>
+						{% endif %}
+						&nbsp;&nbsp;   
+						{% if (page + 2) < pageMax %}
+							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>
+						{% endif %}
+						&nbsp;&nbsp; 
+						{% if (page + 1) < pageMax %}
+							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>
+						{% endif %}
+						&nbsp;&nbsp;
+						
+						{% if (pageMax) > 1 %}
+							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
+						{% endif %}							
+					</div> 
+				{% endif %}
+
 			</div>
 		</div>
 	</div>

@@ -13,9 +13,7 @@ class InterfaceCommerceController
 
 	use Shortcut;
 
-
-
-    public function accueilAction(Application $app)
+	 public function accueilAction(Application $app)
     {
         $products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
         $topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
@@ -108,194 +106,212 @@ class InterfaceCommerceController
     }
 
     public function addItemAction(Application $app, Request $request)
-    {
+	{
 
-        $panier = $app['session']->get('panier');
-        if($panier)
-        {
-            if(isset($panier[$request->get('id')]))
-            {
-                $panier[$request->get('id')] += 1;
-            }
-            else
-            {
-                $panier[$request->get('id')] = 1;  
-            }
-            $app['session']->set('panier',$panier);
-        }
-        else
-        {
-            $app['session']->set('panier', array($request->get('id') => 1));
-            $panier = $app['session']->get('panier');
-        }
+		$panier = $app['session']->get('panier');
+		if($panier)
+		{
+			if(isset($panier[$request->get('id')]))
+			{
+				$panier[$request->get('id')] += 1;
+			}
+			else
+			{
+				$panier[$request->get('id')] = 1;  
+			}
+			$app['session']->set('panier',$panier);
+		}
+		else
+		{
+			$app['session']->set('panier', array($request->get('id') => 1));
+			$panier = $app['session']->get('panier');
+		}
 
-        $total_price = $this->get_total_price($app, $request->get('id'), 'incrementation');
+		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'incrementation'));
+		$app['session']->set('total_product', $this->getTotalProduct($app));
+		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
 
-        $app['session']->set('total_product', $this->getTotalProduct($app));
-        $app['session']->set('total_product_by_id', $this->getTotalProductById($app));
+		$array = array(
+			'total_price' => $app['session']->get('total_price'),
+			'total_product' => $app['session']->get('total_product'),
+			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+		);
 
-        $array = array(
-            'total_price' => $total_price,
-            'total_product' => $app['session']->get('total_product'),
-            'total_product_by_id' => $app['session']->get('total_product_by_id'),
-        );
+		return new Response(json_encode($array));
+	}
 
-        return new Response(json_encode($array));
-    }
+	public function removeOneItemAction(Application $app, Request $request)
+	{
 
-    public function removeOneItemAction(Application $app, Request $request)
-    {
-        $total_price = $this->get_total_price($app, $request->get('id'), 'decrementation');
+		$panier = $app['session']->get('panier');
 
-        $panier = $app['session']->get('panier');
-        if(isset($panier[$request->get('id')]))
-        {
-            if($panier[$request->get('id')] == 0)
-            {
-                unset($panier[$request->get('id')]);
-            }
-            else
-            {
-                $panier[$request->get('id')] -= 1;
-            }
+		if(isset($panier[$request->get('id')]))
+		{
+			if($panier[$request->get('id')] == 0)
+			{
+				unset($panier[$request->get('id')]);
+			}
+			else
+			{
+				$panier[$request->get('id')] -= 1;
+			}
 
-            $app['session']->set('panier', $panier);
-        }
+			$app['session']->set('panier', $panier);
+		}
 
-        $app['session']->set('total_product', $this->getTotalProduct($app));
-        $app['session']->set('total_product_by_id', $this->getTotalProductById($app));
+		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementation'));
+		$app['session']->set('total_product', $this->getTotalProduct($app));
+		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
 
-        $array = array(
-            'total_price' => $total_price,
-            'total_product' => $app['session']->get('total_product'),
-            'total_product_by_id' => $app['session']->get('total_product_by_id'),
-        );
+		$array = array(
+			'total_price' => $app['session']->get('total_price'),
+			'total_product' => $app['session']->get('total_product'),
+			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+		);
 
-        return new Response(json_encode($array)); 
-    }
+		return new Response(json_encode($array)); 
+	}
 
-    public function removeAllItemAction(Application $app, Request $request)
-    {
-        $total_price = $this->get_total_price($app, $request->get('id'), 'decrementationAll');
+	public function removeAllItemAction(Application $app, Request $request)
+	{
+		
+		$panier = $app['session']->get('panier');
+		$num_product = 0;
 
-        $panier = $app['session']->get('panier');
+		if(isset($panier[$request->get('id')]))
+		{
+			$num_product = $panier[$request->get('id')];
 
-        if($panier[$request->get('id')] == 0)
-        {
-            unset($panier[$request->get('id')]);
-        }
-        else
-        {
-            $panier[$request->get('id')] = 0;  
-        }
+			if($panier[$request->get('id')] == 0)
+			{
+				unset($panier[$request->get('id')]);
+			}
+			else
+			{
+				$panier[$request->get('id')] = 0;  
+			}
+		}
 
-        $app['session']->set('panier',$panier);
+		$app['session']->set('panier', $panier);
 
-        $app['session']->set('total_product', $this->getTotalProduct($app));
-        $app['session']->set('total_product_by_id', $this->getTotalProductById($app));
+		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementationAll', $num_product));
+		$app['session']->set('total_product', $this->getTotalProduct($app));
+		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
 
-        $array = array(
-            'total_price' => $total_price,
-            'total_product' => $app['session']->get('total_product'),
-            'total_product_by_id' => $app['session']->get('total_product_by_id'),
-        );
+		$array = array(
+			'total_price' => $app['session']->get('total_price'),
+			'total_product' => $app['session']->get('total_product'),
+			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+		);
 
-        return new Response(json_encode($array));
-    }
+		return new Response(json_encode($array));
+	}
 
-    public function getTotalProduct(Application $app)
-    {
-        $total_product = 0;
+	public function getTotalProduct(Application $app)
+	{
+		$total_product = 0;
 
-        $panier = $app['session']->get('panier');
+		$panier = $app['session']->get('panier');
 
-        if(!empty($panier))
-        {
-            foreach ($panier as $data)
-            {
-                $total_product += $data;
-            }
-        }
+		if(!empty($panier))
+		{
+			foreach ($panier as $data)
+			{
+				$total_product += $data;
+			}
+		}
 
-        return $total_product;
-    }
+		return $total_product;
+	}
 
-    public function getTotalProductById(Application $app)
-    {
-        $total_product_by_id = array();
+	public function getTotalProductById(Application $app)
+	{
+		$total_product_by_id = array();
 
-        $panier = $app['session']->get('panier');
+		$panier = $app['session']->get('panier');
 
-        if(!empty($panier))
-        {
-            $n = 0;
-            foreach ($panier as $key => $data)
-            {
-                if(isset($panier[$key]))
-                {
-                    $total_product_by_id[$key] = $data;
-                    $n++;
-                }
-            }  
-        }
+		if(!empty($panier))
+		{
+			$n = 0;
+			foreach ($panier as $key => $data)
+			{
+				if(isset($panier[$key]))
+				{
+					$total_product_by_id[$key] = $data;
+					$n++;
+				}
+			}  
+		}
 
-        return $total_product_by_id;
-    }
+		return $total_product_by_id;
+	}
 
-    public function get_total_price(Application $app, $id, $mode)
-    {
-        $total_price = $app['session']->get('total_price');
+	public function get_total_price(Application $app, $id, $mode, $num_product = 0)
+	{
+		$total_price = $app['session']->get('total_price');
 
-        if(!$total_price)
-        {
-            $total_price = $app['session']->set('total_price', 0);
-        }
+		if(!$total_price)
+		{
+			$total_price = 0;
+		}
 
-        if(isset($app['session']->get('panier')[$id]))
-        {
-            $product = $app['idiorm.db']->for_table('products')->where('ID_product', $id)->find_result_set();
-            $price = $product[0]->price;
-            $shipping_charges = $product[0]->shipping_charges;
+		if(isset($app['session']->get('panier')[$id]) && $app['session']->get('panier')[$id] >= 0)
+		{
+			$product = $app['idiorm.db']->for_table('products')->where('ID_product', $id)->find_result_set();
+			$price = $product[0]->price;
+			$shipping_charges = $product[0]->shipping_charges;
 
-            if($mode == 'incrementation')
-            {
-                $total_price += $price + $shipping_charges;
-            }
-            elseif($mode == 'decrementation')
-            {
-                $total_price -= $price + $shipping_charges;
-                if($total_price < 0)
-                {
-                    $total_price = 0;
-                }
-            }
-            else
-            {
-                for ($i = $app['session']->get('panier')[$id]; $i > 0; $i--)
-                {
-                    $total_price -= $price + $shipping_charges;
-                    if($total_price <= 0)
-                    {
-                        $total_price = 0;
-                    }
-                }
-            }
+			if($mode == 'incrementation')
+			{
+				$total_price += round($price + $shipping_charges);
+			}
+			elseif($mode == 'decrementation')
+			{
+				$total_price -= round($price + $shipping_charges);
+				if($total_price < 0)
+				{
+					$total_price = 0;
+				}
+			}
+			else
+			{
+				for ($i = $app['session']->get('panier')[$id]; $i > 0; $i--)
+				{
+					$total_price -= round($price + $shipping_charges);
+					if($total_price <= 0)
+					{
+						$total_price = 0;
+					}
+				}
+			}
+		}
 
-            $app['session']->set('total_price', $total_price);
-        }
-        else
-        {
-            if($total_price <= 0)
-            {
-                $total_price = 0;
-            }
-        }
+		if($num_product > 0)
+		{
+			$product = $app['idiorm.db']->for_table('products')->where('ID_product', $id)->find_result_set();
+			$price = $product[0]->price;
+			$shipping_charges = $product[0]->shipping_charges;
 
-        return $total_price;
-    }
-    
-    public function aboutAction(Application $app)
-    {
+			for ($i = $num_product; $i > 0; $i--)
+			{
+				$total_price -= round($price + $shipping_charges);
+				if($total_price <= 0)
+				{
+					$total_price = 0;
+				}
+			}
+		}
+
+		if($total_price < 0)
+		{
+			$total_price = 0;
+		}
+
+		return round($total_price);
+	}
+
+   public function aboutAction(Application $app)
+   {
       return $app['twig']->render('commerce/about.html.twig');
   }
 
@@ -339,6 +355,7 @@ class InterfaceCommerceController
       return $app['twig']->render('commerce/inscription.html.twig');
   }
 
+	
   public function newAdAction(Application $app, $ID_product){
     if($ID_product>0)
     {
@@ -360,8 +377,6 @@ class InterfaceCommerceController
         'modification'=> $modification,
     ]);
 }
-
-
 
     public function newAdPostAction(Application $app, Request $request){
 
@@ -469,7 +484,6 @@ class InterfaceCommerceController
     public function listProducts(Application $app, $ID_user=8){
 
 
-
         $products = $app['idiorm.db']->for_table('view_products')
         ->where('ID_user',8)
         ->find_result_set();
@@ -512,19 +526,20 @@ class InterfaceCommerceController
             ]);
         }
 
-/* $suppression = $app['idiorm.db']->for_table('products')
-->where('ID_product', $ID_product)
-->find_one();
+
+		/* $suppression = $app['idiorm.db']->for_table('products')
+		->where('ID_product', $ID_product)
+		->find_one();
 
 
-$suppression->delete();
+		$suppression->delete();
 
 
-return $app['twig']->render('commerce/list_products.html.twig',[
-'products' => $products,
-'delete'   => $delete
-]);*/
-}  
+		return $app['twig']->render('commerce/list_products.html.twig',[
+		'products' => $products,
+		'delete'   => $delete
+		]);*/
+	}  
 
 
 }
