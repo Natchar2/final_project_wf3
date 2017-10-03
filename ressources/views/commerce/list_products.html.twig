@@ -1,5 +1,9 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% block header %}
+	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
+{% endblock %}
+
 {% block contenu %}
 	<div class="row">
 		{% if delete is defined %}

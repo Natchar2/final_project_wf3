@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block header %}
-	{% include 'commerce/menu.html.twig' %}
+	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
 {% endblock %}
 
 {% block contenu %}
@@ -32,14 +32,14 @@
 				<i class="fa fa-credit-card fa-4x" aria-hidden="true"></i>
 				<h3>Vendre</h3>
 				<p>Quelques photos, une bonne description et le prix de ton choix, c'est tout ce que tu as à faire pour mettre en ligne ton produit. Lorsque tu prépares une commande, ajoute une touche personnelle, un petit mot pour accompagner la vente.</p>
-				<p><a class="btn btn-default" href="#" role="button">C'est parti &raquo;</a></p>
+				<p><a class="btn btn-default" href="{{ url('connexion') }}" role="button">C'est parti &raquo;</a></p>
 			</div><!-- /.col-lg-4 -->
 
 			<div class="col-lg-4">
 				<i class="fa fa-shopping-cart fa-4x" aria-hidden="true"></i>
 				<h3>Acheter</h3>
 				<p>Moins chère qu'en magasin, des millions d'articles à acquérir sur Street Connect ! Achète en toute sérénité sur notre plateforme. Si l'article n'est pas livré ou s'il ne correspond pas à la description, nous te remboursons.</p>
-				<p><a class="btn btn-default" href="#" role="button">C'est parti &raquo;</a></p>
+				<p><a class="btn btn-default" href="{{ url('shop') }}" role="button">C'est parti &raquo;</a></p>
 			</div><!-- /.col-lg-4 -->
 
 			<div class="col-lg-4">

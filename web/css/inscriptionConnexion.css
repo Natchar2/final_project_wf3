@@ -1,8 +1,6 @@
 body {
   padding-top: 50px;
-  background-color: black;
-  background-size: 100px 10000px;
-  background-image: url('../img/geo.png');
+  background-color: white;
 }
 
 .panel-default>.panel-heading {

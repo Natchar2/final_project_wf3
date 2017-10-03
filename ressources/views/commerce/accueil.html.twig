@@ -1,12 +1,12 @@
 {% extends 'defaultLayout.html.twig' %}
 
 {% block header %}
-	{% include 'commerce/menu.html.twig' %}
+	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
 {% endblock %}
 
 {% block contenu %}
 	<header class="container-fluid">
-		<div class="jumbotron col-xs-12 col-md-6 col-md-push-3 hidden-xs">
+		<div class="jumbotron col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 hidden-xs">
 			<h1>Street  Connect</h1>
 		</div>
 
@@ -260,33 +260,33 @@
 					<br>
 					<!-- Three columns of text below the carousel -->
 					<div class="row">
-						<div class="col-lg-3">
+						<a href="https://www.abslyon.com/" target=_blank class="col-lg-3">
 							<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/abs.png')}}" alt="logo_abs">
 							<br>
 
-						</div>
+						</a>
 
-						<div class="col-lg-3">
+						<a href="https://www.hawaiisurf.com/" target=_blank class="col-lg-3">
 							<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/hawai.png')}}" alt="logo_hawai">
 							<br>
-						</div>
+						</a>
 
-						<div class="col-lg-3">
+						<a href="http://www.bikes.com/fr" target=_blank class="col-lg-3">
 							<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/rm.png')}}" alt="logo_rm">
 							<br>
-						</div>
+						</a>
 
-						<div class="col-lg-3">
+						<a href="https://www.vans.fr/" target=_blank class="col-lg-3">
 							<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/vans.png')}}" alt="logo_vans">
 							<br>
-						</div>
+						</a>
 					</div>
 				</div>
 			</div>
 		</div>
-{% endblock %}
+	{% endblock %}
 
-{# include footer #}
-{% block footer %}
-	{% include 'commerce/footer.html.twig' %}
-{% endblock %}
+	{# include footer #}
+	{% block footer %}
+		{% include 'commerce/footer.html.twig' %}
+	{% endblock %}

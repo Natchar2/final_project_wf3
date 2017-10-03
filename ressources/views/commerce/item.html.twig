@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block header %}
-	{% include 'commerce/menu.html.twig' %}
+	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
 {% endblock %}
 
 {% block contenu %}
@@ -27,7 +27,7 @@
 
 			<div class="col-lg-9">
 				<div class="card mt-4">
-					<div class="row carousel-holder">
+					<div class="row carousel-shop carousel-holder">
 						<div class="col-md-12">
 							<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 								<ol class="carousel-indicators">

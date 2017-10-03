@@ -260,6 +260,11 @@ class InterfaceCommerceController
 		return $app['twig']->render('commerce/inscription.html.twig');
 	}
 
+	public function agendaAction(Application $app)
+	{
+		return $app['twig']->render('commerce/agenda.html.twig');
+	}
+
 	public function newAdAction(Application $app, $ID_product){
 
 
@@ -424,8 +429,8 @@ class InterfaceCommerceController
 		return $app['twig']->render('commerce/list_products.html.twig',[
 		'products' => $products,
 		'delete'   => $delete
-		]);*/
-	}  
+	]);*/
+}  
 }
 
 

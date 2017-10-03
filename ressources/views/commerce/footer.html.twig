@@ -5,10 +5,19 @@
 			<div class="reseaux">
 
 				<h2>Rejoignez notre communauté</h2>
-				<i class="fa fa-facebook-square fa-4x" aria-hidden="true"></i>
-				<i class="fa fa-camera-retro fa-4x"></i>
-				<i class="fa fa-twitter-square fa-4x" aria-hidden="true"></i>
-				<i class="fa fa-youtube-square fa-4x" aria-hidden="true"></i>
+
+				<a href="https://fr-fr.facebook.com/" target=_blank>
+					<i class="fa fa-facebook-square fa-4x" aria-hidden="true"></i>
+				</a>
+				<a href="https://www.instagram.com/?hl=fr" target=_blank>
+					<i class="fa fa-camera-retro fa-4x"></i>
+				</a>
+				<a href="https://twitter.com/?lang=fr" target=_blank>
+					<i class="fa fa-twitter-square fa-4x" aria-hidden="true"></i>
+				</a>
+				<a href="https://www.youtube.com/?hl=fr&gl=FR" target=_blank>
+					<i class="fa fa-youtube-square fa-4x" aria-hidden="true"></i>
+				</a>
 
 			</div>
 		</div>
@@ -19,12 +28,12 @@
 <footer class="container-fluid col-xs-12">
 	<div class="container">
 		<div class="row">
-			<a href="#"><h4 class="col-md-3">à propos</h4></a>
-			<a href="#"><h4 class="col-md-3">contact</h4></a>
-			<a href="#"><h4 class="col-md-3">terms</h4></a>
-			<a href="#"><h4 class="col-md-3">faq</h4></a>
+			<a href="{{ url('about') }}"><h4 class="col-md-3">à propos</h4></a>
+			<a href="{{ url('contact_page') }}"><h4 class="col-md-3">contact</h4></a>
+			<a href="{{ url('conditions_page') }}"><h4 class="col-md-3">terms</h4></a>
+			<a href="{{ url('faq') }}"><h4 class="col-md-3">faq</h4></a>
 		</div>
-		<a><span class="glyphicon glyphicon-hand-up aria-hidden="true""></span></a>
+		
 		<br>
 		<p><i class="fa fa-copyright" aria-hidden="true"></i> Copyright 2017</p>
 	</div>

@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block header %}
-	{% include 'commerce/menu.html.twig' %}
+	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
 {% endblock %}
 
 {% block contenu %}
@@ -166,9 +166,9 @@
 				</div>
 			</div>
 		</div>
-{% endblock %}
+	{% endblock %}
 
-{# include footer #}
-{% block footer %}
-	{% include 'commerce/footer.html.twig' %}
-{% endblock %}
+	{# include footer #}
+	{% block footer %}
+		{% include 'commerce/footer.html.twig' %}
+	{% endblock %}

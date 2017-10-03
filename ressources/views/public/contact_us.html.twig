@@ -1,4 +1,9 @@
 {% extends 'defaultLayout.html.twig' %}
+
+{% block header %}
+	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
+{% endblock %}
+
 {% block contenu %}
 	<div class="row">
 		<div class="col-xs-6 col-xs-push-3">
