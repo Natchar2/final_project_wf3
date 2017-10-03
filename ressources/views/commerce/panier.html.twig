@@ -1,5 +1,6 @@
 {% extends 'defaultLayout.html.twig' %}
 
+
 {% block stylesheets %}
 	{{ parent() }}
 	<link rel="stylesheet" href="cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
@@ -18,6 +19,7 @@
 					{% set iTotalPanier = iTotalPanier + compteur %}
 					{% endfor %}		
 				{% endif %}
+
 
 				{{ iTotalPanier ~ ' éléments' }}
 				<br><br>
@@ -115,8 +117,7 @@
 
 
 
-
-
 				</script>
+
 
 			{% endblock %}
