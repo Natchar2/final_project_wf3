@@ -1,115 +1,5 @@
 {% extends 'defaultLayout.html.twig' %}
 
-<<<<<<< HEAD
-
-
-{% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-{% endblock %}
-
-{% set iTotalPanier = 0 %}
-
-	{# fil d'ariane #}
-	{% set active = 'panier' %}
-
-		{% block contenu %}
-
-
-			{% if app.session.get('panier') is defined  %}
-				{% for compteur in app.session.get('panier') %}
-					{% set iTotalPanier = iTotalPanier + compteur %}
-					{% endfor %}		
-				{% endif %}
-
-
-				{{ iTotalPanier ~ ' éléments' }}
-				<br><br>
-				
-				<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
-				<div id="paypal-button"></div>
-
-				<h1><div> <span class="total_price">{{ app.session.get('total_price') }}</span> <span>EUR</span> </div></h1>
-				<h1><div> <span class="total_product"> {{ app.session.get('total_product') }} </span><span> produits</span> </div></h1>
-				<h1><div> <span class="total_by_id" ID-product="1"> {% if app.session.get('total_product_by_id')["1"] is defined %} {{ app.session.get('total_product_by_id')["1"] }} {% else %} 0{% endif %} </span><span> ID: 1</span> </div></h1>
-				<h1><div> <span class="total_by_id" ID-product="2"> {% if app.session.get('total_product_by_id')["2"] is defined %} {{ app.session.get('total_product_by_id')["2"] }} {% else %} 0{% endif %} </span><span> ID: 2</span> </div></h1>
-
-				<button class="add_product" ID-product="1">ADD</button>
-				<button class="remove_one_product" ID-product="1">REMOVE 1</button>
-				<button class="remove_all_product" ID-product="1">REMOVE ALL 1</button>
-				<button class="remove_one_product" ID-product="2">REMOVE 2</button>
-				<button class="remove_all_product" ID-product="2">REMOVE ALL 2</button>
-				<button class="add_product" ID-product="2">ADD</button>
-
-
-
-				<br><br>
-
-
-				{% if (app.session.get('panier') is defined) and (app.session.get('panier')|length > 0)  %}
-
-					<table id="tblResultats" class="table table-striped table-hover table-condensed table-responsive">
-						<thead>
-							<tr>
-								<th> </th>
-								<th>Produit</th>
-								<th>Prix</th>
-								<th>Quantité</th>
-							</tr>
-						</thead>
-						<tbody>
-
-
-							<tr>
-								<td> </td>
-								<td> </td>
-								<td> </td>
-								<td> </td>
-							</tr>
-
-
-
-
-						</tbody>
-					</table>
-
-
-
-
-				{% else %}
-
-					<div class="alert alert-warning">Aucun éléments dans le panier</div>
-
-
-				{% endif %}
-
-
-
-
-			{% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-			{% block javascripts %}
-				{{ parent() }}
-				<script src="https://www.paypalobjects.com/api/checkout.js"></script>
-				<script src="{{ asset('js/paypalPay.js') }}"></script>
-				<script src="{{ asset('js/panier.js') }}"></script>
-
-
-
-
-			{% endblock %}
-
-=======
 {% block contenu %}
 	<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
 	<div id="paypal-button"></div>
@@ -134,4 +24,12 @@
 	<button class="remove_one_product" ID-product="4">REMOVE 4</button>
 	<button class="remove_all_product" ID-product="4">REMOVE ALL 4</button>
 {% endblock %}
->>>>>>> origin/develop
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+	<script src="{{ asset("js/notify.min.js")}}"></script>
+	<script src="{{ asset('js/paypalPay.js') }}"></script>
+	<script src="{{ asset('js/panier.js') }}"></script>
+{% endblock %}

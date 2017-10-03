@@ -53,9 +53,8 @@ $('.remove_one_product').click(function(e){
 			id: ID_product
 		},
 		success: function(data){
-
+			console.log(data);
 			if(data.total_product_by_id[$this.attr('ID-product')] >= 0) $.notify('Produit Supprimé', 'success');
-
 			$('.total_price').text(data.total_price);
 			$('.total_product').text(data.total_product);
 			$('.total_by_id').attr('ID-product', function(id){
@@ -93,9 +92,8 @@ $('.remove_all_product').click(function(e){
 			id: ID_product
 		},
 		success: function(data){
-
+			console.log(data);
 			if(data.total_product_by_id[$($this).attr('ID-product')] >= 0) $.notify('Tous les produits ont été supprimé', 'success');
-
 			if(data.total_price == null)
 			{
 				$('.total_price').text("0");
