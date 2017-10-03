@@ -75,10 +75,6 @@
 
 
 
-					{{ lesproduits }}
-
-
-
 				{% else %}
 
 					<div class="alert alert-warning">Aucun éléments dans le panier</div>
@@ -106,24 +102,9 @@
 				<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 				<script src="{{ asset('js/paypalPay.js') }}"></script>
 				<script src="{{ asset('js/panier.js') }}"></script>
-				<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
 
 
-				<script>
-
-				$(document).ready(function(){
-					$('#tblResultats').DataTable( {
-						'language': {
-							'url': 'scripts/French.json'
-						}
-					});
-				});
-
-
-
-
-				</script>
 
 			{% endblock %}
 
