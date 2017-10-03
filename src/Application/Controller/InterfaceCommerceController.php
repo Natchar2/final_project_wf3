@@ -50,13 +50,12 @@ class InterfaceCommerceController
 			$panier = $app['session']->get('panier');
 		}
 
-		$total_price = $this->get_total_price($app, $request->get('id'), 'incrementation');
-
+		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'incrementation'));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
 
 		$array = array(
-			'total_price' => $total_price,
+			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
 		);
@@ -66,9 +65,9 @@ class InterfaceCommerceController
 
 	public function removeOneItemAction(Application $app, Request $request)
 	{
-		$total_price = $this->get_total_price($app, $request->get('id'), 'decrementation');
 
 		$panier = $app['session']->get('panier');
+
 		if(isset($panier[$request->get('id')]))
 		{
 			if($panier[$request->get('id')] == 0)
@@ -83,11 +82,12 @@ class InterfaceCommerceController
 			$app['session']->set('panier', $panier);
 		}
 
+		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementation'));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
 
 		$array = array(
-			'total_price' => $total_price,
+			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
 		);
@@ -97,26 +97,32 @@ class InterfaceCommerceController
 
 	public function removeAllItemAction(Application $app, Request $request)
 	{
-		$total_price = $this->get_total_price($app, $request->get('id'), 'decrementationAll');
-
+		
 		$panier = $app['session']->get('panier');
+		$num_product = 0;
 
-		if($panier[$request->get('id')] == 0)
+		if(isset($panier[$request->get('id')]))
 		{
-			unset($panier[$request->get('id')]);
-		}
-		else
-		{
-			$panier[$request->get('id')] = 0;  
+			$num_product = $panier[$request->get('id')];
+
+			if($panier[$request->get('id')] == 0)
+			{
+				unset($panier[$request->get('id')]);
+			}
+			else
+			{
+				$panier[$request->get('id')] = 0;  
+			}
 		}
 
-		$app['session']->set('panier',$panier);
+		$app['session']->set('panier', $panier);
 
+		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementationAll', $num_product));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
 
 		$array = array(
-			'total_price' => $total_price,
+			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
 		);
@@ -163,16 +169,16 @@ class InterfaceCommerceController
 		return $total_product_by_id;
 	}
 
-	public function get_total_price(Application $app, $id, $mode)
+	public function get_total_price(Application $app, $id, $mode, $num_product = 0)
 	{
 		$total_price = $app['session']->get('total_price');
 
 		if(!$total_price)
 		{
-			$total_price = $app['session']->set('total_price', 0);
+			$total_price = 0;
 		}
 
-		if(isset($app['session']->get('panier')[$id]))
+		if(isset($app['session']->get('panier')[$id]) && $app['session']->get('panier')[$id] >= 0)
 		{
 			$product = $app['idiorm.db']->for_table('products')->where('ID_product', $id)->find_result_set();
 			$price = $product[0]->price;
@@ -180,11 +186,11 @@ class InterfaceCommerceController
 
 			if($mode == 'incrementation')
 			{
-				$total_price += $price + $shipping_charges;
+				$total_price += round($price + $shipping_charges);
 			}
 			elseif($mode == 'decrementation')
 			{
-				$total_price -= $price + $shipping_charges;
+				$total_price -= round($price + $shipping_charges);
 				if($total_price < 0)
 				{
 					$total_price = 0;
@@ -194,25 +200,37 @@ class InterfaceCommerceController
 			{
 				for ($i = $app['session']->get('panier')[$id]; $i > 0; $i--)
 				{
-					$total_price -= $price + $shipping_charges;
+					$total_price -= round($price + $shipping_charges);
 					if($total_price <= 0)
 					{
 						$total_price = 0;
 					}
 				}
 			}
-
-			$app['session']->set('total_price', $total_price);
 		}
-		else
+
+		if($num_product > 0)
 		{
-			if($total_price <= 0)
+			$product = $app['idiorm.db']->for_table('products')->where('ID_product', $id)->find_result_set();
+			$price = $product[0]->price;
+			$shipping_charges = $product[0]->shipping_charges;
+
+			for ($i = $num_product; $i > 0; $i--)
 			{
-				$total_price = 0;
+				$total_price -= round($price + $shipping_charges);
+				if($total_price <= 0)
+				{
+					$total_price = 0;
+				}
 			}
 		}
 
-		return $total_price;
+		if($total_price < 0)
+		{
+			$total_price = 0;
+		}
+
+		return round($total_price);
 	}
 
 	public function aboutAction(Application $app)
