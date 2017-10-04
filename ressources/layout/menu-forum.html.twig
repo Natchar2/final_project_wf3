@@ -1,0 +1,7 @@
+<!-- menu shop -->
+<div class="list-group">
+	<a href="{{ url('accueil_forum') }}"  class="list-group-item {% if active == 'all' %} "active" {% endif %} ">tous les topic</a></li>
+	{% for category in categories %}
+		<a href="{{ url('accueil_forum', {'category_name': category.category_name|lower}) }}" class="list-group-item {% if active == category.category_name|lower %} "active" {% endif %} ">{{ category.category_name }}</a>
+	{% endfor %}
+</div>

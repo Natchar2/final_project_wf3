@@ -1,118 +1,100 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% set active = global.request.get('category_name')|lower %}
+
+
+{% set pageMax = (totalTopics / nbPerPage)|round(0, 'ceil') %}
+
+
 {% block stylesheets %}
 	{{parent()}}
 	<link rel="stylesheet" href="{{asset('css/forumIndex.css')}}">
 {% endblock %}
 
-{% block header %}
-	{% include 'commerce/menu.html.twig' %}
-{% endblock %}
-
 {% block contenu %}
 
-	<!-- include menu -->
+
+		{% if topics is empty %}
+			<div class="alert alert-warning">Il n'y a pas encore de topic dans cette catégorie</div>
+		{% else %}
 
 	<!-- Page Content -->
 	<div class="container">
 		<div class="row">
+
+	<!-- include menu -->
+			<div class="col-md-3">
+					<h4 class="lead">Street Connect</h4>
+					{{ render (controller('Application\\Controller\\InterfaceForumController::menuForum', { 'active':active } )) }}
+			</div>
+
 			<!-- Blog Entries Column -->
-			<div class="col-md-8">
+			<div class="col-md-5">
 				<h1 class="my-4">Forum</h1>
+				<h3>
+					{% if global.request.get('category_name') == "all" %}
+						Tous topics
+					{% else %}
+						{{ global.request.get('category_name') }}
+					{% endif %}
+				</h3>
 				<!-- Blog Post -->
 				<div class="card mb-4">
+					{% for value in topics %}
 					<div class="card-body">
-						<h2 class="card-title">Post Title</h2>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-						<a href="#" class="btn btn-primary">En savoir plus</a>
+						<h2 class="card-title">{{value.title}}</h2>
+						<p class="card-text">{{value.content}}</p>
+						<a href="{{ url('forum_topic', {'slugTopic' : value.title | slug, 'ID_topic' : value.ID_topic}) }}" class="btn btn-primary">En savoir plus</a>
 					</div>
 					<div class="card-footer text-muted">
-						Posted on January 1, 2017 by
-						<a href="#">User 1</a>
+						Posted on {{value.creation_date | date('d/m/Y')}} by
+						<a href="#">{{value.name}}</a>
 					</div>
+					{% endfor %}
 				</div>
 
-				<div class="card mb-4">
-					<div class="card-body">
-						<h2 class="card-title">Post Title</h2>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-						<a href="#" class="btn btn-primary">En savoir plus</a>
-					</div>
-					<div class="card-footer text-muted">
-						Posted on January 1, 2017 by
-						<a href="#">User 1</a>
-					</div>
-				</div>
-
-				<div class="card mb-4">
-					<div class="card-body">
-						<h2 class="card-title">Post Title</h2>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-						<a href="#" class="btn btn-primary">En savoir plus</a>
-					</div>
-					<div class="card-footer text-muted">
-						Posted on January 1, 2017 by
-						<a href="#">User 1</a>
-					</div>
-				</div>
-
-				<div class="card mb-4">
-					<div class="card-body">
-						<h2 class="card-title">Post Title</h2>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-						<a href="#" class="btn btn-primary">En savoir plus</a>
-					</div>
-					<div class="card-footer text-muted">
-						Posted on January 1, 2017 by
-						<a href="#">User 1</a>
-					</div>
-				</div>
-
-				<div class="card mb-4">
-					<div class="card-body">
-						<h2 class="card-title">Post Title</h2>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-						<a href="#" class="btn btn-primary">En savoir plus</a>
-					</div>
-					<div class="card-footer text-muted">
-						Posted on January 1, 2017 by
-						<a href="#">User 1</a>
-					</div>
-				</div>
-
-				<div class="card mb-4">
-					<div class="card-body">
-						<h2 class="card-title">Post Title</h2>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-						<a href="#" class="btn btn-primary">En savoir plus</a>
-					</div>
-					<div class="card-footer text-muted">
-						Posted on January 1, 2017 by
-						<a href="#">User 1</a>
-					</div>
-				</div>
-
-				<div class="card mb-4">
-					<div class="card-body">
-						<h2 class="card-title">Post Title</h2>
-						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-						<a href="#" class="btn btn-primary">En savoir plus</a>
-					</div>
-					<div class="card-footer text-muted">
-						Posted on January 1, 2017 by
-						<a href="#">User 1</a>
-					</div>
-				</div>
+				
 
 				<!-- Pagination -->
-				<ul class="pagination justify-content-center mb-4">
-					<li class="page-item">
-						<a class="page-link" href="#">&larr; Older</a>
-					</li>
-					<li class="page-item disabled">
-						<a class="page-link" href="#">Newer &rarr;</a>
-					</li>
-				</ul>
+				{% if page is defined %}
+
+					<div class="paging col-xs-12" style="text-align:center;margin:25px 0;">
+						{% if (pageMax) > 1 %}
+							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
+						{% endif %}
+
+						{% if (page - 1) > 1 %}
+							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>
+						{% endif %}
+						&nbsp;&nbsp;
+						{% if (page - 2) >= 1 %}
+							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>
+						{% endif %}
+						&nbsp;&nbsp;                       
+						{% if (page - 1) >= 1 %}
+							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>
+						{% endif %}
+						&nbsp;&nbsp;
+						<a href="#" class="btn btn-primary">{{ page }}</a>
+						&nbsp;&nbsp;
+						{% if (page + 1) <= pageMax %}
+							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>
+						{% endif %}
+						&nbsp;&nbsp;   
+						{% if (page + 2) < pageMax %}
+							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>
+						{% endif %}
+						&nbsp;&nbsp; 
+						{% if (page + 1) < pageMax %}
+							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>
+						{% endif %}
+						&nbsp;&nbsp;
+						
+						{% if (pageMax) > 1 %}
+							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
+						{% endif %}							
+					</div> 
+				{% endif %}
 			</div>
 
 			<!-- Sidebar Widgets Column -->
@@ -139,7 +121,7 @@
 					<div class="card-body">
 						<div class="input-group">
 							<span class="input-group-btn">
-								<button class="btn btn-success" type="button">Ajoutez un post</button>
+								<a href="{{ url('new_topic') }}"><button class="btn btn-success" type="button">Ajoutez un topic</button></a>
 							</span>
 						</div>
 					</div>
@@ -166,6 +148,8 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	{% endif %}
 {% endblock %}
 
 {# include footer #}

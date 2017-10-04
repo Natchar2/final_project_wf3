@@ -45,11 +45,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->assert('ID_product','[0-9]+')
 		->bind('article');
 
-
-		$controllers
-		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-		->bind('addItem');
-
 		$controllers
 		->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
 		->bind('faq');
@@ -69,20 +64,13 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-
 		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
 		->bind('forumAjoutPost');
 
-		$controllers
-		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
-		->bind('forumIndex');
-
-
+		
 		$controllers
 		->get('/agendaIndex', 'Application\Controller\InterfaceCommerceController::agendaIndexAction')
 		->bind('agenda');
-
-
 
 
 		$controllers

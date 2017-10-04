@@ -14,11 +14,74 @@ class InterfaceForumController
 
 	use Shortcut;
 
-	 public function accueilForumAction(Application $app)
+	 public function accueilForumAction($category_name,Application $app,$page = 1,$nbPerPage = 5)
     {
 
-    	return $app['twig']->render('forum/forumIndex.html.twig');
+    	$offset=(($page-1)*$nbPerPage);
+
+		if ($category_name == "all")
+		{
+			$totalTopics=$app['idiorm.db']->for_table('view_accueil_forum')->find_result_set();
+			$totalTopics=count($totalTopics);
+			$topics=$app['idiorm.db']->for_table('view_accueil_forum')->order_by_desc('creation_date')->limit($nbPerPage)->offset($offset)->find_result_set();
+		}
+		else
+		{
+			$totalTopics=$app['idiorm.db']->for_table('view_accueil_forum')->where('category_name', $category_name)->find_result_set();
+			$totalTopics=count($totalTopics);
+			$topics=$app['idiorm.db']->for_table('view_accueil_forum')->where('category_name', $category_name)->order_by_desc('creation_date')->limit($nbPerPage)->offset($offset)->find_result_set();
+		}          
+
+
+		return $app['twig']->render('forum/forumIndex.html.twig',[
+			'totalTopics' => $totalTopics,       
+			'topics' 	  => $topics,
+			'page'		  => $page,       
+			'nbPerPage'   => $nbPerPage
+		]);
+
    	}
+
+   	 public function accueilForumPageAction($category_name,Application $app,$page = 1,$nbPerPage = 5)
+    {
+    	$nbPerPage = 5;
+
+    	$offset=(($page-1)*$nbPerPage);
+
+		if ($category_name == "all")
+		{
+			$totalTopics=$app['idiorm.db']->for_table('view_accueil_forum')->find_result_set();
+			$totalTopics=count($totalTopics);
+			$topics=$app['idiorm.db']->for_table('view_accueil_forum')->order_by_desc('creation_date')->limit($nbPerPage)->offset($offset)->find_result_set();
+		}
+		else
+		{
+			$totalTopics=$app['idiorm.db']->for_table('view_accueil_forum')->where('category_name', $category_name)->find_result_set();
+			$totalTopics=count($totalTopics);
+			$topics=$app['idiorm.db']->for_table('view_accueil_forum')->where('category_name', $category_name)->order_by_desc('creation_date')->limit($nbPerPage)->offset($offset)->find_result_set();
+		}          
+
+
+		return $app['twig']->render('forum/forumIndex.html.twig',[
+			'totalTopics' => $totalTopics,       
+			'topics' 	  => $topics,
+			'page'		  => $page,       
+			'nbPerPage'   => $nbPerPage
+		]);
+
+   	}
+
+   	#génération du menu dans le layout
+	public function menuForum($active, Application $app)
+	{
+		$categories = $app['idiorm.db']->for_table('category')
+		->find_result_set();
+
+		return $app['twig']->render('menu-forum.html.twig',[
+			'active' => $active,
+			'categories' => $categories
+		]);
+	}
 
 	public function topicAction(Application $app, $slugTopic=1 ,$ID_topic=2)
 	{
@@ -67,7 +130,7 @@ class InterfaceForumController
 		return json_encode($posts);
 	}
 
-	public function newPostTopicAction(Application $app, Request $request, $slugTopic=1 ,$ID_topic=2)
+	public function newPostAction(Application $app, Request $request, $slugTopic=1 ,$ID_topic=2)
 	{
 
 		
@@ -135,7 +198,43 @@ class InterfaceForumController
 
 		}
 
+	}
 
+	public function newTopicAction(Application $app)
+	{
+		return $app['twig']->render('forum/new_topic.html.twig',[
+			'categories'=> $app['categories']
+		]);
+	}
+
+	public function newTopicPostAction(Application $app, Request $request)
+	{
+
+        //utilisation de la fonction de vérification dans Model\Vérifications
+        $Verifications = new Verifications;
+
+        $verifs =  $Verifications->VerificationNewTopic($request, $app);
+
+        $errors         = $verifs['errors'];
+
+        		//Connexion à la bdd
+            $topic = $app['idiorm.db']->for_table('topics')->create();
+
+
+    				//Affectation des valeurs
+            $topic->title            = $request->get('title');
+            $topic->ID_category      = $request->get('ID_category');
+ 			$topic->creation_date    = strtotime('now');
+ 			
+ 			$topic->save();
+
+           $success = "Votre topic a bien été ajouté";
+	
+
+		return $app['twig']->render('forum/new_topic.html.twig',[
+	        'errors'    => $errors,
+	        'categories'=> $app['categories']
+	    	]);
 
 	}
 

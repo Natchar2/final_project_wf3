@@ -494,7 +494,8 @@ public function VerificationContact($request, $app){
 }
 
 
-public function VerificationNewPost($request, $app){
+    public function VerificationNewPost($request, $app)
+    {
 
 
         /*-----------Verification du formulaire----------*/
@@ -515,6 +516,40 @@ public function VerificationNewPost($request, $app){
 
         
     }
+
+    public function VerificationNewTopic($request, $app)
+    {
+        $errors = [];
+
+        //verification du champ title
+        if(null!=($request->get('title')) && !empty($request->get('title'))){
+
+            if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_\s\;\!\.\?\:\,\'+\(\)]{3,100}$#i',$request->get('title'))) {
+
+                $errors[] = 'Titre invalide';
+            }
+        }else{
+
+            $errors[] = "Veuillez remplir le champ title";
+
+        }
+
+        ////verification du champ category
+        if(null!=($request->get('category')) && !empty($request->get('category'))){
+
+            if(!filter_var($request->get('category'), FILTER_VALIDATE_INT)){
+
+                $errors[] = 'Catégorie invalide';
+            }
+        }else{
+
+            $errors[] = "Veuillez remplir le champ catégorie";
+
+        }
+
+    }
+
+
 }
 
 ?>
