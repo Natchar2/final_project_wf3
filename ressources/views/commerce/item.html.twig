@@ -1,170 +1,160 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% block title %}
+	{{ product.name }}  | Street Connexion
+{% endblock %}
 
-<<<<<<< HEAD
-{% block header %}
-	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
-	=======
-	{% block title %}
-		{{ product.name }}  | Street Connexion
-		>>>>>>> a5d4c192788ae94c8b1bfbc65e3b053c3a4028af
+{# fil d'ariane #}
+{% set active = product.category_name|lower %}
+
+	{% block stylesheets %}
+		{{parent()}}
+		<link rel="stylesheet" href="{{asset('css/item.css')}}">
 	{% endblock %}
 
-	{# fil d'ariane #}
-	{% set active = product.category_name|lower %}
-
-		{% block stylesheets %}
-			{{parent()}}
-			<link rel="stylesheet" href="{{asset('css/item.css')}}">
-		{% endblock %}
-
-		{% block header %}
-			{% include 'commerce/menu.html.twig' %}
-		{% endblock %}
-
-		{% block contenu %}
+	{% block contenu %}
 
 
-			<!-- Page Content -->
-			<div class="container">
-				<div class="row">
-					<div class="col-md-3">
-						<h4 class="lead">Street Connect</h4>
-						{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
-					</div>
+		<!-- Page Content -->
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<h4 class="lead">Street Connect</h4>
+					{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
+				</div>
 
-					<div class="col-lg-9">
-						<div class="card mt-4">
-							<div class="row carousel-shop carousel-holder">
-								<div class="col-md-12">
-									<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-										<ol class="carousel-indicators">
-											<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+				<div class="col-lg-9">
+					<div class="card mt-4">
+						<div class="row carousel-shop carousel-holder">
+							<div class="col-md-12">
+								<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+									<ol class="carousel-indicators">
+										<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
 
-											{% if product.image_2 >  "" %}
-												<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+										{% if product.image_2 >  "" %}
+											<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+										{% endif %}
+										{% if product.image_3 >  "" %}
+											<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+										{% endif %}				
+									</ol>
+									<div class="carousel-inner">
+										<div class="item active">
+											{% if product.image_1 >  "" %}
+												<img class="slide-image" src="{{ asset('assets/images/'~product.image_1) }}" alt="">
+											{% else %}
+												<img class="slide-image" src="http://placehold.it/800x300" alt="">
 											{% endif %}
-											{% if product.image_3 >  "" %}
-												<li data-target="#carousel-example-generic" data-slide-to="2"></li>
-											{% endif %}				
-										</ol>
-										<div class="carousel-inner">
-											<div class="item active">
-												{% if product.image_1 >  "" %}
-													<img class="slide-image" src="{{ asset('assets/images/'~product.image_1) }}" alt="">
-												{% else %}
-													<img class="slide-image" src="http://placehold.it/800x300" alt="">
-												{% endif %}
-											</div>
-
-											{% if product.image_2 >  "" %}
-												<div class="item">
-													<img class="slide-image" src="{{ asset('assets/images/'~product.image_2) }}" alt="">
-												</div>
-											{% endif %}						
-
-											{% if product.image_3 >  "" %}
-												<div class="item">
-													<img class="slide-image" src="{{ asset('assets/images/'~product.image_3) }}" alt="">
-												</div>
-											{% endif %}						
-
-
 										</div>
-										<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-											<span class="glyphicon glyphicon-chevron-left"></span>
-										</a>
-										<a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-											<span class="glyphicon glyphicon-chevron-right"></span>
-										</a>
+
+										{% if product.image_2 >  "" %}
+											<div class="item">
+												<img class="slide-image" src="{{ asset('assets/images/'~product.image_2) }}" alt="">
+											</div>
+										{% endif %}						
+
+										{% if product.image_3 >  "" %}
+											<div class="item">
+												<img class="slide-image" src="{{ asset('assets/images/'~product.image_3) }}" alt="">
+											</div>
+										{% endif %}						
+
+
 									</div>
+									<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+										<span class="glyphicon glyphicon-chevron-left"></span>
+									</a>
+									<a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+										<span class="glyphicon glyphicon-chevron-right"></span>
+									</a>
 								</div>
 							</div>
-							<div class="card-body">
-								<small class="text-muted pull-right">Publié par {{ product.pseudo }} le  {{ product.creation_date|date('d/m/Y') }}</small>
-								<h3 class="card-title">{{ product.name }} - {% if product.brand > "" %} marque : {{ product.brand }} {% endif %}</h3>							
-								<h4>€ {{ (product.price)|number_format(2, '.', ' ') }}</h4>
-								{% if (product.shipping_charges > 0) %}
-									<h5><i> + Frais de livraison : € {{ (product.shipping_charges)|number_format(2, '.', ' ') }}</i></h5>
-								{% endif %}
-
-								<p class="card-text">{{ product.description }}</p>
-							</div>
 						</div>
-						<a href="#" class="btn btn-success pull-right">Ajouter au panier</a>					
-						<br><br>
-						<hr>
+						<div class="card-body">
+							<small class="text-muted pull-right">Publié par {{ product.pseudo }} le  {{ product.creation_date|date('d/m/Y') }}</small>
+							<h3 class="card-title">{{ product.name }} - {% if product.brand > "" %} marque : {{ product.brand }} {% endif %}</h3>							
+							<h4>€ {{ (product.price)|number_format(2, '.', ' ') }}</h4>
+							{% if (product.shipping_charges > 0) %}
+								<h5><i> + Frais de livraison : € {{ (product.shipping_charges)|number_format(2, '.', ' ') }}</i></h5>
+							{% endif %}
+
+							<p class="card-text">{{ product.description }}</p>
+						</div>
+					</div>
+					<a href="#" class="btn btn-success pull-right">Ajouter au panier</a>					
+					<br><br>
+					<hr>
+
+					<div class="card card-outline-secondary my-4">
+						<div class="card-header">
+							Suggestions
+						</div>
+						<div class="card-body">
+
+							{% if suggests is empty %}
+								<div class="alert alert-warning">Il n'y a pas encore de suggestions rattachées à ca produit</div>
+							{% else %}
+
+
+								{% for suggest in suggests %}
+
+									<div class="col-sm-4 col-lg-4 col-md-4 {{ suggest.category_name|lower }}">
+										<div class="thumbnail">
+											{% if suggest.image_1 > "" %}
+												<img src="{{ asset('assets/images/'~suggest.image_1) }}" alt="" style="height:150px;width:auto;margin-left:auto;margin-right:auto;">
+											{% else %}
+												<img src="http://placehold.it/320x150" alt="">
+											{% endif %}		
+
+											<div class="caption">
+
+												<h4><a href="{{ url('article', {'category_name': suggest.category_name|lower , 'slugproduct':suggest.name|slug , 'ID_product':suggest.ID_product}) }}">{{ suggest.name }}</a>
+												</h4>
+												<p>{{ suggest.description|slice(0, 70) }}</p>
+											</div>
+											<div class="ratings">
+												<a href="{{ url('article', {'category_name': suggest.category_name|lower , 'slugproduct':suggest.name|slug , 'ID_product':suggest.ID_product}) }}" class="btn btn-primary pull-right"> Details </a>
+												<h4>€ {{ (suggest.price)|number_format(2, '.', ' ') }}</h4>
+											</div>
+										</div>
+									</div>
+
+								{% endfor %}
+
+							{% endif %}
+
+						</div>
+					</div>
+
+
+
+					{% if posts is not empty %}
 
 						<div class="card card-outline-secondary my-4">
+
+							<br><br>
+							<hr>
+							<br><br>
 							<div class="card-header">
-								Suggestions
+								Posts sur les produit
 							</div>
 							<div class="card-body">
 
-								{% if suggests is empty %}
-									<div class="alert alert-warning">Il n'y a pas encore de suggestions rattachées à ca produit</div>
-								{% else %}
-
-
-									{% for suggest in suggests %}
-
-										<div class="col-sm-4 col-lg-4 col-md-4 {{ suggest.category_name|lower }}">
-											<div class="thumbnail">
-												{% if suggest.image_1 > "" %}
-													<img src="{{ asset('assets/images/'~suggest.image_1) }}" alt="" style="height:150px;width:auto;margin-left:auto;margin-right:auto;">
-												{% else %}
-													<img src="http://placehold.it/320x150" alt="">
-												{% endif %}		
-
-												<div class="caption">
-
-													<h4><a href="{{ url('article', {'category_name': suggest.category_name|lower , 'slugproduct':suggest.name|slug , 'ID_product':suggest.ID_product}) }}">{{ suggest.name }}</a>
-													</h4>
-													<p>{{ suggest.description|slice(0, 70) }}</p>
-												</div>
-												<div class="ratings">
-													<a href="{{ url('article', {'category_name': suggest.category_name|lower , 'slugproduct':suggest.name|slug , 'ID_product':suggest.ID_product}) }}" class="btn btn-primary pull-right"> Details </a>
-													<h4>€ {{ (suggest.price)|number_format(2, '.', ' ') }}</h4>
-												</div>
-											</div>
-										</div>
-
-									{% endfor %}
-
-								{% endif %}
 
 							</div>
 						</div>
+					{% endif %}
 
+					<br><br>						
 
+					<br><br>
 
-						{% if posts is not empty %}
-
-							<div class="card card-outline-secondary my-4">
-
-								<br><br>
-								<hr>
-								<br><br>
-								<div class="card-header">
-									Posts sur les produit
-								</div>
-								<div class="card-body">
-
-
-								</div>
-							</div>
-						{% endif %}
-
-						<br><br>						
-
-						<br><br>
-
-					</div>
 				</div>
 			</div>
-		{% endblock %}
+		</div>
+	{% endblock %}
 
-		{# include footer #}
-		{% block footer %}
-			{% include 'commerce/footer.html.twig' %}
-		{% endblock %}
+	{# include footer #}
+	{% block footer %}
+		{% include 'commerce/footer.html.twig' %}
+	{% endblock %}

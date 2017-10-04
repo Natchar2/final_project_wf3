@@ -1,9 +1,5 @@
 {% extends 'defaultLayout.html.twig' %}
 
-{% block header %}
-	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
-{% endblock %}
-
 {% block contenu %}
 	<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
 	<div id="paypal-button"></div>
