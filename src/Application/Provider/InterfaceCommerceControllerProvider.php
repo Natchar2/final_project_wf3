@@ -23,11 +23,13 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
 		->bind('panier');
 
+
 		$controllers
 		->get('/categorie/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
 		->assert('category_name','[^/]+')
 		->value('category_name','all')
-		->bind('categorie');
+		->bind('shop');
+
 
 		$controllers
 		->get('/categorie/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
@@ -35,7 +37,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->value('category_name','all')
 		->assert('page','[0-9]+')	
 		->value('page','1')		
-		->bind('categorie_page');
+		->bind('shop_page');
 
 		$controllers
 		->get('/{category_name}/{slugproduct}_{ID_product}.html','Application\Controller\InterfaceCommerceController::articleAction')
@@ -56,7 +58,18 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/about', 'Application\Controller\InterfaceCommerceController::aboutAction')
 		->bind('about');
 
+
 		$controllers
+		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
+		->bind('removeOneItem');
+
+		$controllers
+		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
+		->bind('removeAllItem');
+
+
+		$controllers
+
 		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
 		->bind('forumAjoutPost');
 
@@ -64,17 +77,18 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
 		->bind('forumIndex');
 
+
+		$controllers
+		->get('/agendaIndex', 'Application\Controller\InterfaceCommerceController::agendaIndexAction')
+		->bind('agenda');
+
+
+
+
 		$controllers
 		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
 		->bind('forumPostDetail');
 
-		$controllers
-		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
-		->bind('item');
-
-		$controllers
-		->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
-		->bind('shop');
 
 		$controllers
 		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
@@ -125,25 +139,12 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
 		->bind('connexion');
 
+
 		$controllers
 		->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
 		->bind('inscription');
 
-		$controllers
-		->get('/agenda', 'Application\Controller\InterfaceCommerceController::AgendaAction')
-		->bind('agenda');
 
-		$controllers
-		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
-		->bind('removeOneItem');
-
-		$controllers
-		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
-		->bind('removeAllItem');
-
-		$controllers
-		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
-		->bind('forumAjoutPost');
 
 		return $controllers;
 	}

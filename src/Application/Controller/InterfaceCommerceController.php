@@ -22,7 +22,7 @@ class InterfaceCommerceController
 		return $app['twig']->render('commerce/accueil.html.twig',[
 			'products' => $products,
 			'topics' => $topics,       
-			'events' => $events
+			'events' => $events,
 		]);
 
 	}
@@ -106,7 +106,6 @@ class InterfaceCommerceController
 
 	}
 
-
     #génération du menu dans le layout
 	public function menu($active, Application $app)
 	{
@@ -115,7 +114,6 @@ class InterfaceCommerceController
 			'active' => $active,
 		]);
 	}
-
 
     #génération du menu dans le layout
 	public function menuShop($active, Application $app)
@@ -126,15 +124,6 @@ class InterfaceCommerceController
 			'categories' => $categories
 		]);
 	}
-
-
-
-
-
-
-
-
-
 
 	public function panierAction(Application $app)
 	{
@@ -212,6 +201,7 @@ class InterfaceCommerceController
 
 		return new Response(json_encode($array)); 
 	}
+
 
 	public function removeAllItemAction(Application $app, Request $request)
 	{
@@ -396,11 +386,6 @@ class InterfaceCommerceController
 		return $app['twig']->render('commerce/inscription.html.twig');
 	}
 
-	public function agendaAction(Application $app)
-	{
-		return $app['twig']->render('commerce/agenda.html.twig');
-	}
-
 	public function newAdAction(Application $app, $ID_product){
 
 
@@ -424,7 +409,6 @@ class InterfaceCommerceController
 			'modification'=> $modification,
 		]);
 	}
-
 
 	public function newAdPostAction(Application $app, Request $request){
 
