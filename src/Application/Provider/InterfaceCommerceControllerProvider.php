@@ -24,8 +24,25 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('panier');
 
 		$controllers
-		->get('/categorie', 'Application\Controller\InterfaceCommerceController::categorieAction')
+		->get('/categorie/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
+		->assert('category_name','[^/]+')
+		->value('category_name','all')
 		->bind('categorie');
+
+		$controllers
+		->get('/categorie/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
+		->assert('category_name','[^/]+')
+		->value('category_name','all')
+		->assert('page','[0-9]+')	
+		->value('page','1')		
+		->bind('categorie_page');
+
+		$controllers
+		->get('/{category_name}/{slugproduct}_{ID_product}.html','Application\Controller\InterfaceCommerceController::articleAction')
+		->assert('category_name','[^/]+')
+		->assert('ID_product','[0-9]+')
+		->bind('article');
+
 
 		$controllers
 		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
@@ -40,7 +57,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('about');
 
 		$controllers
-
 		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
 		->bind('forumAjoutPost');
 
@@ -117,6 +133,17 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/agenda', 'Application\Controller\InterfaceCommerceController::AgendaAction')
 		->bind('agenda');
 
+		$controllers
+		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
+		->bind('removeOneItem');
+
+		$controllers
+		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
+		->bind('removeAllItem');
+
+		$controllers
+		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
+		->bind('forumAjoutPost');
 
 		return $controllers;
 	}

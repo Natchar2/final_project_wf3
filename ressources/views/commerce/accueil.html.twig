@@ -1,5 +1,12 @@
 {% extends 'defaultLayout.html.twig' %}
 
+
+{% block title %}
+	Street Connexion
+{% endblock %}
+
+
+
 {% block header %}
 	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
 {% endblock %}
@@ -83,46 +90,31 @@
 				<h2 class="titleAnnonces">Les dernières annonces</h2>
 				<!-- Three columns of text below the carousel -->
 				<div class="row">
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-						<h2>Article 1</h2>
 
-						<p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-						<p><a class="btn btn-default" href="#" role="button">Détails &raquo;</a></p>
-					</div><!-- /.col-lg-4 -->
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-						<h2>Article 2</h2>
-						<p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-						<p><a class="btn btn-default" href="#" role="button">Détails &raquo;</a></p>
-					</div><!-- /.col-lg-4 -->
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-						<h2>Article 3</h2>
-						<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-						<p><a class="btn btn-default" href="#" role="button">Détails &raquo;</a></p>
-					</div><!-- /.col-lg-4 -->
-				</div>
-				<div class="row">
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-						<h2>Article 4</h2>
 
-						<p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-						<p><a class="btn btn-default" href="#" role="button">Détails &raquo;</a></p>
-					</div><!-- /.col-lg-4 -->
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-						<h2>Article 5</h2>
-						<p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-						<p><a class="btn btn-default" href="#" role="button">Détails &raquo;</a></p>
-					</div><!-- /.col-lg-4 -->
-					<div class="col-lg-4">
-						<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-						<h2>Article 6</h2>
-						<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-						<p><a class="btn btn-default" href="#" role="button">Détails &raquo;</a></p>
-					</div><!-- /.col-lg-4 -->
+					{% for product in products %}
+
+						<div class="col-lg-4">
+
+							<div style="width:180px;height:180px;border:1px solid #444;border-radius: 35%;overflow: hidden;margin-left:auto;margin-right:auto;">
+
+								{% if product.image_1 > "" %}
+									<img src="{{ asset('assets/images/'~product.image_1) }}" alt="" style="height:180px;width:auto;margin-left:auto;margin-right:auto;">
+								{% else %}
+									<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="180" height="180">
+								{% endif %}		
+							</div>
+
+							<h2><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a></h2>
+							
+							<p>{{ product.description|slice(0, 70) }}</p>
+							<p><a class="btn btn-default" href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" >Détails &raquo;</a></p>				
+
+						</div>
+
+					{% endfor %}
+
+
 				</div><!-- /.row -->
 			</div>
 		</div>
@@ -156,46 +148,28 @@
 						<h2>Forum</h2>
 
 						<br>
-
 						<table class="table">
 							<thead>
 								<tr>
-									<th>Date</th>
-									<th>Auteur</th>
+									<th width=100>Date</th>
+									<th width=130>Auteur</th>
 									<th>Sujet</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>John</td>
-									<td>Doe</td>
-									<td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia illo dignissimos, omnis nesciunt similique tenetur impedit earum autem. Ipsum unde labore maxime eveniet quibusdam facilis minima numquam voluptatibus sed officia. <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
-								</tr>
-								<tr>
-									<td>Mary</td>
-									<td>Moe</td>
-									<td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum maiores neque deserunt ipsa exercitationem earum cum atque illum, impedit debitis vel magni suscipit ipsum rerum, aliquam dignissimos. Labore, mollitia, iusto. <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
-								</tr>
-								<tr>
-									<td>July</td>
-									<td>Dooley</td>
-									<td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, minima, odio! Nobis fugiat placeat repellendus doloremque alias maiores voluptas consectetur ad iste adipisci, quae mollitia. Neque optio, cumque consequuntur vel? <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
-								</tr>
-								<tr>
-									<td>July</td>
-									<td>Dooley</td>
-									<td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, minima, odio! Nobis fugiat placeat repellendus doloremque alias maiores voluptas consectetur ad iste adipisci, quae mollitia. Neque optio, cumque consequuntur vel? <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
-								</tr>
-								<tr>
-									<td>July</td>
-									<td>Dooley</td>
-									<td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, minima, odio! Nobis fugiat placeat repellendus doloremque alias maiores voluptas consectetur ad iste adipisci, quae mollitia. Neque optio, cumque consequuntur vel? <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
-								</tr>
-								<tr>
-									<td>July</td>
-									<td>Dooley</td>
-									<td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione, minima, odio! Nobis fugiat placeat repellendus doloremque alias maiores voluptas consectetur ad iste adipisci, quae mollitia. Neque optio, cumque consequuntur vel? <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
-								</tr>
+
+
+								{% for topic in topics %}
+									<tr>
+										<td>{{ topic.creation_date|date('d/m/Y') }}</td>
+										<td>{{ topic.name }}</td>
+										<td>{{ topic.title }} <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
+									</tr>
+
+								{% endfor %}
+
+
+
 							</tbody>
 						</table>
 					</div>
@@ -210,83 +184,75 @@
 
 				<h2 class="col-xs-12">Agenda</h2>
 
-				<div class="row">
-					<div class="row featurette">
-						<div class="col-md-7">
-							<h3 class="featurette-heading">Titre de l'évènement</h3>
-							<h4>Date de l'évènement - Lieu de l'évènement</h4>
-							<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-						</div>
-						<div class="col-md-5">
-							<img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
-						</div>
-					</div>
 
-					<hr class="featurette-divider">
 
-					<div class="row featurette">
-						<div class="col-md-7 col-md-push-5">
-							<h3 class="featurette-heading">Titre de l'évènement</h3>
-							<h4>Date de l'évènement - Lieu de l'évènement</h4>
-							<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
-						</div>
-						<div class="col-md-5 col-md-pull-7">
-							<img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
-						</div>
-					</div>
+				{% set bRevStyle = false %}
 
-					<hr class="featurette-divider">
 
-					<div class="row featurette">
-						<div class="col-md-7">
-							<h3 class="featurette-heading">Titre de l'évènement</h3>
-							<h4>Date de l'évènement - Lieu de l'évènement</h4>
-							<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
+					{% for event in events %}
+						<div class="row featurette">
+							<div class="col-md-7 {% if bRevStyle == true %} col-md-push-5 {% endif %}">
+								<h3 class="featurette-heading">{{ event.event_title }}</h3>
+								<h4>{{ event.start_date|date('d/m/Y') }} - {{ event.city ~ ' (' ~ event.zip_code ~ ')' }}</h4>
+								<p class="lead">{{ event.event_description }}.</p>
+							</div>
+							<div class="col-md-5  {% if bRevStyle == true %} col-md-pull-7 {% endif %}">
+								{% if event.image> "" %}
+									<img src="{{ asset('assets/images/'~event.image) }}" alt="" class="img-responsive center-block">
+								{% else %}
+									<img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+								{% endif %}
+							</div>
 						</div>
-						<div class="col-md-5">
-							<img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+
+						<hr class="featurette-divider">
+
+						{% if bRevStyle == false %}
+							{% set bRevStyle = true %}						
+							{% else %}
+								{% set bRevStyle = false %}
+								{% endif %}
+							{% endfor %}
+
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-		<hr class="featurette-divider">
 
-		<!-- Nos partenaires -->
-		<div class="container-fluid partenaires col-xs-12">
-			<div class="container">
-				<div class="row">
-					<h2 class="titleAnnonces">Nos partenaires</h2>
-					<br>
-					<!-- Three columns of text below the carousel -->
-					<div class="row">
-						<a href="https://www.abslyon.com/" target=_blank class="col-lg-3">
-							<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/abs.png')}}" alt="logo_abs">
-							<br>
 
-						</a>
+					<!-- Nos partenaires -->
+					<div class="container-fluid partenaires col-xs-12">
+						<div class="container">
+							<div class="row">
+								<h2 class="titleAnnonces">Nos partenaires</h2>
+								<br>
+								<!-- Three columns of text below the carousel -->
+								<div class="row">
+									<a href="https://www.abslyon.com/" target=_blank class="col-lg-3">
+										<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/abs.png')}}" alt="logo_abs">
+										<br>
 
-						<a href="https://www.hawaiisurf.com/" target=_blank class="col-lg-3">
-							<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/hawai.png')}}" alt="logo_hawai">
-							<br>
-						</a>
+									</a>
 
-						<a href="http://www.bikes.com/fr" target=_blank class="col-lg-3">
-							<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/rm.png')}}" alt="logo_rm">
-							<br>
-						</a>
+									<a href="https://www.hawaiisurf.com/" target=_blank class="col-lg-3">
+										<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/hawai.png')}}" alt="logo_hawai">
+										<br>
+									</a>
 
-						<a href="https://www.vans.fr/" target=_blank class="col-lg-3">
-							<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/vans.png')}}" alt="logo_vans">
-							<br>
-						</a>
+									<a href="http://www.bikes.com/fr" target=_blank class="col-lg-3">
+										<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/rm.png')}}" alt="logo_rm">
+										<br>
+									</a>
+
+									<a href="https://www.vans.fr/" target=_blank class="col-lg-3">
+										<img class="featurette-image img-responsive center-block" height="auto" width="300" src="{{asset('img/vans.png')}}" alt="logo_vans">
+										<br>
+									</a>
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-	{% endblock %}
+				{% endblock %}
 
-	{# include footer #}
-	{% block footer %}
-		{% include 'commerce/footer.html.twig' %}
-	{% endblock %}
+				{# include footer #}
+				{% block footer %}
+					{% include 'commerce/footer.html.twig' %}
+				{% endblock %}
