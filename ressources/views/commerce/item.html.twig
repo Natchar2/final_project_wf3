@@ -1,6 +1,5 @@
 {% extends 'defaultLayout.html.twig' %}
 
-
 {% block title %}
 	{{ product.name }}  | Street Connexion
 {% endblock %}
@@ -13,14 +12,11 @@
 		<link rel="stylesheet" href="{{asset('css/item.css')}}">
 	{% endblock %}
 
-	{% block header %}
-		{% include 'commerce/menu.html.twig' %}
-	{% endblock %}
-
 	{% block contenu %}
 
 
 		<!-- Page Content -->
+		<br><br><br><br>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3">
@@ -28,15 +24,14 @@
 					{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
 				</div>
 
-
 				<div class="col-lg-9">
 					<div class="card mt-4">
-						<div class="row carousel-holder">
+						<div class="row carousel-shop carousel-holder">
 							<div class="col-md-12">
 								<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 									<ol class="carousel-indicators">
 										<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-										
+
 										{% if product.image_2 >  "" %}
 											<li data-target="#carousel-example-generic" data-slide-to="1"></li>
 										{% endif %}
@@ -64,6 +59,7 @@
 												<img class="slide-image" src="{{ asset('assets/images/'~product.image_3) }}" alt="">
 											</div>
 										{% endif %}						
+
 
 									</div>
 									<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
@@ -95,7 +91,7 @@
 							Suggestions
 						</div>
 						<div class="card-body">
-							
+
 							{% if suggests is empty %}
 								<div class="alert alert-warning">Il n'y a pas encore de suggestions rattachées à ca produit</div>
 							{% else %}
@@ -112,7 +108,7 @@
 											{% endif %}		
 
 											<div class="caption">
-												
+
 												<h4><a href="{{ url('article', {'category_name': suggest.category_name|lower , 'slugproduct':suggest.name|slug , 'ID_product':suggest.ID_product}) }}">{{ suggest.name }}</a>
 												</h4>
 												<p>{{ suggest.description|slice(0, 70) }}</p>

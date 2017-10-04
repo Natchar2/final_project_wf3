@@ -28,7 +28,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/categorie/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
 		->assert('category_name','[^/]+')
 		->value('category_name','all')
-		->bind('categorie');
+		->bind('shop');
 
 
 		$controllers
@@ -37,7 +37,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->value('category_name','all')
 		->assert('page','[0-9]+')	
 		->value('page','1')		
-		->bind('categorie_page');
+		->bind('shop_page');
 
 		$controllers
 		->get('/{category_name}/{slugproduct}_{ID_product}.html','Application\Controller\InterfaceCommerceController::articleAction')
@@ -79,12 +79,16 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
+		->get('/agendaIndex', 'Application\Controller\InterfaceCommerceController::agendaIndexAction')
+		->bind('agenda');
+
+
+
+
+		$controllers
 		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
 		->bind('forumPostDetail');
 
-		$controllers
-		->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
-		->bind('shop');
 
 		$controllers
 		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')

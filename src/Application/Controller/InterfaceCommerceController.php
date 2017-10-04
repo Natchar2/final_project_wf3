@@ -13,99 +13,131 @@ class InterfaceCommerceController
 
 	use Shortcut;
 
-	 public function accueilAction(Application $app)
-    {
-        $products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
-        $topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
-        $events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
 
-        return $app['twig']->render('commerce/accueil.html.twig',[
-            'products' => $products,
-            'topics' => $topics,       
-            'events' => $events
-        ]);
+	public function accueilAction(Application $app)
+	{
+		$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
+		$topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
+		$events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
 
-    }
+		return $app['twig']->render('commerce/accueil.html.twig',[
+			'products' => $products,
+			'topics' => $topics,       
+			'events' => $events,
+		]);
 
-    public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
-    {
-        $offset=(($page-1)*$nbPerPage);
-        $totalProducts=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->find_result_set();
-        $totalProducts=count($totalProducts);
-        $products=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->limit($nbPerPage)->offset($offset)->find_result_set();
+	}
 
+	public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
+	{
+		$offset=(($page-1)*$nbPerPage);
 
-        return $app['twig']->render('commerce/categorie.html.twig',[
-            'totalProducts' => $totalProducts,       
-            'products' => $products,
-            'page' => $page,       
-            'nbPerPage' => $nbPerPage
-        ]);
-    }
-
-    public function categoriePageAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
-    {
-        $offset=(($page-1)*$nbPerPage);
-        $totalProducts=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->find_result_set();
-        $totalProducts=count($totalProducts);
-        $products=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->limit($nbPerPage)->offset( $offset)->find_result_set();
+		if ($category_name == "all")
+		{
+			$totalProducts=$app['idiorm.db']->for_table('view_products')->find_result_set();
+			$totalProducts=count($totalProducts);
+			$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit($nbPerPage)->offset($offset)->find_result_set();
+		}
+		else
+		{
+			$totalProducts=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->find_result_set();
+			$totalProducts=count($totalProducts);
+			$products=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->order_by_desc('creation_date')->limit($nbPerPage)->offset($offset)->find_result_set();
+		}          
 
 
-        return $app['twig']->render('commerce/categorie.html.twig',[
-            'totalProducts' => $totalProducts,       
-            'products' => $products,
-            'page' => $page,       
-            'nbPerPage' => $nbPerPage
-        ]);
-    }
+		return $app['twig']->render('commerce/shop.html.twig',[
+			'totalProducts' => $totalProducts,       
+			'products' => $products,
+			'page' => $page,       
+			'nbPerPage' => $nbPerPage
+		]);
+	}
 
-    public function articleAction($category_name,$slugproduct,$ID_product,Application $app)
-    {
+	public function categoriePageAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
+	{
+		$offset=(($page-1)*$nbPerPage);
+
+		if ($category_name == "all")
+		{
+			$totalProducts=$app['idiorm.db']->for_table('view_products')->find_result_set();
+			$totalProducts=count($totalProducts);
+			$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit($nbPerPage)->offset($offset)->find_result_set();
+		}
+		else
+		{
+			$totalProducts=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->find_result_set();
+			$totalProducts=count($totalProducts);
+			$products=$app['idiorm.db']->for_table('view_products')->where('category_name', $category_name)->order_by_desc('creation_date')->limit($nbPerPage)->offset($offset)->find_result_set();
+		}          
+
+
+
+		return $app['twig']->render('commerce/shop.html.twig',[
+			'totalProducts' => $totalProducts,       
+			'products' => $products,
+			'page' => $page,       
+			'nbPerPage' => $nbPerPage
+		]);
+	}
+
+	public function articleAction($category_name,$slugproduct,$ID_product,Application $app)
+	{
         #format index.php/business/une-formation-innovante-a-lyon_87943512.html
-        $product = $app['idiorm.db']->for_table('view_products')->find_one($ID_product);
-        $suggests = $app['idiorm.db']->for_table('view_products')->raw_query('SELECT * FROM view_products WHERE ID_category=' . $product->ID_category . ' AND ID_product<>' . $ID_product . ' ORDER BY RAND() LIMIT 3 ')->find_result_set();       
+		$product = $app['idiorm.db']->for_table('view_products')->find_one($ID_product);
+		$suggests = $app['idiorm.db']->for_table('view_products')->raw_query('SELECT * FROM view_products WHERE ID_category=' . $product->ID_category . ' AND ID_product<>' . $ID_product . ' ORDER BY RAND() LIMIT 3 ')->find_result_set();   
 
-        return $app['twig']->render('commerce/article.html.twig',[
-            'product' => $product,
-            'suggests' => $suggests
-        ]);
+		$topic = $app['idiorm.db']->for_table('view_topics')->where('ID_product', $ID_product)->find_one();
 
-    }
+		if (isset($topic) AND !empty($topic))
+		{
+			$posts = $app['idiorm.db']->for_table('view_topics')->where('ID_topic', $topic['ID_topic'])->find_result_set();
+		}
+		else
+		{
+			$posts = null;
+		}
 
+
+		return $app['twig']->render('commerce/item.html.twig',[
+			'product' => $product,
+			'suggests' => $suggests,
+			'posts' => $posts
+		]);
+
+	}
 
     #génération du menu dans le layout
-    public function menu($active, Application $app)
-    {
-        $categories = $app['idiorm.db']->for_table('category')->find_result_set();
-        return $app['twig']->render('menu.html.twig',[
-            'active' => $active,
-        ]);
-    }
-
+	public function menu($active, Application $app)
+	{
+		$categories = $app['idiorm.db']->for_table('category')->find_result_set();
+		return $app['twig']->render('menu.html.twig',[
+			'active' => $active,
+		]);
+	}
 
     #génération du menu dans le layout
-    public function menuShop($active, Application $app)
-    {
-        $categories = $app['idiorm.db']->for_table('category')->find_result_set();
-        return $app['twig']->render('menu-shop.html.twig',[
-            'active' => $active,
-            'categories' => $categories
-        ]);
-    }
+	public function menuShop($active, Application $app)
+	{
+		$categories = $app['idiorm.db']->for_table('category')->find_result_set();
+		return $app['twig']->render('menu-shop.html.twig',[
+			'active' => $active,
+			'categories' => $categories
+		]);
+	}
 
+	public function panierAction(Application $app)
+	{
+		return $app['twig']->render('commerce/panier.html.twig');
+	}
 
+	public function faqAction(Application $app)
+	{
+		return $app['twig']->render('commerce/FAQ.html.twig');
+	}
 
-    public function panierAction(Application $app)
-    {
-        return $app['twig']->render('commerce/panier.html.twig');
-    }
+	public function addItemAction(Application $app, Request $request)
 
-    public function faqAction(Application $app)
-    {
-        return $app['twig']->render('commerce/FAQ.html.twig');
-    }
-
-    public function addItemAction(Application $app, Request $request)
 	{
 
 		$panier = $app['session']->get('panier');
@@ -171,6 +203,7 @@ class InterfaceCommerceController
 
 		return new Response(json_encode($array)); 
 	}
+
 
 	public function removeAllItemAction(Application $app, Request $request)
 	{
@@ -421,6 +454,7 @@ class InterfaceCommerceController
 
               $modification->save();
 
+
               $success = "Votre produit a bien été modifié";
           }
           else
@@ -428,6 +462,7 @@ class InterfaceCommerceController
 
     				//Connexion à la bdd
             $product = $app['idiorm.db']->for_table('products')->create();
+
 
     				//Affectation des valeurs
             $product->name             = $request->get('name');
@@ -544,7 +579,6 @@ class InterfaceCommerceController
 
 		
 	}  
-
 
 }
 

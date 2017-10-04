@@ -23,14 +23,13 @@
 	<link rel="stylesheet" href="{{asset('css/shop.css')}}">
 {% endblock %}
 
-{% block header %}
-	{% include 'commerce/menu.html.twig' %}
-{% endblock %}
+
 
 {% block contenu %}
-	<!-- include menu -->
+
 
 	<!-- Page Content -->
+	<br><br><br><br>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-3">
@@ -41,7 +40,7 @@
 			</div>
 
 			<div class="col-md-9">
-				<div class="row carousel-holder">
+				<div class="carousel-shop row carousel-holder">
 					<div class="col-md-12">
 						<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 							<ol class="carousel-indicators">
@@ -121,38 +120,38 @@
 
 					<div class="paging col-xs-12" style="text-align:center;margin:25px 0;">
 						{% if (pageMax) > 1 %}
-							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
+							<a href="{{ url('shop_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
 						{% endif %}
 
 						{% if (page - 1) > 1 %}
-							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>
+							<a href="{{ url('shop_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>
 						{% endif %}
 						&nbsp;&nbsp;
 						{% if (page - 2) >= 1 %}
-							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>
+							<a href="{{ url('shop_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>
 						{% endif %}
 						&nbsp;&nbsp;                       
 						{% if (page - 1) >= 1 %}
-							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>
+							<a href="{{ url('shop_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>
 						{% endif %}
 						&nbsp;&nbsp;
 						<a href="#" class="btn btn-primary">{{ page }}</a>
 						&nbsp;&nbsp;
 						{% if (page + 1) <= pageMax %}
-							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>
+							<a href="{{ url('shop_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>
 						{% endif %}
 						&nbsp;&nbsp;   
 						{% if (page + 2) < pageMax %}
-							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>
+							<a href="{{ url('shop_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>
 						{% endif %}
 						&nbsp;&nbsp; 
 						{% if (page + 1) < pageMax %}
-							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>
+							<a href="{{ url('shop_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>
 						{% endif %}
 						&nbsp;&nbsp;
 						
 						{% if (pageMax) > 1 %}
-							<a href="{{ url('categorie_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
+							<a href="{{ url('shop_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
 						{% endif %}							
 					</div> 
 				{% endif %}

@@ -2,18 +2,14 @@
 
 {% block stylesheets %}
 	{{parent()}}
-	<link rel="stylesheet" href="{{asset('css/about.css')}}">
-{% endblock %}
-
-{% block header %}
-	{% include 'commerce/menu.html.twig' %}
+	<link rel="stylesheet" href="{{asset('css/inscriptionConnexion.css')}}">
 {% endblock %}
 
 {% block contenu %}
 	<div class="row">
 		<div class="col-xs-6 col-xs-push-3">
-			<h2 class="texte-center">Inscription</h2>
-
+			<h2 class="text-center">Inscription</h2>
+			<br>
 			{% if  errors is defined %}
 				{% if  errors is not empty %}
 					<div class="alert alert-danger" role=alert>
