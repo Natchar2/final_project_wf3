@@ -123,8 +123,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('listProducts');
 
 		$controllers
-		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
-		->assert('ID_product', '\d+')
+		->post('/produit/liste', 'Application\Controller\InterfaceCommerceController::deleteProduct')
 		->bind('deleteProduct');
 
 		$controllers

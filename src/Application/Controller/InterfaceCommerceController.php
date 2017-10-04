@@ -481,11 +481,11 @@ class InterfaceCommerceController
 
     }
 
-    public function listProducts(Application $app, $ID_user=8){
+    public function listProducts(Application $app, $ID_user=8){ //penser a passer l'ID_User ac la sessions
 
 
         $products = $app['idiorm.db']->for_table('view_products')
-        ->where('ID_user',8)
+        ->where('ID_user',8)  //penser a passer l'ID_User ac la sessions
         ->find_result_set();
 
         return $app['twig']->render('commerce/list_products.html.twig',[
@@ -494,51 +494,55 @@ class InterfaceCommerceController
         ]);
     }
 
-    public function deleteProduct(Application $app, $ID_product, $token)
+    public function deleteProduct(Application $app, Request $request)
     {
 
 
         $products = $app['idiorm.db']->for_table('view_products')
-        ->where('ID_user',8)
+        ->where('ID_user',8)//penser a passer l'ID_User ac la sessions
         ->find_result_set();
 
-        return $app['twig']->render('commerce/list_products.html.twig',[
-            'products' => $products,
 
-        ]);
-
-        if($token == $app['session']->get('token')[0])
+        if($request->get('token') == $app['session']->get('token'))
         {
 
-            $success =  'Uiiiiiiiiiiiiiiiiiii';
-            return $app['twig']->render('commerce/list_products.html.twig',[
-                'success'=>$success,
-                'products'=>$products
-            ]);
+        	$suppression = $app['idiorm.db']->for_table('products')
+    			->where('ID_product', $request->get('ID_product'))
+    			->find_one();
 
+
+			if(!empty($suppression->get('image_1')))
+			{
+				unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_1'));
+			}
+
+			if(!empty($suppression->get('image_2')))
+			{
+				unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_2'));
+			}
+
+			if(!empty($suppression->get('image_3')))
+			{
+				unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_3'));
+			}
+
+			$suppression->delete();
+
+            $success = 'Le produit a été supprimé de la liste';
+           
         }
         else
         {
-            $success = 'nooooooooooooon';
-            return $app['twig']->render('commerce/list_products.html.twig',[
+           $success = 'Vous ne pouvez supprimé un élément sans être connecté';
+           
+        }
+
+         return $app['twig']->render('commerce/list_products.html.twig',[
                 'success'=>$success,
                 'products'=>$products
             ]);
-        }
 
-
-		/* $suppression = $app['idiorm.db']->for_table('products')
-		->where('ID_product', $ID_product)
-		->find_one();
-
-
-		$suppression->delete();
-
-
-		return $app['twig']->render('commerce/list_products.html.twig',[
-		'products' => $products,
-		'delete'   => $delete
-		]);*/
+		
 	}  
 
 

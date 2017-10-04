@@ -20,22 +20,29 @@ class InterfaceForumController
     	return $app['twig']->render('forum/forumIndex.html.twig');
    	}
 
-	public function topicAction(Application $app, $ID_topic=2)
+	public function topicAction(Application $app, $slugTopic=1 ,$ID_topic=2)
 	{
 		if($ID_topic>0)
   	  	{
             //appel de base pour afficher les données pour retrouver l'article a modifier
 			$topics = $app['idiorm.db']->for_table('view_topics')
-			->find_one($ID_topic);
+			->where('ID_topic',2)
+			->find_one();
+
+
+
+			//appel de la page pour tranche de 5 posts
 			$posts = $app['idiorm.db']->for_table('post')
-			->where('ID_topic', $ID_topic)
+			->where('ID_topic',2)
+			->order_by_desc('post_date')
+	 		->limit(5)
 			->find_result_set();
 
 			return $app['twig']->render('forum/topic.html.twig', [
 		        'categories'  => $app['categories'],      
-		        'error'       => [] ,
 		        'errors'      => [],
-		        'topics'=> $topics,
+		        'topics'	  => $topics,
+		        'posts'		  => $posts,
 	  	  ]);
 		}
 		else
@@ -45,8 +52,25 @@ class InterfaceForumController
 		}
 
 	}
-	public function newPostTopicAction(Application $app, Request $request)
+
+	public function addPostTopicAction(Application $app, Request $request)
 	{
+		$number_post = $request->get('number_post');
+
+		$posts = $app['idiorm.db']->for_table('post')
+		->where('ID_topic', 2)
+		->order_by_desc('post_date')
+		->limit(5)
+		->offset($number_post)
+		->find_array();
+
+		return json_encode($posts);
+	}
+
+	public function newPostTopicAction(Application $app, Request $request, $slugTopic=1 ,$ID_topic=2)
+	{
+
+		
 
 		//utilisation de Vérification dans Model\Vérifications
 		$Verifications = new Verifications;
@@ -70,12 +94,33 @@ class InterfaceForumController
 
 			$post->save();
 
+			if($ID_topic>0)
+			  	  	{
+			            //appel de base pour afficher les données pour retrouver l'article a modifier
+						$topics = $app['idiorm.db']->for_table('view_topics')
+						->where('ID_topic',2)
+						->find_one();
+
+
+
+						//appel de la page pour tranche de 5 posts
+						$posts = $app['idiorm.db']->for_table('post')
+						->where('ID_topic',2)
+						->order_by_desc('post_date')
+				 		->limit(5)
+						->find_result_set();
+
+						
+					}
+					
 			$success = "Votre commentaire a bien été ajouté";
 
-			return $app['twig']->render('forum/topic.html',[
+			return $app['twig']->render('forum/topic.html.twig',[
 				'success'     => $success,
     			'errors'      => [] ,
     			'categories'  => $app['categories'],
+    			'topics'	  => $topics,
+		        'posts'		  => $posts,
 			]);
 		}
 		else
@@ -83,7 +128,9 @@ class InterfaceForumController
 
 			return $app['twig']->render('forum/topic.html.twig',[
 			'errors'    => $errors,
-			'categories'=> $app['categories']
+			'categories'=> $app['categories'],
+			'topics'	=> $topics,
+		    'posts'		=> $posts,
 			]);
 
 		}

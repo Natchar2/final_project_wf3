@@ -494,7 +494,7 @@ public function VerificationContact($request, $app){
 }
 
 
-public function VerificationNewAd($request, $app){
+public function VerificationNewPost($request, $app){
 
 
         /*-----------Verification du formulaire----------*/

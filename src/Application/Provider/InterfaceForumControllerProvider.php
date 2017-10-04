@@ -33,6 +33,10 @@ class InterfaceForumControllerProvider implements ControllerProviderInterface
 		->assert('ID_topic', '\d+')
 		->bind('forum_topic_post');
 
+		$controllers
+		->post('/topic_add_post', 'Application\Controller\InterfaceForumController::addPostTopicAction')
+		->bind('topic_add_post');
+
 		return $controllers;
 	}
 }

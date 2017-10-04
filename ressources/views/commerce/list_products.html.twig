@@ -4,11 +4,12 @@
 
 {% block contenu %}
 	<div class="row">
-		{% if success is not empty %}
+		{% if success is defined %}
 			<div class="alert alert-danger" role=alert>
 				<p>{{ success }}</p>
 			</div>	
 		{% endif %}
+		
 
 		{% if products is not empty %}
 			<div class="col-md-12">
@@ -61,9 +62,12 @@
 								<td>{{value.tracking_number}}</td>
 
 								<td>
-									<a href="{{ url('deleteProduct',{'ID_product' : value.ID_product,'token' :  app.session.get('token')} ) }}" onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger">Suppr.</a>
-									{# <input type="hidden" name="edit_id" value="{{products.ID_product}}">#}
-									<a href="{{ url('view_newAd',{'ID_product' : value.ID_product}) }}" class="btn btn-warning">Modifier</a>
+									<form action="{{ url('deleteProduct') }}"  method="post">
+										<input type="hidden" name="ID_product" value="{{value.ID_product}}">
+										<input type="hidden" name="token" value="{{app.session.get('token')}}">
+										<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 
+										<a href="{{ url('view_newAd',{'ID_product' : value.ID_product}) }}" class="btn btn-warning">Modifier</a>
+									</form>
 								</td>
 							</tr>
 						{% endfor %}
@@ -72,7 +76,7 @@
 			</div>
 		{% else %}
 			
-			<div class="alert alert-waring" role=alert>
+			<div class="alert alert-warning" role=alert>
 				<p>Vous n'avez pas encore de produits à afficher</p>
 			</div>		
 

@@ -24,23 +24,31 @@
 				<!-- Blog Post -->
 				<div class="card mb-4">
 					<div class="card-body">
-						<h2 class="card-title">Titre post</h2>
-						<p class="card-text">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse obcaecati, totam aspernatur amet at excepturi. Nemo nihil tempora porro, distinctio atque dolores aliquid, quo doloribus, illo velit amet. Magni, dignissimos! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus sed dolore, delectus soluta aspernatur quisquam voluptatem dolores ullam magnam facilis alias. Quasi sequi, laudantium iure quas impedit magni harum assumenda! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio quis, quibusdam rerum iure veritatis eius dolorem hic debitis reprehenderit reiciendis nulla, dicta, adipisci fugiat quia quas tenetur. Sint, obcaecati, officiis! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur error laborum, inventore aliquam consequatur atque tempora eaque omnis nostrum accusamus beatae excepturi expedita consectetur aperiam, mollitia voluptatibus, vel consequuntur corporis.
-						</p>
-						<span class="input-group-btn">
-							<button class="btn btn-primary" type="button">Revenir au forum</button>
+						<h2 class="card-title">{{topics.title}}</h2>
+						<div class="block_post">
+							<p class="card-text">
+								{{topics.category_name}}<br>
+							</p> 
+							{% for value in posts %}
+							<p class="card-text old_post">
+								{{value.content}}	
+							</p> 
+							{% endfor %}
+						</div>
+						<span >
+							<button class="btn btn-primary plus_post" type="button">Afficher plus</button>&nbsp;&nbsp;<button class="btn btn-primary" type="button">Revenir au forum</button>
 						</span>
-					</div>
-				</div>
-			</div>
-
+		
 				<!-- Blog Post -->
-				<div class="card mb-4">
-					<div class="card-body">
-						<h2 class="card-title">Ajoutez un commentaire</h2>
+						<h2 >Ajoutez un commentaire</h2>
 						<p class="card-text">
-							<form action="" method="POST" class="form-horizontal itemForm">
+
+							{% if success is defined %}
+								<div class="alert alert-info" role="alert">
+									{{ success }}
+								</div>
+							{% endif %}
+							<form action="{{ url('forum_topic_post', {'slugTopic' : topics.title | slug, 'ID_topic' : topics.ID_topic}) }}" method="POST" class="form-horizontal itemForm">
 								<fieldset>
 									<!-- Text input-->
 									<!-- <div class="form-group">
@@ -54,18 +62,20 @@
 									<input type="hidden" name="ID_topic">
 									<!-- Textarea -->
 									<div class="form-group">
-										<label class="col-md-4 control-label" for="text">Texte</label>
-										<div class="col-md-4">                     
+										<div class="col-md-12">                     
 											<textarea class="form-control" id="text" name="content"></textarea>
 										</div>
 									</div>
+									<button type="submit" class="btn btn-success">Poster</button>
 								</fieldset>
 							</form>
 						</p>
-						<a href="#" type="submit" class="btn btn-success">Poster</a>
+						
 					</div>
 				</div>
 			</div>
+		
+
 
 			<!-- Sidebar Widgets Column -->
 			<div class="col-md-4">
@@ -93,12 +103,21 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- /.row -->
+			<!-- /.row -->
 	</div>
+</div>
+			
+
+
+
 {% endblock %}
 
 {# include footer #}
 {% block footer %}
 	{% include 'commerce/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('js/topic.js') }}"></script>
 {% endblock %}
