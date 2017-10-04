@@ -63,19 +63,10 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('removeAllItem');
 
 
-		$controllers
-		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
-		->bind('forumAjoutPost');
-
 		
 		$controllers
 		->get('/agendaIndex', 'Application\Controller\InterfaceCommerceController::agendaIndexAction')
 		->bind('agenda');
-
-
-		$controllers
-		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
-		->bind('forumPostDetail');
 
 
 		$controllers
