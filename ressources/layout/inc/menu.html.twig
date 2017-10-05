@@ -30,8 +30,16 @@
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="{{ url('inscription') }}">Inscription</a></li>
+
+					
+
+				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+					<li><a href="{{ path('deconnexion') }}">Déconnexion</a></li>
+				{% else %}
+					<li><a href="{{ url('inscription_post') }}">Inscription</a></li>
 					<li><a href="{{ url('connexion') }}">Connexion</a></li>
+				{% endif %}
+
 				</ul>
 			</div>
 			<!--/.nav-collapse -->

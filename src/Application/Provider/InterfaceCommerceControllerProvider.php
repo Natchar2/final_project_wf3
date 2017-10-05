@@ -125,9 +125,14 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
 		->bind('connexion');
 
+		// $controllers
+		// ->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
+		// ->bind('inscription');
+
 		$controllers
-		->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
-		->bind('inscription');
+		->match('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionPostAction')
+		->method('GET|POST')
+		->bind('inscription_post');
 
 		$controllers
 		->get('/agenda', 'Application\Controller\InterfaceCommerceController::AgendaAction')

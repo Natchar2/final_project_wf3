@@ -7,123 +7,173 @@
 
 {% block contenu %}
 	<div class="row">
-		<div class="col-xs-6 col-xs-push-3">
-			<h2 class="text-center">Inscription</h2>
-			<br>
-			{% if  errors is defined %}
-				{% if  errors is not empty %}
-					<div class="alert alert-danger" role=alert>
-						{% for value in errors %}
-							<p>{{value}}</p><br>
-						{% endfor %}
-					</div><br>
-				{% endif %}
-			{% endif %}
+		{% if error is defined %}
+			<div class="alert alert-danger" role=alert>
+				
+					<p>{{error}}</p><br>	
+				
+			</div><br>
+		{% endif %}
+    	<div class="col-xs-10 col-xs-offset-1">
+    		<form enctype="multipart/form-data" class="form-horizontal" method="POST">
+    			<h3>S'inscrire</h3>
+    			
+    			<!-- NOM  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Nom
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.name) }}
+    				</div>
+    			</div>
+    			
+    			<!-- PRENOM  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Prénom
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.surname) }}
+    				</div>
+    			</div>
+    			
+    			<!-- PSEUDO  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Pseudo
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.pseudo) }}
+    				</div>
+    			</div>
+    			
+    			<!-- RUE  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Rue
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.street) }}
+    				</div>
+    			</div>
 
-			{% if success is defined %}
-				<div class="alert alert-success" role=alert>
-					<p>Inscription validée</p>
-				</div><br>
-			{% endif %}
+    			<!-- Code Postal  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Code Postal
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.zip_code) }}
+    				</div>
+    			</div>
 
-			<form class="form-horizontal" action="" method="POST">
-				<!-- Nom -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Nom</label>
-					<div class="col-md-7">
-						<input type="text" class="form-control" name="name" required>
+    			<!-- VILLE  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Ville
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.city) }}
+    				</div>
+    			</div>
+
+    			<!-- MAIL  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Mail
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.email) }}
+    				</div>
+    			</div>
+
+    			<!-- TELEPHONE  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Numéro de téléphone
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.phone) }}
+    				</div>
+    			</div>
+
+    			<!-- NOM DE LA SOCIETE  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Nom de la société
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.society_name) }}
+    				</div>
+    			</div>
+    			
+    			<!-- AVATAR -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Avatar image
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.avatar) }}
+    				</div>
+    			</div>
+
+    			<!-- PASSWORD  -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Mot de passe
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.password) }}
+    				</div>
+    			</div>
+
+    			<!-- PASSWORD VERIF -->
+    			<div class="form-group">
+    				<label for="" class="col-md-3 control-label">
+    					Confirmation du mot de passe
+    				</label>
+    				<div class="col-md-7">
+    					{{ form_row(form.passwordVerif) }}
+    				</div>
+    			</div>
+    			
+    			
+    			{# Important pour la validation du Token #}
+    			{{ form_row(form._token) }}
+    			
+    			<!-- Submit -->
+    			<div class="form-group">
+    				<div class="col-xs-7 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary" value="Publier">
+							S'enregistrer</button>
 					</div>
-				</div>
-
-				<!-- Prénom -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Prénom</label>
-					<div class="col-md-7">
-						<input type="text" class="form-control" name="surname" required>
-					</div>
-				</div>
-
-				<!-- Pseudo -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Pseudo</label>
-					<div class="col-md-7">
-						<input type="text" class="form-control" name="pseudo" required>
-					</div>
-				</div>
-
-				<!-- Adresse -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Rue</label>
-					<div class="col-md-7">
-						<input type="text" class="form-control" name="street" required>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="col-md-3 control-label">Code Postal</label>
-					<div class="col-md-7">
-						<input type="text" class="form-control" name="zip_code" required>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="col-md-3 control-label">Ville</label>
-					<div class="col-md-7">
-						<input type="text" class="form-control" name="city" required>
-					</div>
-				</div>
-
-				<!-- Email -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Email</label>
-					<div class="col-md-7">
-						<input type="email" class="form-control" name="mail" required>
-					</div>
-				</div>
-
-				<!-- Telephone -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Numéro de télephone</label>
-					<div class="col-md-7">
-						<input type="text" class="form-control" name="phone" required>
-					</div>
-				</div>
-
-				<!-- Nom de la société -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Nom de la société</label>
-					<div class="col-md-7">
-						<input type="text" class="form-control" name="society_name" required>
-					</div>
-				</div>
-
-				<!-- Password -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Mot de passe</label>
-					<div class="col-md-7">
-						<input type="password" class="form-control" name="password" required>
-					</div>
-				</div>
-
-				<!-- Confirm-Password -->
-				<div class="form-group">
-					<label class="col-md-3 control-label">Confirmez votre mot de passe</label>
-					<div class="col-md-7">
-						<input type="password" class="form-control" name="password2" required>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-md-7 col-md-push-3">
-						<input  type="submit" class="btn btn-primary" value="S'inscrire">
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+    			</div>
+    			
+    		</form>
+    	</div>
+    </div>
+	
 {% endblock %}
 
 {# include footer #}
 {% block footer %}
 	{% include 'commerce/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="//cdn.ckeditor.com/4.7.3/full/ckeditor.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha256-SUaao5Q7ifr2twwET0iyXVy0OVnuFJhGVi5E/dqEiLU=" crossorigin="anonymous"></script>
+	<script>
+        
+        $('.dropify').dropify({
+            messages: {
+            default: 'Glissez-d&eacute;posez un fichier ici ou cliquez',
+            replace: 'Glissez-d&eacute;posez un fichier ou cliquez pour remplacer',
+            remove:  'Supprimer',
+            error:   'D&eacute;sol&eacute;, le fichier trop volumineux'
+        }	
+    });
+    </script>
 {% endblock %}
