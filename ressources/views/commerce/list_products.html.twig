@@ -1,10 +1,7 @@
 {% extends 'defaultLayout.html.twig' %}
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/develop
 {% block contenu %}
 	<div class="row">
 		{% if success is defined %}
@@ -68,8 +65,12 @@
 									<form action="{{ url('deleteProduct') }}"  method="post">
 										<input type="hidden" name="ID_product" value="{{value.ID_product}}">
 										<input type="hidden" name="token" value="{{app.session.get('token')}}">
-										<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 
-										<a href="{{ url('view_newAd',{'ID_product' : value.ID_product}) }}" class="btn btn-warning">Modifier</a>
+										<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
+									</form>
+									<form action="{{ url('newAd') }}"  method="post">
+										<input type="hidden" name="ID_product" value="{{value.ID_product}}">
+										<input type="hidden" name="token" value="{{app.session.get('token')}}">
+										<button  class="btn btn-warning">Modifier</button>
 									</form>
 								</td>
 							</tr>

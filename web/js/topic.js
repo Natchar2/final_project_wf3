@@ -11,8 +11,23 @@ $('.plus_post').click(function(e){
 		dataType: 'json',
 		timeout: 4000,
 		success: function(data){
+
 			for(post in data){
-				$('.block_post').append('<p class="card-text old_post">' + data[post].content + '</p>');
+				timestamp = data[post].post_date;
+				date = new Date(timestamp * 1000);
+				
+					jour = date.getDate();
+					mois = date.getMonth()+1;
+
+					if(mois < 10 )
+					{
+						mois= "0"+mois;
+					}
+
+				  	annee = date.getFullYear();	  
+				   	chaine = jour + "/"	+ mois + "/" + annee;  
+							
+				$('.block_post').append('<div class="col-xs-12 card-text old_post"><p class= "pull-right"> par '+ data[post].pseudo +' le : ' + chaine +'</p><br>' + data[post].content + '<hr></div>');
 			}
 		},
 		error: function(data){

@@ -47,8 +47,7 @@
 						<a href="{{ url('forum_topic', {'slugTopic' : value.title | slug, 'ID_topic' : value.ID_topic}) }}" class="btn btn-primary">En savoir plus</a>
 					</div>
 					<div class="card-footer text-muted">
-						Posted on {{value.creation_date | date('d/m/Y')}} by
-						<a href="#">{{value.name}}</a>
+						poster le {{value.creation_date | date('d/m/Y')}} Par <a href="#">{{value.name}}</a>
 					</div>
 					{% endfor %}
 				</div>

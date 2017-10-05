@@ -43,11 +43,12 @@
 				<fieldset>
 					<legend>Vendre un objet</legend>
 					<!-- champ caché pour l'id-->
-					<input type="hidden" name="ID_product"	
+					<input type="hidden" name="ID_product" 
 					{% if modification is not empty %}
-						{{dump(modification) }}
 						value="{{modification.ID_product}}"
 					{% endif %}>
+					<input type="hidden" name="ID_user" value=" {{ app.user.ID_user }} ">
+
 
 					<!-- nom et marque -->
 					<div class="form-group">
@@ -190,6 +191,7 @@
 					
 					<div class="form-group">
 						<div class="col-md-4">
+							<input type="hidden" name="token" value="{{app.session.get('token')}}">
 							<button  type="submit" class="btn btn-primary">Ajouter</button>
 						</div>
 					</div>

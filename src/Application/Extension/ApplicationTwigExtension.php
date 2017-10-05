@@ -8,7 +8,8 @@ class ApplicationTwigExtension extends \Twig_Extension
 				return array(
 
 			//https://twig.symfony.com/doc/2.x/advanced.html#filters
-			new \Twig_Filter('accroche', function($text){
+			new \Twig_Filter('accroche', function($text)
+			{
 
 				$string = strip_tags($text);
 
@@ -26,7 +27,8 @@ class ApplicationTwigExtension extends \Twig_Extension
 
 				}),//fin de twig_Filter Accroche
 			
-			new \Twig_Filter('slug', function($text){
+			new \Twig_Filter('slug', function($text)
+			{
 				$strRetour=strip_tags($text);
 
 			    // replace non letter or digits by -
@@ -54,6 +56,12 @@ class ApplicationTwigExtension extends \Twig_Extension
 				return $text;
 
 			}), #fin twig_filter slug
+
+			new \Twig_Filter('balise', function($text)
+			{
+				 printf($text);
+				return;
+			}),
 		);
 	}
 }

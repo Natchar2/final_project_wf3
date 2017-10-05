@@ -21,16 +21,22 @@
 					<div class="card-body">
 						<h2 class="card-title">{{topics.title}}</h2>
 						<div class="block_post">
-							<p class="card-text">
+							<h2 class="card-text">
 								{{topics.category_name}}<br>
-							</p> 
-							{% for value in posts %}
-							<p class="card-text old_post">
-								{{value.content}}	
-							</p> 
+							</h2> 
+							{% for value in posts %}								
+							<div class="col-xs-12 card-text old_post">
+								<p class= "pull-right">
+								par {{value.pseudo}} le : {{value.post_date | date('d/m/Y')}}</p>
+								<br>
+								{{value.content | balise}}
+								<hr>
+							</div>
+							
 							{% endfor %}
 						</div>
 						<span >
+							<br>
 							<button class="btn btn-primary plus_post" type="button">Afficher plus</button>&nbsp;&nbsp;<button class="btn btn-primary" type="button">Revenir au forum</button>
 						</span>
 		
@@ -61,6 +67,7 @@
 											<textarea class="form-control" id="text" name="content"></textarea>
 										</div>
 									</div>
+									<input type="hidden" name="token" value="{{app.session.get('token')}}">
 									<button type="submit" class="btn btn-success">Poster</button>
 								</fieldset>
 							</form>
