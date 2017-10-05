@@ -1,12 +1,23 @@
 <?php
+
 namespace Application\Controller;
 
 use Silex\Application;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response; 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Application\Traits\Shortcut;
 use Application\Model\Verifications;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class InterfaceCommerceController
 {
@@ -18,6 +29,12 @@ class InterfaceCommerceController
 		$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
 		$topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
 		$events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
+
+		// $t = 	$app['security.encoder.digest']
+		// ->encodePassword('test', '');  
+
+		// print_r($t);
+		// die();
 
 		return $app['twig']->render('commerce/accueil.html.twig',[
 			'products' => $products,
@@ -376,15 +393,15 @@ class InterfaceCommerceController
 		return $app['twig']->render('commerce/shoppingCard.html.twig');
 	}
 
-	public function connexionAction(Application $app)
+	public function connexionAction(Application $app, Request $request)
 	{
-		return $app['twig']->render('commerce/connexion.html.twig');
+		return $app['twig']->render('commerce/connexion.html.twig', array(
+			'error' => $app['security.last_error']($request),
+			'last_username' => $app['session']->get('_security.last_username'),
+		));
+
 	}
 
-	public function inscriptionAction(Application $app)
-	{
-		return $app['twig']->render('commerce/inscription.html.twig');
-	}
 
 	public function newAdAction(Application $app, $ID_product){
 
@@ -487,7 +504,7 @@ class InterfaceCommerceController
 
 				$success = "Votre produit a bien été ajouté";
 			}
-			
+
 			return $app['twig']->render('commerce/ajout_produit.html.twig',[
 				'success'    => $success,
 				'errors'     => [] ,
@@ -551,7 +568,218 @@ class InterfaceCommerceController
 		'delete'   => $delete
 	]);*/
 }  
-}
 
+ public function inscriptionPostAction(Application $app, Request $request) {
+        # Création du Formulaire permettant l'ajout d'un User
+        # use Symfony\Component\Form\Extension\Core\Type\FormType;
+        $form = $app['form.factory']->createBuilder(FormType::class)
+        
+        ->add('name', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un nom')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('surname', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un prénom')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('pseudo', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un pseudo')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('street', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir une adresse')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('zip_code', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un code postal')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('city', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir une ville')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('email', TextType::class, [
+            'constraints' => new Assert\Email(),
+            'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com')
+        ])
+        
+        ->add('phone', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un numéro de téléphone')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('society_name', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un nom de société')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('avatar', FileType::class, [
+            
+            'required'      => false,
+            'label'         => false,
+            'attr'          => [
+                'class' => 'dropify'
+            ]                
+        ])
+
+        ->add('password', PasswordType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un mot de passe')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('passwordVerif', PasswordType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un mot de passe')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+        
+
+        ->add('submit', SubmitType::class, ['label' => 'Publier'])
+        
+        ->getForm();
+        
+        # Traitement des données POST
+        $form->handleRequest($request);
+        
+        # Vérifier si le Formulaire est valid
+        if($form->isValid()) :
+            
+            # Récupération des données du Formulaire
+            $inscription = $form->getData();
+
+			if($inscription['password'] != $inscription['passwordVerif'])
+			{
+				$error = "Les mots de passe ne sont pas identiques";
+				return $app['twig']->render('commerce/inscription.html.twig', [
+            'form' => $form->createView(),
+            'error'=> $error
+        		]);
+			}
+			else{
+				# Récupération de l'image
+            if(!empty($inscription['avatar'])){
+
+            $image = $inscription['avatar'];
+            $newname = $this->createFileName(10);
+
+            $chemin = PUBLIC_ROOT.'/assets/images/avatar/';
+            $image->move($chemin, $newname.'.jpg');
+
+        	}
+
+            # Insertion en BDD
+            $inscriptionDb = $app['idiorm.db']->for_table('users')->create();
+            
+            #On associe les colonnes de notre BDD avec les valeurs du Formulaire
+            #Colonne mySQL                         #Valeurs du Formulaire
+            $inscriptionDb->name            =   $inscription['name'];
+            $inscriptionDb->surname         =   $inscription['surname'];
+            $inscriptionDb->pseudo          =   $inscription['pseudo'];
+            $inscriptionDb->street          =   $inscription['street'];
+            $inscriptionDb->zip_code        =   $inscription['zip_code'];
+            $inscriptionDb->city            =   $inscription['city'];
+            $inscriptionDb->mail            =   $inscription['email'];
+            $inscriptionDb->phone           =   $inscription['phone'];
+            $inscriptionDb->society_name    =   $inscription['society_name'];
+            if(!empty($inscription['avatar']))
+            $inscriptionDb->avatar          =	$newname.'.jpg';   
+            $inscriptionDb->password 		= 	$app['security.encoder.digest']->encodePassword($inscription['password'], '');
+            $inscriptionDb->creation_date	=	strtotime("now");
+            
+            # Insertion en BDD
+            $inscriptionDb->save();
+            
+            # Redirection
+            return $app->redirect( $app['url_generator'] ->generate('connexion', [ 
+
+            ]));
+			}
+		
+		
+            
+        
+        endif;
+        
+        # Affichage du Formulaire dans la Vue
+        return $app['twig']->render('commerce/inscription.html.twig', [
+            'form' => $form->createView()
+        ]);
+}
+}
 
 ?>
