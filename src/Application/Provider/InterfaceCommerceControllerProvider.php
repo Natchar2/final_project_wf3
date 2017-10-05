@@ -45,11 +45,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->assert('ID_product','[0-9]+')
 		->bind('article');
 
-
-		$controllers
-		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-		->bind('addItem');
-
 		$controllers
 		->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
 		->bind('faq');
@@ -68,26 +63,10 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('removeAllItem');
 
 
-		$controllers
-
-		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
-		->bind('forumAjoutPost');
-
-		$controllers
-		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
-		->bind('forumIndex');
-
-
+		
 		$controllers
 		->get('/agendaIndex', 'Application\Controller\InterfaceCommerceController::agendaIndexAction')
 		->bind('agenda');
-
-
-
-
-		$controllers
-		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
-		->bind('forumPostDetail');
 
 
 		$controllers
@@ -127,8 +106,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('listProducts');
 
 		$controllers
-		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
-		->assert('ID_product', '\d+')
+		->post('/produit/liste', 'Application\Controller\InterfaceCommerceController::deleteProduct')
 		->bind('deleteProduct');
 
 		$controllers

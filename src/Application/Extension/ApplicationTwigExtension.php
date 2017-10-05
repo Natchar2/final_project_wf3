@@ -5,8 +5,30 @@ class ApplicationTwigExtension extends \Twig_Extension
 {
 	public function getFilters()
 	{
-		return array(
-			new \Twig_Filter('slug', function($text){
+				return array(
+
+			//https://twig.symfony.com/doc/2.x/advanced.html#filters
+			new \Twig_Filter('accroche', function($text)
+			{
+
+				$string = strip_tags($text);
+
+		/*SI ma chaine de caractère est sup à 170, je poursuis 
+		Sinon c'est inutile*/
+				if(strlen($string)>170){
+					//je coupe ma chaine si sup à 170
+					$stringCut = substr($string, 0, 170);
+
+				//je m'assure que je ne coupe pas un mot
+				$string = substr($stringCut,0, strrpos($stringCut,' ' ));
+					}
+
+				return $string;
+
+				}),//fin de twig_Filter Accroche
+			
+			new \Twig_Filter('slug', function($text)
+			{
 				$strRetour=strip_tags($text);
 
 			    // replace non letter or digits by -
@@ -34,6 +56,12 @@ class ApplicationTwigExtension extends \Twig_Extension
 				return $text;
 
 			}), #fin twig_filter slug
+
+			new \Twig_Filter('balise', function($text)
+			{
+				 printf($text);
+				return;
+			}),
 		);
 	}
 }

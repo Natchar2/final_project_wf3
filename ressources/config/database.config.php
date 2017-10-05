@@ -17,6 +17,17 @@ $app->register(new \Idiorm\Silex\Provider\IdiormServiceProvider(), array(
 		),
 	),
 ));
+
+#----------------------------------------------------------------------
+
+$app['categories'] = function() use($app){
+
+		$categories = $app['idiorm.db']->for_table('category')
+		->find_result_set();
+
+	return $categories;
+
+	}
 	#----------------------------------------------------------------------
 
 

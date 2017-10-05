@@ -8,3 +8,10 @@ html, body{
 body{
 	margin-top: 48px;
 }
+
+#myTable td{
+
+	color: black;
+
+
+}
