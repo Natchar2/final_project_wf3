@@ -33,7 +33,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-3">
-				<h4 class="lead">Street Connect</h4>
+				<h4 class="lead">Street Connect - Shop</h4>
 
 				{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
 
@@ -99,7 +99,7 @@
 										
 										<h4><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a>
 										</h4>
-										<p>{{ product.description|slice(0, 70) }}</p>
+										<p>{{ product.description|accroche }}</p>
 									</div>
 									<div class="ratings">
 										<span class="pull-right">

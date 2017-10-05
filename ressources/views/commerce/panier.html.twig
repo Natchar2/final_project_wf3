@@ -28,7 +28,11 @@
 							{% endif %}
 
 						</td>
-						<td>{{ product.name }}</td>
+						<td>
+							<h3>{{ product.name }}</h3>
+							<br>
+							{{ product.description|accroche }}
+						</td>
 						<td>
 
 							<button class="remove_one_product btn btn-primary" ID-product="{{ product.ID_product }}"> - </button>
@@ -89,7 +93,6 @@
 
 
 
-<!-- 
 
 
 	<h1><div> <span class="total_price">{{ app.session.get('total_price') }}</span> <span>EUR</span> </div></h1>
@@ -110,7 +113,7 @@
 	<button class="remove_one_product" ID-product="3">REMOVE 3</button>
 	<button class="remove_all_product" ID-product="3">REMOVE ALL 3</button>
 	<button class="remove_one_product" ID-product="4">REMOVE 4</button>
-	<button class="remove_all_product" ID-product="4">REMOVE ALL 4</button> -->
+	<button class="remove_all_product" ID-product="4">REMOVE ALL 4</button>
 
 
 

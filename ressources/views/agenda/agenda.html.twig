@@ -54,7 +54,7 @@
                                         <br>
                                         {{ top.city ~ ' (' ~ top.zip_code ~ ')'}}
                                     </i></h5>
-                                    <p>{{ top.event_description|slice(0,100) }}</p>
+                                    <p>{{ top.event_description|accroche }}</p>
                                     <a href="{{ url('agenda_article', {'category_name': global.request.get('category_name')|lower , 'slugevent':top.event_title|slug , 'ID_event':top.ID_event}) }}" class="btn btn-primary pull-right">Infos</a>
                                 </div>
 
@@ -96,7 +96,17 @@
                                             {% endif %} 
                                         </a>
                                         <h3>{{ event.event_title }}</h3>
-                                        <p>{{ event.event_description|slice(0,100) }}</p>
+                                        <h6><i> 
+                                            {% if event.end_date > 0 %}
+                                                du {{ event.start_date|date('d/m/Y') }} au {{ event.end_date|date('d/m/Y') }} 
+                                            {% else %}
+                                                le {{ event.start_date|date('d/m/Y') }} 
+                                            {% endif %}
+                                            <br>
+                                            {{ event.city ~ ' (' ~ event.zip_code ~ ')'}}
+                                        </i></h6>
+
+                                        <p>{{ event.event_description|accroche }}</p>
                                         <a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-primary pull-right">Infos</a>
 
                                         <br><br>

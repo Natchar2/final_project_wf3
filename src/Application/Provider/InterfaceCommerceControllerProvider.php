@@ -59,6 +59,12 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('about');
 
 
+
+		$controllers
+		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+		->bind('addItem');
+
+
 		$controllers
 		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
 		->bind('removeOneItem');
@@ -83,14 +89,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('forumPostDetail');
 
 
-
-		$controllers
-		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
-		->bind('removeOneItem');
-
-		$controllers
-		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
-		->bind('removeAllItem');
 
 		$controllers
 		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')

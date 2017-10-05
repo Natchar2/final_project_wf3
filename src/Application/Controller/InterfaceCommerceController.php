@@ -27,7 +27,7 @@ class InterfaceCommerceController
 
 	}
 
-	public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
+	public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
 	{
 		$offset=(($page-1)*$nbPerPage);
 
@@ -53,7 +53,7 @@ class InterfaceCommerceController
 		]);
 	}
 
-	public function categoriePageAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
+	public function categoriePageAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
 	{
 		$offset=(($page-1)*$nbPerPage);
 
@@ -129,11 +129,15 @@ class InterfaceCommerceController
 	{
 
 		$panierProducts[]=0;
-		foreach ($app['session']->get('panier') as $key => $value)
+		
+		if (!empty($app['session']->get('panier')))
 		{
-			if ($value>0)
+			foreach ($app['session']->get('panier') as $key => $value)
 			{
-				$panierProducts[]=$key;
+				if ($value>0)
+				{
+					$panierProducts[]=$key;
+				}
 			}
 		}
 		$products=$app['idiorm.db']->for_table('view_products')->where_id_in($panierProducts)->order_by_asc('name')->find_result_set();

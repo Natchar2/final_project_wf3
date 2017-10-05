@@ -20,7 +20,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3">
-					<h4 class="lead">Street Connect</h4>
+					<h4 class="lead">Street Connect - Shop</h4>
 					{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
 				</div>
 
@@ -88,13 +88,15 @@
 
 					<div class="card card-outline-secondary my-4">
 						<div class="card-header">
-							Suggestions
+							<h4 class="lead">Suggestions</h4>
 						</div>
 						<div class="card-body">
 
 							{% if suggests is empty %}
-								<div class="alert alert-warning">Il n'y a pas encore de suggestions rattachées à ca produit</div>
+								<div class="alert alert-warning">Il n'y a pas encore de suggestions rattachées à ce produit</div>
 							{% else %}
+
+
 
 
 								{% for suggest in suggests %}
@@ -127,29 +129,37 @@
 							{% endif %}
 
 						</div>
-					</div>
+
+						<br><br>
+						<hr>
+						<br><br>
 
 
 
-					{% if posts is not empty %}
 
-						<div class="card card-outline-secondary my-4">
-
-							<br><br>
-							<hr>
-							<br><br>
-							<div class="card-header">
-								Posts sur les produit
-							</div>
-							<div class="card-body">
-
-
-							</div>
+						<div class="card-header">
+							<h4 class="lead">Discussions autour du produit</h4>
 						</div>
-					{% endif %}
+						<div class="card-body">
+
+							{% if posts is empty %}
+								<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
+							{% else %}
+								{% for post in posts %}
+
+									{{ post.content }}
+									<br><hr><br>
+
+
+
+								{% endfor %}
+							{% endif %}
+
+						</div>
+					</div>
+					
 
 					<br><br>						
-
 					<br><br>
 
 				</div>

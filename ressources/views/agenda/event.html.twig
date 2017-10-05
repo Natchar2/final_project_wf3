@@ -64,7 +64,7 @@
 											{% endif %} 
 										</a>
 										<h3>{{ event.event_title }}</h3>
-										<p>{{ event.event_description|slice(0,100) }}</p>
+										<p>{{ event.event_description|accroche }}</p>
 										<a href="{{ url('agenda_article', {'category_name': suggest.category_name|lower , 'slugevent':suggest.event_title|slug , 'ID_event':suggest.ID_event}) }}" class="btn btn-primary pull-right">Infos</a>
 									</div>
 									<div class="hidden-xs-up col-sm-1"></div>
@@ -73,10 +73,9 @@
 
 							{% endif %}
 						</div>
-						<br><br>
-
 					</div>
-
+					<br><br>
+					<br><br>
 
 					{% if posts is not empty %}
 
@@ -96,7 +95,6 @@
 					{% endif %}
 
 					<br><br>						
-
 					<br><br>
 
 				</div>

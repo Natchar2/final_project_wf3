@@ -34,6 +34,19 @@ class ApplicationTwigExtension extends \Twig_Extension
 				return $text;
 
 			}), #fin twig_filter slug
+			new \Twig_Filter('accroche', function($text){
+
+				$strRetour=strip_tags($text);
+
+				if (strlen($strRetour) > 170)
+				{
+					$strRetour=substr($strRetour,0, 170);
+					$strRetour=substr($strRetour, 0, strrpos($strRetour, ' '));
+					$strRetour.=" ...";
+				}
+				return $strRetour;
+			}),#fin twig_filter accroche
+
 		);
 	}
 }
