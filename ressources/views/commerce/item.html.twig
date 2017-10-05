@@ -82,7 +82,7 @@
 							<p class="card-text">{{ product.description }}</p>
 						</div>
 					</div>
-					<a href="#" class="btn btn-success pull-right">Ajouter au panier</a>					
+					<button class="add_product btn btn-success pull-right" ID-product="{{ product.ID_product }}">Ajouter au panier</button>					
 					<br><br>
 					<hr>
 
@@ -114,7 +114,9 @@
 												<p>{{ suggest.description|slice(0, 70) }}</p>
 											</div>
 											<div class="ratings">
-												<a href="{{ url('article', {'category_name': suggest.category_name|lower , 'slugproduct':suggest.name|slug , 'ID_product':suggest.ID_product}) }}" class="btn btn-primary pull-right"> Details </a>
+												<span class="pull-right">
+													<a class="btn btn-primary" href="{{ url('article', {'category_name': suggest.category_name|lower , 'slugproduct':suggest.name|slug , 'ID_product':suggest.ID_product}) }}" > Details </a>&nbsp;&nbsp;<button class="add_product btn btn-success" ID-product="{{ suggest.ID_product }}">Ajouter</button>
+												</span>
 												<h4>€ {{ (suggest.price)|number_format(2, '.', ' ') }}</h4>
 											</div>
 										</div>
@@ -158,4 +160,10 @@
 	{# include footer #}
 	{% block footer %}
 		{% include 'commerce/footer.html.twig' %}
+	{% endblock %}
+
+	{% block javascripts %}
+		{{ parent() }}
+		<script src="{{ asset("js/notify.min.js")}}"></script>
+		<script src="{{ asset('js/panier.js') }}"></script>
 	{% endblock %}

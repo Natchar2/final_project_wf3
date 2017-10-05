@@ -5,6 +5,14 @@ html, body{
 	margin: 0;
 }
 
-body{
-	margin-top: 48px;
+#myTable td{
+	color: black;
+	vertical-align:middle;
+}
+
+#myTable tfoot td{
+	background-color: white;
+	border:0;
+	color: #444;
+	vertical-align:middle;
 }

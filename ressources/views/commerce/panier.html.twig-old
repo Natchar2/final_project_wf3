@@ -1,97 +1,9 @@
 {% extends 'defaultLayout.html.twig' %}
 
 {% block contenu %}
-
-	<br><br><br><br>
-
-
-	{% if products is defined and products is not empty %}
-
-		<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
-			<thead>
-				<tr>
-					<th width="80"> </th>
-					<th>Produit</th>
-					<th width="80">Quantité</th>
-					<th width="120">Prix</th>
-					<th width="80"> </th>				
-				</tr>
-			</thead>
-			<tbody>
-
-				{% for product in products %}
-
-					<tr>
-						<td>
-							{% if (product.image_1>"") %}
-								<img src="{{ asset('assets/images/'~product.image_1) }}" style="width:70px;height:auto;">
-							{% endif %}
-
-						</td>
-						<td>{{ product.name }}</td>
-						<td>
-
-							<button class="remove_one_product btn btn-primary" ID-product="{{ product.ID_product }}"> - </button>
-
-
-							<span class="total_by_id" ID-product="{{ product.ID_product }}"> 
-								{% if app.session.get('total_product_by_id')[product.ID_product] is defined %}
-									{{ app.session.get('total_product_by_id')[product.ID_product] }}
-								{% else %}
-									0
-								{% endif %}
-							</span>
-
-							<button class="add_product btn btn-success" ID-product="{{ product.ID_product }}"> + </button>
-						</td>
-						<td>le total on verra</td>
-						<td>
-							<button class="remove_all_product btn btn-danger" ID-product="{{ product.ID_product }}">Supprimer</button>
-						</td>
-					</tr>
-
-
-
-
-				{% endfor %}
-				
-			</tbody>
-			<tfoot>
-				<tr>
-					<td> </td>
-					<td align="right">Total</td>
-					<td>
-						<span class="total_product"> {{ app.session.get('total_product') }} </span> produits
-					</td>
-					<td>
-						€ <span class="total_price"> {{ app.session.get('total_price')|number_format(2, '.', ' ') }} </span> 
-					</td>
-					<td>
-						<a href={{ url('panier') }} class="btn btn-primary">Rafraichir</button>
-						</td>				
-					</tr>
-				</tfoot>
-			</table>
-		{% else %}
-			<div class="alert alert-warning" role=alert>
-				<p>Aucun produits dans le panier</p>
-			</div>		
-		{% endif %}
-	</div>
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-
-
+	<h1>PAIEMENT: <b>paypal</b><br/>COUT: <b>1 eur</b><br/>ITEM: <b>1</b></h1>
+	<div id="paypal-button"></div>
+	
 	<h1><div> <span class="total_price">{{ app.session.get('total_price') }}</span> <span>EUR</span> </div></h1>
 	<h1><div> <span class="total_product"> {{ app.session.get('total_product') }} </span><span> produits</span> </div></h1>
 	<h1><div> <span class="total_by_id" ID-product="1"> {% if app.session.get('total_product_by_id')["1"] is defined %} {{ app.session.get('total_product_by_id')["1"] }} {% else %} 0{% endif %} </span><span> ID: 1</span> </div></h1>
@@ -110,31 +22,12 @@
 	<button class="remove_one_product" ID-product="3">REMOVE 3</button>
 	<button class="remove_all_product" ID-product="3">REMOVE ALL 3</button>
 	<button class="remove_one_product" ID-product="4">REMOVE 4</button>
-	<button class="remove_all_product" ID-product="4">REMOVE ALL 4</button> -->
-
-
-
+	<button class="remove_all_product" ID-product="4">REMOVE ALL 4</button>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 {% block javascripts %}
 	{{ parent() }}
+
 	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 	<script src="{{ asset("js/notify.min.js")}}"></script>
 	<script src="{{ asset('js/paypalPay.js') }}"></script>

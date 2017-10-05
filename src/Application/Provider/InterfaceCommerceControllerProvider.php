@@ -25,14 +25,14 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-		->get('/categorie/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
+		->get('/shop/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
 		->assert('category_name','[^/]+')
 		->value('category_name','all')
 		->bind('shop');
 
 
 		$controllers
-		->get('/categorie/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
+		->get('/shop/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
 		->assert('category_name','[^/]+')
 		->value('category_name','all')
 		->assert('page','[0-9]+')	
@@ -79,15 +79,9 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-		->get('/agendaIndex', 'Application\Controller\InterfaceCommerceController::agendaIndexAction')
-		->bind('agenda');
-
-
-
-
-		$controllers
 		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
 		->bind('forumPostDetail');
+
 
 
 		$controllers

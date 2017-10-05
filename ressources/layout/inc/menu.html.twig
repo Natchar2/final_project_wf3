@@ -32,7 +32,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="{{ url('inscription') }}">Inscription</a></li>
 					<li><a href="{{ url('connexion') }}">Connexion</a></li>
-					<li><a href="{{ url('panier') }}">Panier ({{ app.session.get('total_product') }})</a></li>
+					<li><a href="{{ url('panier') }}">Panier (<span class="total_product">{{ app.session.get('total_product') }}</span>)</a></li>
 
 
 				</ul>

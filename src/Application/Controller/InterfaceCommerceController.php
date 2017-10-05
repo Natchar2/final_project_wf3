@@ -127,7 +127,21 @@ class InterfaceCommerceController
 
 	public function panierAction(Application $app)
 	{
-		return $app['twig']->render('commerce/panier.html.twig');
+
+		$panierProducts[]=0;
+		foreach ($app['session']->get('panier') as $key => $value)
+		{
+			if ($value>0)
+			{
+				$panierProducts[]=$key;
+			}
+		}
+		$products=$app['idiorm.db']->for_table('view_products')->where_id_in($panierProducts)->order_by_asc('name')->find_result_set();
+
+		return $app['twig']->render('commerce/panier.html.twig',[
+			'products' => $products
+
+		]);
 	}
 
 	public function faqAction(Application $app)
@@ -364,11 +378,6 @@ class InterfaceCommerceController
 	public function itemAction(Application $app)
 	{
 		return $app['twig']->render('commerce/item.html.twig');
-	}
-
-	public function shopAction(Application $app)
-	{
-		return $app['twig']->render('commerce/shop.html.twig');
 	}
 
 	public function shoppingCardAction(Application $app)

@@ -102,7 +102,9 @@
 										<p>{{ product.description|slice(0, 70) }}</p>
 									</div>
 									<div class="ratings">
-										<a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" class="btn btn-primary pull-right"> Details </a>
+										<span class="pull-right">
+											<a class="btn btn-primary" href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" > Details </a>&nbsp;&nbsp;<button class="add_product btn btn-success" ID-product="{{ product.ID_product }}">Ajouter</button>
+										</span>
 										<h4>€ {{ (product.price)|number_format(2, '.', ' ') }}</h4>
 									</div>
 								</div>
@@ -161,7 +163,15 @@
 	</div>
 {% endblock %}
 
+
 {# include footer #}
 {% block footer %}
 	{% include 'commerce/footer.html.twig' %}
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset("js/notify.min.js")}}"></script>
+	<script src="{{ asset('js/panier.js') }}"></script>
 {% endblock %}
