@@ -45,7 +45,7 @@ class InterfaceCommerceController
 
 	}
 
-	public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
+	public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
 	{
 		$offset=(($page-1)*$nbPerPage);
 
@@ -71,7 +71,7 @@ class InterfaceCommerceController
 		]);
 	}
 
-	public function categoriePageAction($category_name,Application $app,$page = 1,$nbPerPage = 2)
+	public function categoriePageAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
 	{
 		$offset=(($page-1)*$nbPerPage);
 
@@ -145,7 +145,25 @@ class InterfaceCommerceController
 
 	public function panierAction(Application $app)
 	{
-		return $app['twig']->render('commerce/panier.html.twig');
+
+		$panierProducts[]=0;
+		
+		if (!empty($app['session']->get('panier')))
+		{
+			foreach ($app['session']->get('panier') as $key => $value)
+			{
+				if ($value>0)
+				{
+					$panierProducts[]=$key;
+				}
+			}
+		}
+		$products=$app['idiorm.db']->for_table('view_products')->where_id_in($panierProducts)->order_by_asc('name')->find_result_set();
+
+		return $app['twig']->render('commerce/panier.html.twig',[
+			'products' => $products
+
+		]);
 	}
 
 	public function faqAction(Application $app)
@@ -380,7 +398,7 @@ class InterfaceCommerceController
 
 	}
 
-  
+ 
 	
   public function newAdAction(Application $app, $ID_product){
     if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
@@ -404,6 +422,11 @@ class InterfaceCommerceController
         'ID_product'  => $ID_product,
     ]);
 }
+
+
+
+
+
 
     public function newAdPostAction(Application $app, Request $request)
     {

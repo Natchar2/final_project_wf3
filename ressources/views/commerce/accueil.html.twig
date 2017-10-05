@@ -100,7 +100,7 @@
 
 							<h2><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a></h2>
 							
-							<p>{{ product.description|slice(0, 70) }}</p>
+							<p>{{ product.description|accroche }}</p>
 							<p><a class="btn btn-default" href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" >Détails &raquo;</a></p>				
 
 						</div>
@@ -155,7 +155,7 @@
 								{% for topic in topics %}
 									<tr>
 										<td>{{ topic.creation_date|date('d/m/Y') }}</td>
-										<td>{{ topic.name }}</td>
+										<td>{{ topic.pseudo }}</td>
 										<td>{{ topic.title }} <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
 									</tr>
 
@@ -186,8 +186,17 @@
 						<div class="row featurette">
 							<div class="col-md-7 {% if bRevStyle == true %} col-md-push-5 {% endif %}">
 								<h3 class="featurette-heading">{{ event.event_title }}</h3>
-								<h4>{{ event.start_date|date('d/m/Y') }} - {{ event.city ~ ' (' ~ event.zip_code ~ ')' }}</h4>
-								<p class="lead">{{ event.event_description }}.</p>
+								<h4><i>
+									{% if event.end_date > 0 %}
+										du {{ event.start_date|date('d/m/Y') }} au {{ event.end_date|date('d/m/Y') }} 
+									{% else %}
+										le {{ event.start_date|date('d/m/Y') }} 
+									{% endif %}
+									<br>
+									{{ event.city ~ ' (' ~ event.zip_code ~ ')'}}
+								</i></h4>
+								<p class="lead">{{ event.event_description|accroche }}.</p>
+								<a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-default pull-right">Infos &raquo;</a>
 							</div>
 							<div class="col-md-5  {% if bRevStyle == true %} col-md-pull-7 {% endif %}">
 								{% if event.image> "" %}

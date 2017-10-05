@@ -25,14 +25,14 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-		->get('/categorie/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
+		->get('/shop/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
 		->assert('category_name','[^/]+')
 		->value('category_name','all')
 		->bind('shop');
 
 
 		$controllers
-		->get('/categorie/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
+		->get('/shop/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
 		->assert('category_name','[^/]+')
 		->value('category_name','all')
 		->assert('page','[0-9]+')	
@@ -54,19 +54,10 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('about');
 
 
-		$controllers
-		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
-		->bind('removeOneItem');
 
 		$controllers
-		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
-		->bind('removeAllItem');
-
-
-		
-		$controllers
-		->get('/agendaIndex', 'Application\Controller\InterfaceCommerceController::agendaIndexAction')
-		->bind('agenda');
+		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+		->bind('addItem');
 
 
 		$controllers
@@ -76,6 +67,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		$controllers
 		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
 		->bind('removeAllItem');
+
 
 		$controllers
 		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
