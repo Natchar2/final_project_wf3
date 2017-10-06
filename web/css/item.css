@@ -16,11 +16,9 @@ a.list-group-item, button.list-group-item {
 
 .thumbnail {
   padding: 5px;
+  margin: 5px;
 }
 
-.btn-primary{
-  padding: 1px;
-}
 
 /* FOOTER
 -------------------------------------------------- */

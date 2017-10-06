@@ -10,11 +10,13 @@ $.notify.defaults({
 // -- AJOUTER UN ITEM AU PANIER
 $('.add_product').click(function(e){
 	e.preventDefault();
+	url = document.location.href;
+	url = url.split("web/");
 
 	ID_product = $(this).attr('ID-product').toString();
 
 	$.ajax({
-		url: 'addItem',
+		url: url[0] + 'web/addItem',
 		type: 'post',
 		dataType: 'json',
 		timeout: 4000,
@@ -39,13 +41,15 @@ $('.add_product').click(function(e){
 // -- SUPPRIMER UN ITEM DU TABLEAU PAR ID
 $('.remove_one_product').click(function(e){
 	e.preventDefault();
+	url = document.location.href;
+	url = url.split("web/");
 
 	ID_product = $(this).attr('ID-product').toString();
 
 	$this = $(this);
 
 	$.ajax({
-		url: 'removeOneItem',
+		url: url[0] + 'web/removeOneItem',
 		type: 'post',
 		dataType: 'json',
 		timeout: 4000,
@@ -78,13 +82,15 @@ $('.remove_one_product').click(function(e){
 // -- SUPPRIMER TOUS LES ITEMS DU TABLEAU PAR ID
 $('.remove_all_product').click(function(e){
 	e.preventDefault();
+	url = document.location.href;
+	url = url.split("web/");
 
 	ID_product = $(this).attr('ID-product').toString();
 
 	$this = $(this);
 
 	$.ajax({
-		url: 'removeAllItem',
+		url: url[0] + 'web/removeAllItem',
 		type: 'post',
 		dataType: 'json',
 		timeout: 4000,

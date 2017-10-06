@@ -12,9 +12,19 @@ body {
 -------------------------------------------------- */
 
 header{
+  padding-top: 30px;
   background-color: black;
   background-size: 100px 10000px;
   background-image: url('../../img/geo.png');
+}
+
+.headerNewTopic{
+  min-height: 617px;
+}
+
+.padMenu{
+  padding-top: 60px;
+  min-height: 617px;
 }
 
 /* Special class on .container surrounding .navbar, used for positioning it into place. */
@@ -193,7 +203,7 @@ header{
 }
 
 .forum h2{
-  font-size: 60px;
+  font-size: 3em;
   text-align: center;
   padding: 50px;
   color: RGBA(238, 181, 56, 1.00);
@@ -229,6 +239,7 @@ header{
 .divTableCell{
   margin: 20px;
 }
+
 
 /* AGENDA
 -------------------------------------------------- */
@@ -300,7 +311,6 @@ footer{
   text-align: center;
   padding-top: 30px;
   padding-bottom: 10px;
-  border-style: 
 }
 
 footer h4{
@@ -313,6 +323,15 @@ footer p{
 
 footer span{
   color: white;
+}
+
+.footMargin{
+  margin: 0px;
+}
+
+.contactFooter{
+  padding-top: 60px;
+  min-height: 617px;
 }
 
 /* RESPONSIVE CSS
@@ -337,7 +356,32 @@ footer span{
 }
 
 @media all and (max-device-width: 480px)
-
 {
+  .small
+  {
+    width: 100%;
+  }
+  table thead
+  {
+    display: none;
+  }
 
+  table tr
+  {
+    display: block;
+    margin-top: 5px;
+    padding-bottom:5px;
+    border-bottom: 2px solid #FF5733;
+  }
+
+  table td
+  {
+    display: block;
+    text-align: right;
+    font-size: 13px;
+    border-radius:5px;
+    margin-bottom:1px;
+    min-height: 14px
+  }
+  
 }

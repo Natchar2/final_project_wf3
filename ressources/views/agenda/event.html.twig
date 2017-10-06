@@ -1,0 +1,116 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block title %}
+	{{ event.event_title }}  | Street Connexion
+{% endblock %}
+
+{# fil d'ariane #}
+{% set active = event.category_name|lower %}
+
+	{% block stylesheets %}
+		{{parent()}}
+		<link rel="stylesheet" href="{{asset('css/item.css')}}">
+	{% endblock %}
+
+	{% block contenu %}
+
+
+		<!-- Page Content -->
+		<br><br><br><br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<h4 class="lead">Street Connect</h4>
+					{{ render (controller('Application\\Controller\\InterfaceAgendaController::menuAgenda', { 'active':active } )) }}
+				</div>
+
+				<div class="col-lg-9">
+					<div class="card mt-4">
+						<div class="row carousel-shop carousel-holder">
+							{% if event.image >  "" %}
+								<img class="img-responsive" src="{{ asset('assets/images/'~event.image) }}" alt="">
+							{% else %}
+								<img class="img-responsive" src="http://placehold.it/800x300" alt="">
+							{% endif %}					
+						</div>
+						<div class="card-body">
+							<small class="text-muted pull-right">Publié par {{ event.pseudo }} le  {{ event.creation_date|date('d/m/Y') }}</small>
+							<h3 class="card-title">{{ event.event_title }}</h3>							
+							<p class="card-text">{{ event.event_description }}</p>
+						</div>
+					</div>
+					<br><br>
+					<hr>
+
+					<div class="card card-outline-secondary my-4">
+
+						<div class="card-header">
+							Suggestions
+							<br><br>
+						</div>
+
+						<div class=" row card-body">
+
+							{% if suggests is empty %}
+								<div class="alert alert-warning">Il n'y a pas encore de suggestions rattachées à cet événement</div>
+							{% else %}
+
+								{% for suggest in suggests %}
+
+									<div class="col-sm-3 thumbnail">
+										<a href="{{ url('agenda_article', {'category_name': suggest.category_name|lower , 'slugevent':suggest.event_title|slug , 'ID_event':suggest.ID_event}) }}">
+											{% if event.image > "" %}
+												<img class="img-responsive" style="width:auto;height:100px;margin-left:auto;margin-right:auto;" src="{{ asset('assets/images/'~suggest.image) }}" alt="">
+											{% else %}
+												<img class="img-responsive" src="http://placehold.it/500x300" alt="">
+											{% endif %} 
+										</a>
+										<h3>{{ event.event_title }}</h3>
+										<p>{{ event.event_description|accroche }}</p>
+										<a href="{{ url('agenda_article', {'category_name': suggest.category_name|lower , 'slugevent':suggest.event_title|slug , 'ID_event':suggest.ID_event}) }}" class="btn btn-primary pull-right">Infos</a>
+									</div>
+									<div class="hidden-xs-up col-sm-1"></div>
+
+								{% endfor %}
+
+							{% endif %}
+						</div>
+					</div>
+					<br><br>
+					<br><br>
+
+					{% if posts is not empty %}
+
+						<div class="card card-outline-secondary my-4">
+
+							<br><br>
+							<hr>
+							<br><br>
+							<div class="card-header">
+								Posts sur les produit
+							</div>
+							<div class="card-body">
+
+
+							</div>
+						</div>
+					{% endif %}
+
+					<br><br>						
+					<br><br>
+
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+
+	{# include footer #}
+	{% block footer %}
+		{% include 'commerce/footer.html.twig' %}
+	{% endblock %}
+
+	{% block javascripts %}
+		{{ parent() }}
+		<script src="{{ asset("js/notify.min.js")}}"></script>
+		<script src="{{ asset('js/panier.js') }}"></script>
+	{% endblock %}

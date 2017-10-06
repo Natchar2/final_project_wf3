@@ -24,25 +24,29 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('panier');
 
 		$controllers
-		->get('/categorie/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
-		->assert('category_name','[^/]+')
-		->value('category_name','all')
-		->bind('categorie');
+		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+		->bind('addItem');
 
 		$controllers
-		->get('/categorie/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
-		->assert('category_name','[^/]+')
-		->value('category_name','all')
-		->assert('page','[0-9]+')	
-		->value('page','1')		
-		->bind('categorie_page');
+        ->get('/shop/{category_name}', 'Application\Controller\InterfaceCommerceController::shopAction')
+        ->assert('category_name','[^/]+')
+        ->value('category_name','all')
+        ->bind('shop');
+
+
+        $controllers
+        ->get('/shop/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::shopPageAction')
+        ->assert('category_name','[^/]+')
+        ->value('category_name','all')
+        ->assert('page','[0-9]+')    
+        ->value('page','1')        
+        ->bind('shop_page');
 
 		$controllers
 		->get('/{category_name}/{slugproduct}_{ID_product}.html','Application\Controller\InterfaceCommerceController::articleAction')
 		->assert('category_name','[^/]+')
 		->assert('ID_product','[0-9]+')
 		->bind('article');
-
 
 		$controllers
 		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
@@ -72,9 +76,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
 		->bind('item');
 
-		$controllers
-		->get('/shop', 'Application\Controller\InterfaceCommerceController::shopAction')
-		->bind('shop');
 
 		$controllers
 		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')

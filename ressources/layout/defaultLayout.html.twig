@@ -24,9 +24,11 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }} ">
 {% endblock %}
 {# -- HEADER BODY -- #}
+
 {% block header %}
     {{ render(controller("Application\\Controller\\IncludeController::menuAction")) }}
 {% endblock %}
+
 {# -- CONTENU BODY -- #}
 {% block body %}
     {% block contenu %}{% endblock %}
@@ -46,4 +48,5 @@
     <script src="{{asset('assets/js/ie10-viewport-bug-workaround.js')}}"></script>
     <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
+    <script src="https://cdn.ckeditor.com/4.7.3/basic/ckeditor.js"></script>
 {% endblock %}

@@ -69,7 +69,7 @@ trait Shortcut{
 		return $text;
 	}
 
-//créer un slug a partir du titre d'un article
+//créer un slug a partir du titre d'un nom
 	public function generateSlug($text){
 
 		return self::staticSlug($text);

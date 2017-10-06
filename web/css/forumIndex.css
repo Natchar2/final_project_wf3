@@ -1,54 +1,6 @@
-/* Special class on .container surrounding .navbar, used for positioning it into place. */
-.navbar-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 20;
-}
-
-/* Flip around the padding for proper display in narrow viewports */
-.navbar-wrapper > .container {
-  padding-right: 0;
-  padding-left: 0;
-}
-.navbar-wrapper .navbar {
-  padding-right: 15px;
-  padding-left: 15px;
-}
-.navbar-wrapper .navbar .container {
-  width: auto;
-}
-
-.navbar-default {
-  background-color: black;
-  border-color: RGBA(51, 51, 51, 1.00);
-}
-
-.navbar-default .navbar-brand {
-  color: rgba(240,190,64,1);
-}
-
-.navbar-default .navbar-nav>li>a {
-  color: white;
-}
-
-.navbar-default .navbar-nav>li>a:hover{
-  color: rgba(240,190,64,1);
-}
-
-.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
-  color: white;
-  background-color: RGBA(51, 51, 51, 1.00);
-}
-
-.dropdown-menu{
-  background-color: transparent;
-}
-
-.dropdown-menu>li>a {
-  color: white;
-  background: black;
+.forumHeader{
+  padding-top: 50px;
+  min-height: 615px;
 }
 
 .logo{
@@ -95,6 +47,10 @@
 
   a.list-group-item, button.list-group-item {
     color: white;
+  }
+
+  .card-title{
+    font-size: 1.5em;
   }
 
   .thumbnail {

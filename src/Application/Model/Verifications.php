@@ -32,9 +32,12 @@ class Verifications
 			$errors[] = "Veuillez remplir le champ nom ou modèle";
 		}
 
+
 		//verification du champ marque
-		if(null!=($request->get('brand'))&& !empty($request->get('brand')))
+		if(null!=($request->get('brand')) && !empty($request->get('brand')))
 		{
+
+
 
 			if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_]{3,30}$#i',$request->get('brand')))
 			{
@@ -67,10 +70,7 @@ class Verifications
 				$errors[] = 'Sous-catégorie invalide';
 			}
 		}
-		else
-		{
-			$errors[] = "Veuillez remplir le champ sous-catégorie";
-		}
+
 
 		//verification du champ prix
 		if(null!=($request->get('price')) && !empty($request->get('price')))
@@ -168,7 +168,9 @@ class Verifications
                 			{
                 				$newFileExt = '.jpg';
                 			}
-                			elseif ($extension == 'image.png')
+
+                			elseif ($extension == 'image/png')
+
                 			{
                 				$newFileExt = '.png';
                 			}
@@ -258,6 +260,7 @@ class Verifications
                 default://si aucune erreur a été envoyer
                 $success[] = 'le téléchargement s\'est bien effectué';
 
+
                 $extension = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $_FILES['image_2']['tmp_name']);
 
                 if(($_FILES['image_2']['size'])<=512000)
@@ -267,7 +270,7 @@ class Verifications
                 	if($extension=='image/jpeg' || $extension=='image/png'|| $extension=='image/bmp' || $extension=='image/gif')
                 	{
         				//recupération, deplacement et chgt du nom du fichier
-                		if(($error)){
+                		if(null!==($error)){
 
                 			$newFileName =  $this->createFileName(10);
 
@@ -275,23 +278,23 @@ class Verifications
                 			{
                 				$newFileExt = '.jpg';
                 			}
-                			elseif ($extension == 'image.png')
+                			elseif ($extension == 'image/png')
                 			{
                 				$newFileExt = '.png';
                 			}
 
-                			return $finalFileName2 = $newFileName .$newFileExt;
+                			$finalFileName2 = $newFileName .$newFileExt;
+
                 		}
 
-                		$image_2 = $_FILES['image_2']['tmp_name'];
-                		$image_2->move(ROOTH.'web/assets/images/',$finalFileName2);
+                        move_uploaded_file($_FILES['image_2']['tmp_name'],ROOT.'web/assets/images/'. $finalFileName2);
 
                 		$success[]= 'image sauvegardée';
 
                 	}
                 	else
                 	{
-                		$error[] = 'Le format de l\image 2 n\'est pas valide';
+                		$error[] = 'Le format de l\'image 2 n\'est pas valide';
                 	}
                 }
                 else
@@ -301,6 +304,7 @@ class Verifications
 
                 break;
             }
+
 
         }
         else
@@ -322,6 +326,7 @@ class Verifications
         		$finalFileName2 = null;
         	}
         }
+
 
         //verification du champ image_3
         if($_FILES['image_3']['name']>"")
@@ -375,7 +380,7 @@ class Verifications
                 	{
 
         				//recupération, deplacement et chgt du nom du fichier
-                		if(($error))
+                		if(null!==($error))
                 		{
                 			$newFileName =  $this->createFileName(10);
 
@@ -383,16 +388,16 @@ class Verifications
                 			{
                 				$newFileExt = '.jpg';
                 			}
-                			elseif ($extension == 'image.png')
+                			elseif ($extension == 'image/png')
                 			{
                 				$newFileExt = '.png';
                 			}
 
-                			return $finalFileName3 = $newFileName .$newFileExt;
+                			$finalFileName3 = $newFileName .$newFileExt;
                 		}
 
-                		$image_3 = $_FILES['image_3']['tmp_name'];
-                		$image_3->move(ROOTH.'web/assets/images/',$finalFileName3);
+                		move_uploaded_file($_FILES['image_3']['tmp_name'],ROOT.'web/assets/images/'. $finalFileName3);
+
 
                 		$success[]= 'image sauvegardée';
 
@@ -410,6 +415,7 @@ class Verifications
 
                 break;
             }
+
 
         }
         else
@@ -562,8 +568,6 @@ class Verifications
     	}
     }
 
-
-}
 }
 
 ?>

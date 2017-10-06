@@ -30,3 +30,7 @@ body {
   border-radius: 10px;
   border: solid 0.5px white;
 }
+
+.exterior, h2 {
+  color : white;
+}

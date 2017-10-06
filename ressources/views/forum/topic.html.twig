@@ -1,0 +1,139 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/forumAjoutPost.css')}}">
+{% endblock %}
+
+{% block contenu %}
+
+	<!-- Page Content -->
+	<div class="container headerTopic contactFooter">
+		<div class="row">
+	
+			<!-- Blog Entries Column -->
+			<div class="col-md-8">
+				<h1 class="my-4">Forum</h1>
+				<!-- Blog Post -->
+				<div class="card mb-4">
+					<div class="card-body">
+						<h2 class="card-title">{{topics.title}}</h2>
+						<div class="block_post">
+							<h2 class="card-text">
+								{{topics.category_name}}<br>
+							</h2> 
+							{% for value in posts %}								
+							<div class="col-xs-12 card-text old_post">
+								<p class= "pull-right">
+								par {{value.pseudo}} le : {{value.post_date | date('d/m/Y')}}</p>
+								<br>
+								{{value.content | balise}}
+								<hr>
+							</div>
+							
+							{% endfor %}
+						</div>
+						<span >
+							<br>
+							<button class="btn btn-primary plus_post" type="button">Afficher plus</button>&nbsp;&nbsp;<button class="btn btn-primary" type="button">Revenir au forum</button>
+						</span>
+		
+				<!-- Blog Post -->
+						<h2 >Ajoutez un commentaire</h2>
+						<p class="card-text">
+
+							{% if success is defined %}
+								<div class="alert alert-info" role="alert">
+									{{ success }}
+								</div>
+							{% endif %}
+							<form action="{{ url('forum_topic_post', {'slugTopic' : topics.title | slug, 'ID_topic' : topics.ID_topic}) }}" method="POST" class="form-horizontal itemForm">
+								<fieldset>
+									<!-- Text input-->
+									<!-- <div class="form-group">
+										<label class="col-md-4 control-label" for="textinput">Sujet</label>  
+										<div class="col-md-4">
+											<input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md">
+										</div>
+									</div> -->
+
+									<!-- champ caché -->
+									<input type="hidden" name="ID_topic">
+									<!-- Textarea -->
+									<div class="form-group">
+										<div class="col-md-12">                     
+											<textarea class="form-control" id="text" name="content"></textarea>
+										</div>
+									</div>
+									<input type="hidden" name="token" value="{{app.session.get('token')}}">
+									<button type="submit" class="btn btn-success">Poster</button>
+								</fieldset>
+							</form>
+						</p>
+						
+					</div>
+				</div>
+			</div>
+		
+
+
+			<!-- Sidebar Widgets Column -->
+			<div class="col-md-4">
+				<div class="card my-4">
+					<h3 class="card-header">Profil</h3>
+					<div class="card-body">
+						<div class="input-group">
+							<div class="text-center mb-4">
+								<img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+								<br>
+								<h4>User Name</h4>
+								<p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
+								<span>
+									<button class="btn btn-success" type="button">Profil</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card my-4">
+					<h5 class="card-header">Contribuez</h5>
+					<div class="card-body">
+						<div class="input-group">
+							<span class="input-group-btn">
+								<a href="{{ url('new_topic') }}"><button class="btn btn-success" type="button">Ajoutez un topic</button></a>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Side Widget -->
+				<div class="card my-4">
+					<h5 class="card-header">Publicité</h5>
+					<div class="card-body">
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+	</div>
+</div>
+			
+
+
+
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('js/topic.js') }}"></script>
+	<script>
+	// Replace the <textarea id="editor1"> with a CKEditor
+	// instance, using default configuration.
+	CKEDITOR.replace( 'text' );
+	</script>
+{% endblock %}

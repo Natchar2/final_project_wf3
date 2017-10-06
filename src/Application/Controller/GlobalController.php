@@ -11,7 +11,7 @@
 
 	class GlobalController
 	{
-		public function sendMailAction(Application $app, $subject, $from, $to, $content, $redirectTo) 
+		public function sendMailAction(Application $app, $subject, $from, $to, $content) 
 	    { 
 			$transport = $app['swiftmailer.transport'];
 			$mailer = $app['mailer'];

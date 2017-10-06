@@ -12,11 +12,24 @@ $app->register(new \Idiorm\Silex\Provider\IdiormServiceProvider(), array(
 			'products' => 'ID_product',
 			'topic' => 'ID_topic',
 			'users' => 'ID_user',
-			'view_products' => 'ID_product'
-
+			'view_products' => 'ID_product',
+			'view_events' => 'ID_event',
+			'view_topics' => 'ID_topic',		
+			'view_posts' => 'ID_post'
 		),
 	),
 ));
+
+#----------------------------------------------------------------------
+
+$app['categories'] = function() use($app){
+
+		$categories = $app['idiorm.db']->for_table('category')
+		->find_result_set();
+
+	return $categories;
+
+	}
 	#----------------------------------------------------------------------
 
 

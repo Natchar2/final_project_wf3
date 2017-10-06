@@ -1,215 +1,214 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
+	<link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet">
+	<link rel="stylesheet" href="{{asset('css/ajoutArticle.css')}}">
+
+{% endblock %}
+
+
 {% block contenu %}
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-6 col-xs-push-3">
-				<h2 class="text-center">Vendre un objet</h2>
+<div class="container">	
+	<div class="row">
+		<div class="col-md-12">
+			{% if error is not empty %}
+				<div class="alert alert-danger" role=alert>
+					{% for value in error %}
 
-				{% if error is not empty %}
-					<div class="alert alert-danger" role=alert>
-						{% for value in error %}
-							
-							<p>{{value}}</p><br>
-							
-						{% endfor %}
-					</div><br>
-				{% endif %}
+						<p>{{value}}</p><br>
 
-				{% if  errors is not empty %}
-					<div class="alert alert-danger" role=alert>
-						{% for value in errors %}
-							
-							<p>{{value}}</p><br>
-							
-						{% endfor %}
-					</div><br>
-				{% endif %}
+					{% endfor %}
+				</div><br>
+			{% endif %}
 
-				{% if success is defined %}
-					<div class="alert alert-success" role=alert>
-						<p>{{ success }}</p>
-					</div><br>
-				{% endif %}
+			{% if  errors is not empty %}
+				<div class="alert alert-danger" role=alert>
+					{% for value in errors %}
 
-				<!-- include menu -->
-				<div class="container">
-					<div class="row">
-						<div class="col-md-3">
-							<h4 class="lead">Street Connect</h4>
-							<div class="list-group">
-								<a href="#" class="list-group-item">Skate</a>
-								<a href="#" class="list-group-item">Bmx</a>
-								<a href="#" class="list-group-item">Parkour</a>
-								<a href="#" class="list-group-item">Roller</a>
-							</div>
+						<p>{{value}}</p><br>
+
+					{% endfor %}
+				</div><br>
+			{% endif %}
+
+			{% if success is defined %}
+				<div class="alert alert-success" role=alert>
+					<p>{{ success }}</p>
+				</div><br>
+			{% endif %}
+
+			<form action=""  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
+				<fieldset>
+					<legend>Vendre un objet</legend>
+					<!-- champ caché pour l'id-->
+					<input type="hidden" name="ID_product" 
+					{% if modification is not empty %}
+						value="{{modification.ID_product}}"
+					{% endif %}>
+					<input type="hidden" name="ID_user" value=" {{ app.user.ID_user }} ">
+
+
+					<!-- nom et marque -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Nom ou modèle</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="name" required 
+							{% if modification is not empty %}
+								value="{{modification.name}}"
+							{% endif %}>
 						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Marque</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="brand" required
+							{% if modification is not empty %}
+								value="{{modification.brand}}"
+							{% endif %}>
+						</div>
+					</div>
 
-						<div class="col-md-9">
-							<form action=""  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
-								<fieldset>
-									<!-- champ caché pour l'id-->
-									<input type="hidden" name="ID_product"	
-									{% if modification is not empty %}
-										{{dump(modification) }}
-										value="{{modification.ID_product}}"
-									{% endif %}>
+					<!-- Categorie -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">
+							Catégorie
+						</label>
+						<div class="col-md-4">
+							<select name="category" class="form-control">
+								{% for value in categories %}
 
-									<!-- nom et marque -->
-									<div class="form-group">
-										<label class="col-md-4 control-label">Nom ou modèle</label>
-										<div class="col-md-4">
-											<input class="form-control" type="text" name="name" required 
-											{% if modification is not empty %}
-												value="{{modification.name}}"
-											{% endif %}>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-4 control-label">Marque</label>
-										<div class="col-md-4">
-											<input class="form-control" type="text" name="brand" required
-											{% if modification is not empty %}
-												value="{{modification.brand}}"
-											{% endif %}>
-										</div>
-									</div>
-
-									<!-- Categorie -->
-									<div class="form-group">
-										<label class="col-md-4 control-label">
-											Catégorie
-										</label>
-										<div class="col-md-4">
-											<select name="category" class="form-control">
-												{% for value in categories %}
-
-													<option value="{{value.ID_category}}"
-													{% if modification is not empty %} 
-														{% if modification.ID_category == value.ID_category %} 
-															{{' selected '}}
-														{% endif %}
-													{% endif %}
-													>{{value.category_name}}</option>
-												{% endfor %}
-											</select>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-4 control-label">Sous-catégorie</label>
-										<div class="col-md-4">
-											<input class="form-control" type="text" name="sub_category" 
-											{% if modification is not empty %}
-												value="{{modification.sub_category}}"
-											{% endif %}
-											>
-										</div>
-									</div>
-
-									<!-- prix et frais de livraisons-->
-									<div class="form-group">
-										<label class="col-md-4 control-label">Prix</label>
-										<div class="col-md-4">
-											<input class="form-control" type="text" name="price" required 
-											{% if modification is not empty %}
-												value="{{modification.price}}"
-											{% endif %}
-											>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-4 control-label">Frais de livraison</label>
-										<div class="col-md-4">
-											<input class="form-control" type="text" name="shipping_charges" 
-											{% if modification is not empty %}
-												value="{{modification.shipping_charges}}"
-											{% endif %}
-											>
-										</div>
-									</div>
-
-									<!-- Description -->
-									<div class="form-group">
-										<label class="col-md-4 control-label">Description</label>
-										<div class="col-md-4">
-											<textarea name="description" class="form-control" placeholder="Saisissez une description du produit"						
-											>
-											{% if modification is not empty %}
-												{{modification.description}}
-											{% endif %}
-										</textarea>
-									</div>
-								</div>
-
-								<!-- Images -->
-								<div class="form-group">
-									<label class="col-md-4 control-label">Image</label>
-									<div class="col-md-4">
-										{% if modification is not empty %}
-											{% if modification.image_1 is not empty %}
-												<div class="alert alert-info" role="alert">
-													<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
-													<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>								
-												</div>
-											{% endif %}
-										{% endif %}
-										<input  type="file" class="dropify" name="image_1">
-										<input type="hidden" name="image_1-hidden"	
-										{% if modification is not empty %}
-											value="{{modification.image_1}}"
-										{% endif %}>
-									</div>
-									<label class="col-md-4 control-label">Image 2</label>
-									<div class="col-md-4">
-										{% if modification is not empty %}
-											{% if modification.image_2 is not empty %}
-												44	<div class="alert alert-info" role="alert">
-												<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
-												<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
-											</div>
+									<option value="{{value.ID_category}}"
+									{% if modification is not empty %} 
+										{% if modification.ID_category == value.ID_category %} 
+											{{' selected '}}
 										{% endif %}
 									{% endif %}
-									<input type="file" class="dropify" name="image_2">
-									<input type="hidden" name="image_2-hidden"	
-									{% if modification is not empty %}
-										value="{{modification.image_2}}"
-									{% endif %}>
-								</div>
-								<label class="col-md-4 control-label">Image 3</label>
-								<div class="col-md-4">
-									{% if modification is not empty %}
+									>{{value.category_name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Sous-catégorie</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="sub_category" 
+							{% if modification is not empty %}
+								value="{{modification.sub_category}}"
+							{% endif %}
+							>
+						</div>
+					</div>
 
-										{% if modification.image_3 is not empty %}
-											<div class="alert alert-info" role="alert">
-												<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
-												<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
-											</div>
-										{% endif %}
-									{% endif %}
-									<input type="file" class="dropify" name="image_3">
-									<input type="hidden" name="image_3-hidden"	
-									{% if modification is not empty %}
-										value="{{modification.image_3}}"
-									{% endif %}>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-md-4">
-									<input  type="submit" class="btn btn-primary" value="Ajouter">
-								</div>
-							</div>
-						</fieldset>
-					</form>
-				</div>
-			</div>
+					<!-- prix et frais de livraisons-->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Prix</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="price" required 
+							{% if modification is not empty %}
+								value="{{modification.price}}"
+							{% endif %}
+							>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Frais de livraison</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="shipping_charges" 
+							{% if modification is not empty %}
+								value="{{modification.shipping_charges}}"
+							{% endif %}
+							>
+						</div>
+					</div>
+					<!-- Images -->
+					<div class="form-group">
+						
+						<div class="col-md-4">
+							<label class="control-label">Image</label>
+							{% if modification is not empty %}
+								{% if modification.image_1 is not empty %}
+									<div class="alert alert-info" role="alert">
+										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
+										<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>								
+									</div>
+								{% endif %}
+							{% endif %}
+							<input  type="file" class="dropify" name="image_1">
+							<input type="hidden" name="image_1-hidden"	
+							{% if modification is not empty %}
+								value="{{modification.image_1}}"
+							{% endif %}>
+						</div>
+						<div class="col-md-4">
+							<label class="control-label">Image 2</label>
+							{% if modification is not empty %}
+								{% if modification.image_2 is not empty %}
+									<div class="alert alert-info" role="alert">
+										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
+										<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
+									</div>
+								{% endif %}
+							{% endif %}
+							<input type="file" class="dropify" name="image_2">
+							<input type="hidden" name="image_2-hidden"	
+							{% if modification is not empty %}
+								value="{{modification.image_2}}"
+							{% endif %}>
+						</div>
+						<div class="col-md-4">
+							<label class="control-label">Image 3</label>
+							{% if modification is not empty %}
+
+								{% if modification.image_3 is not empty %}
+									<div class="alert alert-info" role="alert">
+										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
+										<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
+									</div>
+								{% endif %}
+							{% endif %}
+							<input type="file" class="dropify" name="image_3">
+							<input type="hidden" name="image_3-hidden"	
+							{% if modification is not empty %}
+								value="{{modification.image_3}}"
+							{% endif %}>
+						</div>
+					</div>
+					<!-- Description -->
+					<div class="form-group">
+						<div class="col-md-12">
+							<label class="control-label">Description</label>
+							<textarea name="description" class="form-control" placeholder="Saisissez une description du produit"						
+							>
+							{% if modification is not empty %}
+								{{modification.description}}
+							{% endif %}
+							</textarea>
+						</div>
+					</div>
+
+					
+					<div class="form-group">
+						<div class="col-md-4">
+							<input type="hidden" name="token" value="{{app.session.get('token')}}">
+							<button  type="submit" class="btn btn-primary">Ajouter</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+
 		</div>
 	</div>
 </div>
+
+
+
 {% endblock %}
 
-{#{% block footer %}
+{% block footer %}
 	{% include 'commerce/footer.html.twig' %}
-{% endblock %}#}
+{% endblock %}
 
 {% block javascripts %}
 	<script src="{{asset('dist/js/bootstrap.min.js')}}"></script>
@@ -225,6 +224,12 @@
 			'error':   'Ooops, d&eacute;sol&eacute; le fichier est trop volumineux.'
 		}
 	});
+	</script>
+	<script src="{{ asset('js/topic.js') }}"></script>
+	<script>
+	// Replace the <textarea id="editor1"> with a CKEditor
+	// instance, using default configuration.
+	CKEDITOR.replace( 'description' );
 	</script>
 
 {% endblock %}
