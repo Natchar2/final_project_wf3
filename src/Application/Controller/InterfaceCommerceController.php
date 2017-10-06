@@ -412,111 +412,6 @@ class InterfaceCommerceController
 
 	}
 
-
-
-
-	// public function connexionPostAction(Application $app, Request $request){
-
-	// 	if($request->get('email') !=null && !empty($request->get('email'))){
-
-	// 		if (!filter_var(htmlspecialchars($request->get('email')),FILTER_VALIDATE_EMAIL)) {
-
-	// 			$error[] = 'Identification invalide';
-
-	// 		}
-
-	// 	}else{
-
-	// 		$error[] = 'Veuillez remplir le champ email';
-
-	// 	}
-
-
-
-	// 	if($request->get('password') !=null && !empty($request->get('password'))){
-
-	// 		if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_]{3,50}$#i',$request->get('password'))) {
-
-	// 			$errors[] = 'Identification invalide';
-	// 		}
-	// 	}else{
-
-	// 		$errors[] = "Veuillez remplir le champ mot de passe";
-
-	// 	}
-
-	// 	if(!isset($errors)){
-	// 		$user = $app['idiorm.db']->for_table('users')->where('mail', $request['email'])->find_one();
-	// 		if(!empty($user))
-	// 		{
-	// 			if(!password_verify($request->get('password'), $user->get('password'))){
-	// 				$request
-	// 			};
-	// 		}
-	// 	}else
-	// 	{
-	// 		$errors[] = 'erreur d\'authentification';
-	// 	}
-
-
-	// 	return array(
-	// 		'errors'  => $errors,
-	// 	);
-
-	// }
-
-
-
-
-	// public function inscriptionAction(Application $app)
-	// {
-	// 	return $app['twig']->render('commerce/inscription.html.twig');
-	// }
-
-	// public function inscriptionPostAction(Application $app, Request $request)
-	// {
-	// 	//utilisation de la fonction de vérification dans Model\Vérifications
-	// 	$Verifications = new Verifications;
-
-	// 	$verifs =  $Verifications->VerificationInscription($request, $app);
-
-
-	// 	//Retour des variables de VerificationNewAd
-	// 	$errors         = $verifs['errors'];
-	// 	$error          = $verifs['error'];
-	// 	$finalFileName1 = $verifs['finalFileName1'];
-
-	// 	if(empty($errors) && empty($error))
-	// 	{
-	// 		$user = $app['idiorm.db']->for_table('users')->create();
-
- //            $user->name = $request->get('name');
- //            $user->surname = $request->get('surname');
- //            $user->password = $app['security.encoder.digest']->encodePassword($request->get('password'), '');
- //            $user->pseudo = $request->get('pseudo');
- //            $user->street = $request->get('street');
- //            $user->zip_code = $request->get('zip_code');
- //            $user->city = $request->get('city');
- //            $user->mail = $request->get('mail');
- //            $user->phone = $request->get('phone');
- //            $user->society_name = $request->get('society_name');
- //            $user->avatar = $finalFileName1;
-
- //            $user->save();
-
- //            return $app['twig']->render('commerce/connexion.html.twig',[
-	// 			'success'    => 'Vous êtes bien inscrit',
-	// 		]);
-	// 	}
-	// 	else
-	// 	{
-	// 		return $app['twig']->render('commerce/inscription.html.twig',[
-	// 			'errors'    => $errors,
-	// 			'error'     => $error,
-	// 		]);
-	// 	}
-	// }
-
 	public function agendaAction(Application $app)
 	{
 		return $app['twig']->render('commerce/agenda.html.twig');
@@ -677,16 +572,6 @@ class InterfaceCommerceController
 			$app->redirect('/listProducts');
 		}
 
-		/* $suppression = $app['idiorm.db']->for_table('products')
-		->where('ID_product', $ID_product)
-		->find_one();
-
-		$suppression->delete();
-
-		return $app['twig']->render('commerce/list_products.html.twig',[
-		'products' => $products,
-		'delete'   => $delete
-	]);*/
 }  
 
  public function inscriptionPostAction(Application $app, Request $request) {
