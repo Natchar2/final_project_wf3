@@ -57,7 +57,7 @@
 
 								<td><img src="{{ asset('assets/images/'~value.image_3)}}" class="img-fluid"></td>
 
-								<td>{{value.creation_date}}</td>
+								<td>{{value.creation_date | date('d/m/Y')}}</td>
 
 								<td>{{value.tracking_number}}</td>
 

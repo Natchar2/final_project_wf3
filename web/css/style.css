@@ -5,6 +5,12 @@ html, body{
 	margin: 0;
 }
 
+body{
+	padding-top:48px;
+
+}
+
+
 
 #myTable td{
 	color: black;

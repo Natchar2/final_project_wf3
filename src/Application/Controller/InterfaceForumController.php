@@ -87,7 +87,7 @@ class InterfaceForumController
 	}
 
 //page topic avec un sujet les 5 dernier posts
-	public function topicAction(Application $app, $slugTopic=1 ,$ID_topic=2)
+	public function topicAction(Application $app, $slugTopic,$ID_topic)
 	{
 		if($ID_topic>0)
   	  	{
@@ -114,8 +114,15 @@ class InterfaceForumController
 		}
 		else
 		{
+			$success = "Il n'y a pas encore de topic sur ce sujet";
 
-			$app->redirect('forum/accueil');
+			return $app['twig']->render('forum/topic.html.twig', [
+		        'categories'  => $app['categories'],      
+		        'errors'      => [],
+		        'topics'	  => $topics,
+		        'posts'		  => $posts,
+		        'success'	  => $success, 
+	  	  ]);
 		}
 
 	}
@@ -138,127 +145,184 @@ class InterfaceForumController
 //ajout de commentaire sur la page topic.html
 	public function newPostAction(Application $app, Request $request, $slugTopic=1 ,$ID_topic=2)
 	{
-	
-			if($app['session']->get('token') == $request->get('token'))
+
+		//gestion du formulaire d'ajout de produit  sur add_event.html
+
+    	$token = $app['security.token_storage']->getToken();  
+		
+		//test d'authentification
+	  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+	  	 {
+
+	  	 	//récupération de l'ID_user
+	    	$user = $token->getUser();
+	    	$ID_user = $user->getID_user();
+
+    		if($app['session']->get('token') == $request->get('token'))
 			{//utilisation de Vérification dans Model\Vérifications
-						$Verifications = new Verifications;
-			
-						$verifs = $Verifications->VerificationNewPost($request, $app);
-			
-						//retour des variables de VerificationNewPost
-			
-						$errors = $verifs['errors'];
-			
-						if(empty($errors))
-						{
-							//Connexion  a la bdd
-							$post = $app['idiorm.db']->for_table('post')->create();
-			
-							//Afectation des valeurs
-							$post->content   = $request->get('content');
-							$post->ID_topic  = filter_var($request->get('ID_topic'), FILTER_VALIDATE_INT);
-							$post->ID_user   = $request->get('ID_user');
-							$post->post_date = strtotime('now');
-			
-							$post->save();
-			
-							if($ID_topic>0)
-							  	  	{
-							            //appel de base pour afficher les données pour retrouver l'article a modifier
-										$topics = $app['idiorm.db']->for_table('view_topics')
-										->where('ID_topic',2)
-										->find_one();
-			
-			
-			
-										//appel de la page pour tranche de 5 posts
-										$posts = $app['idiorm.db']->for_table('view_posts')
-										->where('ID_topic',2)
-										->order_by_desc('post_date')
-								 		->limit(5)
-										->find_result_set();
-			
-										
-									}
-									
-							$success = "Votre commentaire a bien été ajouté";
-			
-							return $app['twig']->render('forum/topic.html.twig',[
-								'success'     => $success,
-				    			'errors'      => [] ,
-				    			'categories'  => $app['categories'],
-				    			'topics'	  => $topics,
-						        'posts'		  => $posts,
-							]);
-						}
-						else
-						{
-			
-							return $app['twig']->render('forum/topic.html.twig',[
-							'errors'    => $errors,
-							'categories'=> $app['categories'],
-							'topics'	=> $topics,
-						    'posts'		=> $posts,
-							]);
-			
-						}
+				$Verifications = new Verifications;
+	
+				$verifs = $Verifications->VerificationNewPost($request, $app);
+	
+				//retour des variables de VerificationNewPost
+	
+				$errors = $verifs['errors'];
+	
+				if(empty($errors))
+				{
+					//Connexion  a la bdd
+					$post = $app['idiorm.db']->for_table('post')->create();
+	
+					//Afectation des valeurs
+					$post->content   = $request->get('content');
+					$post->ID_topic  = filter_var($request->get('ID_topic'), FILTER_VALIDATE_INT);
+					$post->ID_user   = $request->get('ID_user');
+					$post->post_date = strtotime('now');
+					$post->ID_user = $ID_user;
+	
+					$post->save();
+	
+					if($ID_topic>0)
+					  	  	{
+					            //appel de base pour afficher les données pour retrouver l'article a modifier
+								$topics = $app['idiorm.db']->for_table('view_topics')
+								->where('ID_topic',2)
+								->find_one();
+	
+	
+	
+								//appel de la page pour tranche de 5 posts
+								$posts = $app['idiorm.db']->for_table('view_posts')
+								->where('ID_topic',2)
+								->order_by_desc('post_date')
+						 		->limit(5)
+								->find_result_set();
+	
+								
+							}
+							
+					$success = "Votre commentaire a bien été ajouté";
+	
+					return $app['twig']->render('forum/topic.html.twig',[
+						'success'     => $success,
+		    			'errors'      => [] ,
+		    			'categories'  => $app['categories'],
+		    			'topics'	  => $topics,
+				        'posts'		  => $posts,
+					]);
+				}
+				else
+				{
+	
+					return $app['twig']->render('forum/topic.html.twig',[
+					'errors'    => $errors,
+					'categories'=> $app['categories'],
+					'topics'	=> $topics,
+				    'posts'		=> $posts,
+					]);
+	
+				}
 			}
 			else
 			{
-				 $app->get('/redirect', function() use ($app) {
-			    return $app->redirect($app["url_generator"]->generate("inscription_post"));
-					});
+				return $app->redirect('inscription/erreur');
 			}
+		}
+		else
+		{
+			return $app->redirect('inscription/erreur');
+			
+		}
+
+			
 	}
  
 
  //affichage de la page pour l'ajout de topic : new_topic.html.twig
 	public function newTopicAction(Application $app)
 	{
-		return $app['twig']->render('forum/new_topic.html.twig',[
+		//gestion du formulaire d'ajout de produit  sur add_event.html
+
+    	$token = $app['security.token_storage']->getToken();  
+		
+		//test d'authentification
+	  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+	  	 {
+
+	  	 	//récupération de l'ID_user
+	    	$user = $token->getUser();
+	    	$ID_user = $user->getID_user();
+
+    		return $app['twig']->render('forum/new_topic.html.twig',[
 			'categories'=> $app['categories']
-		]);
+			]);
+		}
+		else
+		{
+			return $app->redirect('inscription/erreur');
+			
+		}
+		
 	}
 
 //Gestion du formulaire de création du topic
 	public function newTopicPostAction(Application $app, Request $request)
 	{
+		
+    	$token = $app['security.token_storage']->getToken();  
+		
+		//test d'authentification
+	  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+	  	 {
 
+	  	 	//récupération de l'ID_user
+	    	$user = $token->getUser();
+	    	$ID_user = $user->getID_user();
 
-			if($app['session']->get('token') == $request->get('token'))
+		//gestion du formulaire d'ajout de produit  sur add_event.html
+
+    		if($app['session']->get('token') == $request->get('token'))
 	        {//utilisation de la fonction de vérification dans Model\Vérifications
-	        	        $Verifications = new Verifications;
-	        
-	        	        $verifs =  $Verifications->VerificationNewTopic($request, $app);
-	        
-	        	        $errors = $verifs['errors'];
-	        
-	        	        		//Connexion à la bdd
-	        	            $topic = $app['idiorm.db']->for_table('topics')->create();
-	        
-	        
-	        	    				//Affectation des valeurs
-	        	            $topic->title            = $request->get('title');
-	        	            $topic->ID_category      = $request->get('ID_category');
-	        	 			$topic->creation_date    = strtotime('now');
-	        	 			
-	        	 			$topic->save();
-	        
-	        	           $success = "Votre topic a bien été ajouté";
-	        		
-	        
-	        			return $app['twig']->render('forum/new_topic.html.twig',[
-	        		        'errors'    => $errors,
-	        		        'categories'=> $app['categories']
-	        		    	]);
+		        $Verifications = new Verifications;
+
+		        $verifs =  $Verifications->VerificationNewTopic($request, $app);
+
+		        $errors = $verifs['errors'];
+
+		        		//Connexion à la bdd
+		            $topic = $app['idiorm.db']->for_table('topics')->create();
+
+
+		    				//Affectation des valeurs
+		            $topic->title            = $request->get('title');
+		            $topic->ID_category      = $request->get('ID_category');
+		 			$topic->creation_date    = strtotime('now');
+		 			$topic->ID_user			 = $ID_user;
+		 			
+		 			$topic->save();
+
+		           $success = "Votre topic a bien été ajouté";
+			
+
+				return $app['twig']->render('forum/new_topic.html.twig',[
+			        'errors'    => $errors,
+			        'categories'=> $app['categories']
+	        		   ]);
 	        
 	   		}
 	   		else
 	   		{
-	   			 $app->get('/redirect', function() use ($app) {
-			    return $app->redirect($app["url_generator"]->generate("inscription_post"));
-					});
+	   			return $app->redirect('inscription/erreur');
+   			 
 	   		}
+		}
+		else
+		{
+			return $app->redirect('inscription/erreur');
+			
+		}
+
+			
 	}
 
 }

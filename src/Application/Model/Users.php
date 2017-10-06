@@ -54,7 +54,7 @@ class Users implements UserInterface
 	// ----------------------------------
 
 	// GETTERS
-	public function getIDUser()
+	public function getID_user()
 	{
 		return $this->ID_user;
 	}

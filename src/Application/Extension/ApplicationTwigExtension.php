@@ -17,10 +17,10 @@ class ApplicationTwigExtension extends \Twig_Extension
 		Sinon c'est inutile*/
 				if(strlen($string)>170){
 					//je coupe ma chaine si sup à 170
-					$stringCut = substr($string, 0, 170);
+					$stringCut = substr($string, 0, 130);
 
 				//je m'assure que je ne coupe pas un mot
-				$string = substr($stringCut,0, strrpos($stringCut,' ' ));
+				$string = substr($stringCut,0, strrpos($stringCut,' ' )). '...';
 					}
 
 				return $string;
