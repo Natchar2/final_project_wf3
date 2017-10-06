@@ -43,6 +43,7 @@ class ComposerStaticInita6fc1a1c48d7ad9a3e32b0d20d26c7fa
             'Symfony\\Component\\Config\\' => 25,
             'Symfony\\Component\\Asset\\' => 24,
             'Symfony\\Bridge\\Twig\\' => 20,
+            'Stripe\\' => 7,
             'Silex\\' => 6,
             'SKoziel\\Silex\\PayPalRest\\' => 25,
         ),
@@ -160,6 +161,10 @@ class ComposerStaticInita6fc1a1c48d7ad9a3e32b0d20d26c7fa
         'Symfony\\Bridge\\Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/twig-bridge',
+        ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
         ),
         'Silex\\' => 
         array (

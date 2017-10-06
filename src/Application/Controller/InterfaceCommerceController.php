@@ -166,10 +166,107 @@ class InterfaceCommerceController
 		]);
 	}
 
-	public function faqAction(Application $app)
+
+
+
+	public function suiviAction(Application $app, $errors = "")
 	{
-		return $app['twig']->render('commerce/FAQ.html.twig');
+        $idUser=1;
+
+        #format index.php/business/une-formation-innovante-a-lyon_87943512.html
+		$buyers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_buyer=' . $idUser . ' AND users.ID_user=ID_seller ORDER BY order_date DESC')->find_result_set();			
+		$sellers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_seller=' . $idUser . ' AND users.ID_user=ID_buyer ORDER BY order_date DESC')->find_result_set();
+	
+
+		return $app['twig']->render('commerce/suivi.html.twig',[
+			'buyers' => $buyers,
+			'sellers' => $sellers,
+			'errors' => $errors
+	
+		]);
+
 	}
+
+    public function suiviMajAction(Application $app, Request $request, $error = "")
+    {
+
+		$ID_order = $request->get('ID_order');
+
+		$update=$app['idiorm.db']->for_table('orders')->find_one($ID_order);
+
+
+
+		if ($request->get('seller_status'))
+		{
+
+
+			if ($request->get('seller_status') == 0)
+			{
+				$update->set(array(
+				 	'seller_status' => 1
+				));
+		        $update->save();
+			}
+
+			if ($request->get('seller_status') == 1 or $request->get('seller_status') == 2)
+			{
+	
+				if(null!=($request->get('tracking_number')) && !empty($request->get('tracking_number')))
+				{
+					if (!preg_match('#^[a-z0-9\/ \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_]{3,50}$#i',$request->get('tracking_number')))
+					{
+						$errors[] = 'numéro de colis incorrect';
+					}
+				}
+				else
+				{
+					$errors[] = "Veuillez indiquer un numéro de suivi";
+				}
+
+				if (!isset($errors))
+				{
+					$update->set(array(
+					 	'seller_status' => 2,
+					 	'tracking_number' => $request->get('tracking_number')
+					));
+			        $update->save();
+			    }
+			}
+		}
+
+		if ($request->get('buyer_status'))
+		{
+			if ($request->get('seller_status') == 0)
+			{
+				$update->set(array(
+				 	'buyer_status' => 1
+				));
+		        $update->save();
+			}
+		}
+
+
+		if (!isset($errors))
+		{
+			$errors = "";
+		}
+
+        $idUser=1;
+
+        #format index.php/business/une-formation-innovante-a-lyon_87943512.html
+		$buyers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_buyer=' . $idUser . ' AND users.ID_user=ID_seller ORDER BY order_date DESC')->find_result_set();			
+		$sellers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_seller=' . $idUser . ' AND users.ID_user=ID_buyer ORDER BY order_date DESC')->find_result_set();
+	
+
+		return $app['twig']->render('commerce/suivi.html.twig',[
+			'buyers' => $buyers,
+			'sellers' => $sellers,
+			'errors' => $errors	
+		]);
+
+
+
+    }
 
 	public function addItemAction(Application $app, Request $request)
 
@@ -214,7 +311,7 @@ class InterfaceCommerceController
 
 		if(isset($panier[$request->get('id')]))
 		{
-			if($panier[$request->get('id')] == 0)
+			if(($panier[$request->get('id')] - 1) == 0)
 			{
 				unset($panier[$request->get('id')]);
 			}
@@ -222,8 +319,9 @@ class InterfaceCommerceController
 			{
 				$panier[$request->get('id')] -= 1;
 			}
-
 			$app['session']->set('panier', $panier);
+
+			
 		}
 
 		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementation'));
@@ -249,15 +347,7 @@ class InterfaceCommerceController
 		if(isset($panier[$request->get('id')]))
 		{
 			$num_product = $panier[$request->get('id')];
-
-			if($panier[$request->get('id')] == 0)
-			{
-				unset($panier[$request->get('id')]);
-			}
-			else
-			{
-				$panier[$request->get('id')] = 0;  
-			}
+			unset($panier[$request->get('id')]);
 		}
 
 		$app['session']->set('panier', $panier);
@@ -378,10 +468,149 @@ class InterfaceCommerceController
 		return round($total_price);
 	}
 
-   public function aboutAction(Application $app)
-   {
-      return $app['twig']->render('commerce/about.html.twig');
-  }
+
+public function createCustomerAction(Application $app, Request $request)
+	{
+		\Stripe\Stripe::setApiKey("sk_test_QmSww6Ib9W6e27EL24MysACJ");
+
+		$customer = \Stripe\Customer::create(array(
+			"email" => $request->get('email'),
+			"source" => $request->get('token'),
+		));
+
+		if(empty($customer->failure_code))
+		{
+			$globalController = new GlobalController();
+
+			$subject = "Street Connect - [" . $customer->id . "] Demande prise en compte";
+			$from = "postmaster@localhost";
+			$to = $request->get('customer_email');
+			$content = "Bonjour " . $request->get('customer_name') . ", votre demande a bien été prise en compte. Nous attendons la confirmation du vendeur avant de vous de vous débiter. Cordialement.";
+			
+			$globalController->sendMailAction($app, $subject, $from, $to, $content);
+
+			// -- Envoie de mail au vendeur
+			$product_by_id = $app['session']->get('total_product_by_id');
+
+			foreach ($product_by_id as $key => $value)
+			{
+				$product = $app['idiorm.db']->for_table('products')->where('ID_product', $key)->find_result_set()[0];
+				$seller = $app['idiorm.db']->for_table('users')->where('ID_user', $product->ID_user)->find_result_set()[0];
+
+				$globalController = new GlobalController();
+
+				$subject = "Street Connect - Un client demande vos articles";
+				$from = "postmaster@localhost";
+				$to = $seller->mail;
+
+				$strTemp = ($value > 1) ? "s" : "";
+				$content = "Bonjour " . $seller->name . ", un client vous demande " . $value . " article" . $strTemp . ", cliquez sur le lien suivant pour accepter la vente: <br/><a href='" . PUBLIC_ROOT . "suivi'>Accepter la vente</a><br/><b>Cordialement.</b>";
+				
+				$globalController->sendMailAction($app, $subject, $from, $to, $content);
+
+				$order = $app['idiorm.db']->for_table('orders')->create();
+				$order->ID_seller = $seller->ID_user;
+//---------------------------------------------------------------ATTENTION, ecrire la session des que fonctionnelle ------------------------------
+				$order->ID_buyer = 1;
+				$order->ID_customer= $customer->id;
+				$order->ID_product = $key;
+				$order->name = $product->name;			
+				$order->quantity = $value;
+//---------------------------------------------------------------ATTENTION, ecrire la session des que fonctionnelle ------------------------------
+				$order->total_price = 112;
+				$order->seller_status = 0;
+				$order->buyer_status = 0;
+				$order->order_date = strtotime('now');
+				$order->payment_token = $request->get('token');
+				$order->save();
+			}
+			// ----------------------------
+
+			return 'Votre demande a bien été prise en compte';
+		}
+		else
+		{
+			$order = $app['idiorm.db']->for_table('orders')->create();
+			$order->error_code = $charge->failure_code;
+			$order->save();
+		}
+
+		return 'Une erreur c\'est produite, veuillez réessayer';
+
+	}
+
+	public function confirmationSaleAction(Application $app, Request $request)
+	{
+		if($request->get('token') != undefined)
+		{
+			if($request->get('token') === $app['session']->get('token'))
+			{
+				$order_payment = $app['idiorm.db']->for_table('order')->where('ID_order', $request->get('ID_order'))->find_result_set()[0];
+				$seller = $app['idiorm.db']->for_table('users')->where('ID_user', $order_payment->ID_seller)->find_result_set()[0];
+				$buyer = $app['idiorm.db']->for_table('users')->where('ID_user', $order_payment->ID_buyer)->find_result_set()[0];
+
+				$charge = \Stripe\Charge::create(array(
+					"amount" => $order_payment->total_price,
+					"currency" => "EUR",
+					"description" => $order_payment->name,
+					"statement_descriptor" => "Passé le: " . date("d/m/Y H:i:s", $order_payment->order_date),
+					"customer" => $order_payment->ID_customer,
+				));
+
+				if(empty($charge->failure_code))
+				{
+					$globalController = new GlobalController();
+
+					$subject = "Street Connect - [" . $order_payment->ID_order . "] Paiement effectué";
+					$from = "postmaster@localhost";
+					$to = $seller->mail;
+					$content = "Bonjour " . $seller->name . ", le versement d'une somme de " . $order_payment->total_price . " EUR, a bien été effectué le " . date("d/m/Y H:i:s", $order_payment->order_date) .  ". Cordialement.";
+					
+					$globalController->sendMailAction($app, $subject, $from, $to, $content);
+
+					$subject = "Street Connect - [" . $order_payment->ID_order . "] Paiement effectué";
+					$from = "postmaster@localhost";
+					$to = $seller->mail;
+					$content = "Bonjour " . $buyer->name . ", le paiement d'une somme de " . $order_payment->total_price . " EUR, a bien été effectué " . date("d/m/Y H:i:s", $order_payment->order_date) .  ". Cordialement.";
+					
+					$globalController->sendMailAction($app, $subject, $from, $to, $content);
+
+					return 'Le paiement a bien été effectué';
+				}
+				else
+				{
+					$order_error = $app['idiorm.db']->for_table('orders')->create();
+					$order_error->error_code = $charge->failure_code;
+					$order_error->save();
+
+					return 'Une erreur c\'est produite lors du paiement';
+				}
+			}
+		}
+		
+		return $app->redirect('acceuil');
+
+	}
+
+
+
+
+
+
+
+
+
+
+	public function faqAction(Application $app)
+	{
+		return $app['twig']->render('commerce/FAQ.html.twig');
+	}
+
+
+    public function aboutAction(Application $app)
+    {
+    	return $app['twig']->render('commerce/about.html.twig');
+    }
 
 
   public function shoppingCardAction(Application $app)

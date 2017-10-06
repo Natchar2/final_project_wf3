@@ -19,9 +19,57 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/accueil', 'Application\Controller\InterfaceCommerceController::accueilAction')
 		->bind('accueil');
 
+		// -----------	Panier et paiement 	-------------------
+
 		$controllers
 		->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
 		->bind('panier');
+
+
+		
+		$controllers
+		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+		->bind('addItem');
+
+
+		$controllers
+		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
+		->bind('removeOneItem');
+
+		$controllers
+		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
+		->bind('removeAllItem');
+
+
+
+		
+		$controllers
+		->post('/create_customer', 'Application\Controller\InterfaceCommerceController::createCustomerAction')
+		->bind('create_customer');
+
+		$controllers
+		->post('/confirmation_of_sale', 'Application\Controller\InterfaceCommerceController::confirmationSaleAction')
+		->bind('confirmation_of_sale');
+
+
+
+		$controllers
+		->get('/suivi', 'Application\Controller\InterfaceCommerceController::suiviAction')
+		->bind('suivi');
+
+		$controllers
+		->post('/suivi', 'Application\Controller\InterfaceCommerceController::suiviMajAction')
+		->bind('suiviMaj');
+
+
+
+		// ---------------		fin Panier et paiement		-----------------
+
+
+
+
+
+
 
 
 		$controllers
@@ -55,19 +103,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 
-		$controllers
-		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-		->bind('addItem');
-
-
-		$controllers
-		->post('/removeOneItem', 'Application\Controller\InterfaceCommerceController::removeOneItemAction')
-		->bind('removeOneItem');
-
-		$controllers
-		->post('/removeAllItem', 'Application\Controller\InterfaceCommerceController::removeAllItemAction')
-		->bind('removeAllItem');
-
+	
 
 		$controllers
 		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')

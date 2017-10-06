@@ -1,0 +1,200 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block contenu %}
+
+	
+	<h1 class="my-4">Suivi</h1>
+
+	{{ dump(errors) ~"**" }}
+
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-8 col-sm-push-2">
+			<h4 class="lead">En tant qu'acheteur</h4>
+
+			{% if buyers is defined and buyers is not empty %}
+
+				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
+					<thead>
+						<tr>
+							<th width="80">Date</th>
+							<th>Produit</th>
+							<th width="80">Quantité</th>
+							<th width="80">Prix</th>
+							<th width="120">Statut vendeur</th>				
+							<th width="120">Statut acheteur</th>	
+						</tr>
+					</thead>
+					<tbody>
+
+						{% for buyer in buyers %}
+
+							<tr>
+								<td>
+									{{ buyer.order_date|date('d/m/Y') }}
+								</td>
+								<td>
+									<h3>{{ buyer.name }}</h3>
+								</td>
+								<td>
+									{{ buyer.name }}
+								</td>
+								<td>{{ buyer.total_price|number_format(2, '.', ' ') }}</td>
+								<td>
+									{% if buyer.seller_status == -1 %}
+										refusé par le vendeur
+									{% endif %}
+									
+									{% if buyer.seller_status == 0 %}
+										attente validation vendeur
+									{% endif %}
+									{% if buyer.seller_status == 1 %}
+										vente validée le {{ buyer.validation_date|date('d/m/Y') }}
+									{% endif %}
+									{% if buyer.seller_status == 2 %}
+										expédié le {{ buyer.send_date|date('d/m/Y') }}<br>
+										n° suivi colis : {{ buyer.tracking_number }}
+									{% endif %}
+								</td>
+								<td>
+									{% if buyer.buyer_status == -1 %}
+										colis non reçu
+									{% endif %}
+									
+									{% if buyer.buyer_status == 0 %}
+										attente réception
+									{% endif %}
+									{% if buyer.buyer_status == 1 %}
+										reçu le {{ buyer.reception_date|date('d/m/Y') }}
+									{% endif %}
+								</td>
+							</tr>
+
+						{% endfor %}
+					
+					</tbody>
+				</table>
+			{% else %}
+				<div class="alert alert-warning" role=alert>
+					<p>Vous n'avez effectué aucun achat pour le moment</p>
+				</div>		
+			{% endif %}
+		</div>
+	</div>
+
+
+	<hr>
+
+
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-8 col-sm-push-2">
+			<h4 class="lead">En tant que vendeur</h4>
+
+			{% if sellers is defined and sellers is not empty %}
+
+				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
+					<thead>
+						<tr>
+							<th width="80">Date</th>
+							<th>Produit</th>
+							<th width="80">Quantité</th>
+							<th width="80">Prix</th>
+							<th width="150">Statut vendeur</th>				
+							<th width="150">Statut acheteur</th>	
+							<th></th>						
+						</tr>
+					</thead>
+					<tbody>
+
+						{% for seller in sellers %}
+
+							<tr>
+								<td>
+									{{ seller.order_date|date('d/m/Y') }}
+								</td>
+								<td>
+									<h5>{{ seller.name }}</h5>
+								</td>
+								<td>
+									{{ seller.quantity}}
+								</td>
+								<td>{{ seller.total_price|number_format(2, '.', ' ') }}</td>
+								<td>
+									{% if seller.seller_status == -1 %}
+										refusé par le vendeur
+									{% endif %}
+									
+									{% if seller.seller_status == 0 %}
+										attente validation vendeur
+									{% endif %}
+									{% if seller.seller_status == 1 %}
+										validé le {{ seller.validation_date|date('d/m/Y') }}
+										<br>attente d'envoi
+									{% endif %}
+									{% if seller.seller_status == 2 %}
+										expédié le {{ seller.send_date|date('d/m/Y') }}<br>
+										n° suivi colis : {{ seller.tracking_number }}
+									{% endif %}
+								</td>
+								<td>
+									{% if seller.buyer_status == -1 %}
+										colis non reçu
+									{% endif %}
+									
+									{% if seller.buyer_status == 0 %}
+										attente réception
+									{% endif %}
+									{% if seller.buyer_status == 1 %}
+										reçu le {{ seller.reception_date|date('d/m/Y') }}
+									{% endif %}
+								</td>
+								<td>
+									<form action="" class="form-horizontal" method="post">
+										<input type="hidden" name="ID_order" value="{{ seller.ID_order }}">
+										<input type="hidden" name="seller_status" value="{{ seller.seller_status }}">										
+										
+										{% if seller.seller_status == 0 %}
+											<button type="sumbit">Valider la vente</button>
+										{% endif %}
+
+										{% if ( seller.seller_status == 1 or seller.seller_status == 2 ) and seller.buyer_status == 0 %}
+											<div class="form-group">
+												<label class="control-label">Numéro de colis</label> <input class="form-control input-xs" type="text" name="tracking_number" required 
+												{% if seller is not empty %}
+													value="{{seller.tracking_number}}"
+												{% endif %}>
+												<button type="sumbit">Valider le colisage</button>
+
+											</div>
+										{% endif %}
+									</form>	
+
+
+
+
+								</td>
+							</tr>
+
+						{% endfor %}
+					
+					</tbody>
+				</table>
+			{% else %}
+				<div class="alert alert-warning" role=alert>
+					<p>Vous n'avez effectué aucune vente pour le moment</p>
+				</div>		
+			{% endif %}
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+

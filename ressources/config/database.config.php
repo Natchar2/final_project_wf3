@@ -12,6 +12,7 @@ $app->register(new \Idiorm\Silex\Provider\IdiormServiceProvider(), array(
 			'products' => 'ID_product',
 			'topic' => 'ID_topic',
 			'users' => 'ID_user',
+			'orders' => 'ID_order',		
 			'view_products' => 'ID_product',
 			'view_events' => 'ID_event',
 			'view_topics' => 'ID_topic',		

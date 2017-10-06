@@ -11,7 +11,7 @@
 
 	class GlobalController
 	{
-		public function sendMailAction(Application $app, $subject, $from, $to, $content, $redirectTo) 
+		public function sendMailAction(Application $app, $subject, $from, $to, $content) 
 	    { 
 			$transport = $app['swiftmailer.transport'];
 			$mailer = $app['mailer'];
@@ -20,7 +20,7 @@
 				->setSubject($subject)
 				->setFrom(array($from))
 				->setTo(array($to))
-				->setBody($content);
+				->setBody($content,'text/html');
 
 		    $app['swiftmailer.use_spool'] = false;
 	    	$result = $mailer->send($message);

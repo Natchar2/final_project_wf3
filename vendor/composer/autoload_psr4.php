@@ -28,6 +28,7 @@ return array(
     'Symfony\\Component\\Config\\' => array($vendorDir . '/symfony/config'),
     'Symfony\\Component\\Asset\\' => array($vendorDir . '/symfony/asset'),
     'Symfony\\Bridge\\Twig\\' => array($vendorDir . '/symfony/twig-bridge'),
+    'Stripe\\' => array($vendorDir . '/stripe/stripe-php/lib'),
     'Silex\\' => array($vendorDir . '/silex/silex/src/Silex'),
     'SKoziel\\Silex\\PayPalRest\\' => array($vendorDir . '/skoziel/silex-paypal/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
