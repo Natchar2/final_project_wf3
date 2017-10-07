@@ -7,7 +7,7 @@
 
 {% block contenu %}
 	<div class="row">
-		{% if error is defined %}
+		{% if error is not empty %}
 			<div class="alert alert-danger" role=alert>
 				
 					<p>{{error}}</p><br>	

@@ -15,12 +15,14 @@ class ApplicationTwigExtension extends \Twig_Extension
 
 		/*SI ma chaine de caractère est sup à 150, je poursuis 
 		Sinon c'est inutile*/
+
 				if(strlen($string)>150){
 					//je coupe ma chaine si sup à 150
 					$stringCut = substr($string, 0, 150);
 
 				//je m'assure que je ne coupe pas un mot
 				$string = substr($stringCut,0, strrpos($stringCut,' ' ))  . '...';
+
 					}
 
 				return $string;

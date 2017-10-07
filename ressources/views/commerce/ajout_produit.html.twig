@@ -10,7 +10,7 @@
 
 
 {% block contenu %}
-<div class="container">	
+<div class="container">
 	<div class="row">
 		<div class="col-md-12">
 			{% if error is not empty %}
@@ -47,9 +47,7 @@
 					{% if modification is not empty %}
 						value="{{modification.ID_product}}"
 					{% endif %}>
-					<input type="hidden" name="ID_user" value=" {{ app.user.ID_user }} ">
-
-
+					
 					<!-- nom et marque -->
 					<div class="form-group">
 						<label class="col-md-4 control-label">Nom ou modèle</label>
@@ -131,7 +129,7 @@
 								{% if modification.image_1 is not empty %}
 									<div class="alert alert-info" role="alert">
 										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
-										<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>								
+										<a href="{{ asset('/assets/images/'~modification.image_1)}}"></a>								
 									</div>
 								{% endif %}
 							{% endif %}
@@ -164,7 +162,7 @@
 								{% if modification.image_3 is not empty %}
 									<div class="alert alert-info" role="alert">
 										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
-										<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
+										<a href="{{ asset('/assets/images/'~modification.image_3)}}"></a>							
 									</div>
 								{% endif %}
 							{% endif %}

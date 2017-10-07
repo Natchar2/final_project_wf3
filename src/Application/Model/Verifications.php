@@ -494,9 +494,9 @@ class Verifications
     	}
 
 		//Verification du champ email
-    	if(null!=($request->get('email')) && !empty($request->get('email')))
+    	if(null!=($request->get('mail')) && !empty($request->get('mail')))
     	{
-    		if (!filter_var(htmlspecialchars($request->get('email')),FILTER_VALIDATE_EMAIL))
+    		if (!filter_var(htmlspecialchars($request->get('mail')),FILTER_VALIDATE_EMAIL))
     		{
     			$error[] = 'email n\'est pas valide';
     		}
@@ -567,6 +567,290 @@ class Verifications
     		$errors[] = "Veuillez remplir le champ catégorie";
     	}
     }
+
+    public function VerificationNewEvent($request, $app)
+    {
+        $errors = [];
+        $error = [];
+
+        //verification du champ title
+        if(null!=($request->get('event_title')) && !empty($request->get('event_title')))
+        {
+            if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_\s\;\!\.\?\:\,\'+\(\)]{3,100}$#i',$request->get('event_title')))
+            {
+                $errors[] = 'Nom de l\'événement invalide';
+            }
+        }
+        else
+        {
+            $errors[] = "Veuillez remplir le champ nom de l\'événement";
+        }
+
+        ////verification du champ category
+        if(null!=($request->get('category')) && !empty($request->get('category')))
+        {
+
+            if(!filter_var($request->get('category'), FILTER_VALIDATE_INT))
+            {
+                $errors[] = 'Catégorie invalide';
+            }
+        }
+        else
+        {
+            $errors[] = "Veuillez remplir le champ catégorie";
+        }
+
+
+        //Verification des champs date
+        if(null!=($request->get('start_date')) && !empty($request->get('start_date')))
+        {
+            if (!preg_match('#^([0-9]{2}[/]){2}([0-9]){4}$#i',$request->get('start_date')))
+            {
+                $errors[] ='Veuillez rentrer un format de date valide (ex: 01/01/2001)';
+            } 
+        }
+        else
+        {
+            $errors[]= "Veuillez remplir le champ Date de début";
+        }
+
+        if (!preg_match('#^([0-9]{2}[/]){2}([0-9]){4}$#i',$request->get('end_date')))
+            {
+                $errors[] ='Veuillez rentrer un format de date valide (ex: 01/01/2001)';
+            }
+
+        //verification du champ street name
+        if(null!=($request->get('street_name')) && !empty($request->get('street_name')))
+        {
+            if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\-\/)]{3,100}$#i',$request->get('street_name')))
+            {
+                $errors[] = 'Nom de la rue invalide';
+            }
+        }
+        else
+        {
+            $errors[] = "Veuillez remplir le champ nom de la rue";
+        }
+
+        //verification du champ zip_code
+        if(null!=($request->get('zip_code')) && !empty($request->get('zip_code')))
+        {
+            if (!preg_match('#^[0-9]{5}$#i',$request->get('zip_code')))
+            {
+                $errors[] = 'Code postal invalide';
+            }
+        }
+        else
+        {
+            $errors[] = "Veuillez remplir le champ code postal";
+        }
+
+        //verification du champ image
+        if($_FILES['image']['name']>"")
+        {
+            switch ($_FILES['image']['error'])
+            {
+
+                case 1:
+                $error[]='Image 1 : La taille de fichier est supérieur à celle acceptée';
+                break;
+
+                case 2:
+                $error[]='Image 1 : La taille de fichier est supérieur à celle acceptée';
+                break;
+
+                case 3:
+                $error[]='Le téléchargement est incomplet. Veuillez réessayer';
+                break;
+
+                case 4:
+                $error[]='Image 1 : Veuillez selectionner un fichier';
+                break; 
+
+                case 6:
+                $error[]='Image 1 : Erreur serveur code 90001 : Le téléchargement n\'a pus ce faire. Veuillez réessayer plus tard';
+                break;
+                //90001 doit etre inscrit chez nous afin de pouvoir identifier l'erreur facilement 
+
+                case 7:
+                $error[]='Image 1 : Le téléchargement n\'a pu ce faire. Veuillez réessayer plus tard';
+                break;
+
+                case 8:
+                $error[]='Image 1 : Le téléchargement était interrompu';
+                break;
+
+                case !0://comme on a sauté des erreurs il faut verifier qu'il n'y en ai pas d'autres
+                $error[]= 'Erreur inconnue.';
+
+                default://si aucune erreur a été envoyer
+                $success[] = 'le téléchargement s\'est bien effectué';
+
+                $extension = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $_FILES['image']['tmp_name']);
+
+                if(($_FILES['image']['size'])<=512000)
+                {
+
+                    $success[] = 'La taille est acceptable';
+
+                    if($extension=='image/jpeg' || $extension=='image/png'|| $extension=='image/bmp' || $extension=='image/gif')
+                    {
+
+
+                        //recupération, deplacement et chgt du nom du fichier
+                        if(null!==($error))
+                        {
+                            $newFileName = $this->createFileName(10);
+
+                            if($extension == 'image/jpeg')
+                            {
+                                $newFileExt = '.jpg';
+                            }
+
+                            elseif ($extension == 'image/png')
+
+                            {
+                                $newFileExt = '.png';
+                            }
+
+                            $finalFileName1 = $newFileName .$newFileExt;
+                        }
+
+
+                        move_uploaded_file($_FILES['image']['tmp_name'],ROOT.'web/assets/images/'. $finalFileName1);
+
+                        $success[]= 'image sauvegardée';
+
+
+                    }
+                    else
+                    {
+                        $error[] = 'Le format de l\'image 1 n\'est pas valide';
+                    }
+                }
+                else
+                {
+                    $error[] = 'Veuillez choisir un fichier inférieur à 500Ko pour l\'image 1!';
+                }
+
+                break;
+            }
+
+        }
+        else
+        {
+            if(!empty($request->get('image-hidden')))
+            {
+                if(preg_match('#^[a-z0-9A-Z \.]{3,}$#i',$request->get('image-hidden')))
+                {
+                    $finalFileName1 = ($request->get('image-hidden'));
+                }
+                else
+                {
+                    $finalFileName1 = null;
+                }
+
+            }
+            else
+            {
+                $finalFileName1 = null;
+            }
+
+        }
+
+         //verification du champ url_1
+        if(null!=($request->get('url_1')) && !empty($request->get('url_1')))
+        {
+            if (!filter_var($request->get('url_1'), FILTER_VALIDATE_URL))
+            {
+                $errors[] = 'L\'adresse de site est invalide';
+            }
+        }
+        
+
+          //verification du champ url_2
+        if(null!=($request->get('url_2')) && !empty($request->get('url_2')))
+        {
+            if (!filter_var($request->get('url_2'), FILTER_VALIDATE_URL))
+            {
+                $errors[] = 'L\'adresse de réseau social est invalide';
+            }
+        }
+        
+
+          //verification du champ url_3
+        if(null!=($request->get('url_3')) && !empty($request->get('url_3')))
+        {
+            if (!filter_var($request->get('url_3'), FILTER_VALIDATE_URL))
+            {
+                $errors[] = 'L\'adresse de réseau social est invalide';
+            }
+        }
+
+        //Verification du champ email
+        if(null!=($request->get('mail')) && !empty($request->get('mail')))
+        {
+            if (!filter_var(htmlspecialchars($request->get('mail')),FILTER_VALIDATE_EMAIL))
+            {
+                $error[] = 'email n\'est pas valide';
+            }
+
+        }
+        else
+        {
+            $error[] = 'Veuillez remplir le champ email';
+        }
+
+        
+        //verification du champ phone
+        if(null!=($request->get('phone')) && !empty($request->get('phone')))
+        {
+            if (!preg_match('#^([0-9]{2}[\- .]?){4}\d{2}$#i',$request->get('phone')))
+            {
+                $errors[] = 'Téléphone invalide';
+            }
+        }
+       
+        //verification du champ description
+        if(null!=($request->get('event_description')) && !empty($request->get('event_description')))
+        {
+            if (preg_match('#(<script.)#i',$request->get('description')))
+            {
+                $errors[] = 'Description invalide';
+            }
+        }
+        else
+        {
+            $errors[] = "Veuillez remplir le champ description";
+        }
+
+        //verification du champ latitude
+        if(null!=($request->get('latitude')) && !empty($request->get('latitude')))
+        {
+            if (!preg_match('#(^\d){1,2}\.(\d){6}$#i',$request->get('latitude')))
+            {
+                $errors[] = 'Coordonnées de latitude';
+            }
+        }
+
+        //verification du champ longitude
+        if(null!=($request->get('longitude')) && !empty($request->get('longitude')))
+        {
+            if (!preg_match('#(^\d){1,2}\.(\d){6}$#i',$request->get('longitude')))
+            {
+                $errors[] = 'Coordonnées de longitude';
+            }
+        }
+
+            return array(
+            'errors'        => $errors,
+            'error'         => $error,
+            'finalFileName1'=> $finalFileName1,
+        );
+
+    }
+    
+
 
 }
 

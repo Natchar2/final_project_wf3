@@ -1,0 +1,288 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
+	<link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet">
+	<link rel="stylesheet" href="{{asset('css/ajoutArticle.css')}}">
+
+{% endblock %}
+
+
+{% block contenu %}
+<div class="container">	
+	<div class="row">
+		<div class="col-md-12">
+			{% if error is not empty %}
+				<div class="alert alert-danger" role=alert>
+					{% for value in error %}
+
+						<p>{{value}}</p><br>
+
+					{% endfor %}
+				</div><br>
+			{% endif %}
+
+			{% if  errors is not empty %}
+				<div class="alert alert-danger" role=alert>
+					{% for value in errors %}
+
+						<p>{{value}}</p><br>
+
+					{% endfor %}
+				</div><br>
+			{% endif %}
+
+			{% if success is defined %}
+				<div class="alert alert-success" role=alert>
+					<p>{{ success }}</p>
+				</div><br>
+			{% endif %}
+
+			<form action=""  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
+				<fieldset>
+					<legend>Ajouter un événement</legend>
+					<!-- champ caché pour l'id-->
+					<input type="hidden" name="ID_event" 
+					{% if modification is not empty %}
+						value="{{modification.ID_event}}"
+					{% endif %}>
+					{% if app.user.ID_user is defined %}
+					<input type="hidden" name="ID_user" value=" {{ app.user.ID_user }} ">
+					{% endif %}
+
+					<!-- nom  -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Nom de l'événement</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="event_title" required 
+							{% if modification is not empty %}
+								value="{{modification.event_title}}"
+							{% endif %}>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">Date de début</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="start_date" required placeholder="ex : 01/01/2001" 
+							{% if modification is not empty %}
+								value="{{modification.start_date}}"
+							{% endif %}>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Date de fin</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="end_date" placeholder="ex : 01/01/2001" 
+							{% if modification is not empty %}
+								value="{{modification.end_date}}"
+							{% endif %}>
+						</div>
+					</div>
+
+					<!-- Categorie -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">
+							Catégorie
+						</label>
+						<div class="col-md-4">
+							<select name="category" class="form-control">
+								{% for value in categories %}
+
+									<option value="{{value.ID_category}}"
+									{% if modification is not empty %} 
+										{% if modification.ID_category == value.ID_category %} 
+											{{' selected '}}
+										{% endif %}
+									{% endif %}
+									>{{value.category_name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					
+
+					<!-- prix et frais de livraisons-->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Nom de la rue</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="street_name" required 
+							{% if modification is not empty %}
+								value="{{modification.street_name}}"
+							{% endif %}
+							>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Code Postal</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="int" name="zip_code" 
+							{% if modification is not empty %}
+								value="{{modification.zip_code}}"
+							{% endif %}
+							>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Nom de la ville</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="city" required 
+							{% if modification is not empty %}
+								value="{{modification.city}}"
+							{% endif %}
+							>
+						</div>
+					</div>
+
+					<!-- Images -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Image</label>
+						<div class="col-md-4">
+							
+							{% if modification is not empty %}
+								{% if modification.image is not empty %}
+									<div class="alert alert-info" role="alert">
+										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
+										<a href="{{ asset('/assets/images/'~modification.image)}}"></a>								
+									</div>
+								{% endif %}
+							{% endif %}
+							<input  type="file" class="dropify" name="image">
+							<input type="hidden" name="image-hidden"	
+							{% if modification is not empty %}
+								value="{{modification.image}}"
+							{% endif %}>
+						</div>
+					</div>
+					<!-- URl 1 URl 2 URL3 -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Adresse de site web</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="url" name="url_1"  
+							{% if modification is not empty %}
+								value="{{modification.url_1}}"
+							{% endif %}>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Adresse web de résau social</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="url" name="url_2"  
+							{% if modification is not empty %}
+								value="{{modification.url_2}}"
+							{% endif %}>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Adresse web de résau social</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="url" name="url_3"  
+							{% if modification is not empty %}
+								value="{{modification.url_3}}"
+							{% endif %}>
+						</div>
+					</div>
+
+					<!-- Email -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Email</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="email" name="mail" required 
+							{% if modification is not empty %}
+								value="{{modification.mail}}"
+							{% endif %}>
+						</div>
+					</div>
+
+
+					<!-- Téléphone -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Téléphone</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="phone"
+							{% if modification is not empty %}
+								value="{{modification.phone}}"
+							{% endif %}>
+						</div>
+					</div>		
+					
+					<!-- Coordonées GPS -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Coordonées GPS : latitude</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="latitude" placeholder="ex : 48.854186"
+							{% if modification is not empty %}
+								value="{{modification.latitude}}"
+							{% endif %}>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Coordonées GPS : longitude</label>
+						<div class="col-md-4">
+							<input class="form-control input-md" type="text" name="longitude" placeholder="ex : 2.357692"
+							{% if modification is not empty %}
+								value="{{modification.longitude}}"
+							{% endif %}>
+						</div>
+					</div>
+					
+					<!-- Description -->
+					<div class="form-group">
+						<div class="col-md-10 col-md-push-1">
+							<label class="control-label">Description</label>
+							<textarea name="event_description" class="form-control" placeholder="Saisissez une description de l'événement"						
+							>
+							{% if modification is not empty %}
+								{{modification.event_description}}
+							{% endif %}
+							</textarea>
+						</div>
+					</div>
+
+					
+
+					<div class="form-group">
+						<div class="col-md-4 col-md-push-1">
+							<input type="hidden" name="token" value="{{app.session.get('token')}}">
+							<button  type="submit" class="btn btn-primary">Ajouter</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}
+
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{asset('dist/js/bootstrap.min.js')}}"></script>
+	{{parent()}}
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
+	<script>
+	$('.dropify').dropify({
+		messages: {
+			'default': 'Glissez-d&eacute;posez un fichier ici ou cliquez',
+			'replace': 'Glissez-d&eacute;posez un fichier ici ou cliquez pour remplacer',
+			'remove':  'Remplacer',
+			'error':   'Ooops, d&eacute;sol&eacute; le fichier est trop volumineux.'
+		}
+	});
+	</script>
+	<script src="{{ asset('js/topic.js') }}"></script>
+	<script>
+	// Replace the <textarea id="editor1"> with a CKEditor
+	// instance, using default configuration.
+	CKEDITOR.replace( 'event_description' );
+	</script>
+
+{% endblock %}

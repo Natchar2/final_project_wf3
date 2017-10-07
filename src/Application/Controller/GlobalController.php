@@ -20,7 +20,8 @@
 				->setSubject($subject)
 				->setFrom(array($from))
 				->setTo(array($to))
-				->setBody($content,'text/html');
+				->setBody($content, 'text/html');
+
 
 		    $app['swiftmailer.use_spool'] = false;
 	    	$result = $mailer->send($message);
@@ -48,7 +49,7 @@
 
 	    		$content 	= htmlspecialchars($request->get('message')).$request->get('name').$request->get('surname');
 	    		$subject 	= $request->get('subject');
-	    		$from 		= $request->get('email');
+	    		$from 		= $request->get('mail');
 	    		$to 	 	= 'root@localhost';
 	    		$redirectTo = '/accueil';
 

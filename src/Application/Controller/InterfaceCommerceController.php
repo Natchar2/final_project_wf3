@@ -628,28 +628,45 @@ public function createCustomerAction(Application $app, Request $request)
 	}
 
  
-	
+//affichage de la page formulair ajout de produit ac les eventuelles données deu produit en cas de modification	
   public function newAdAction(Application $app, $ID_product){
-    if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
-    {
-            //appel de base pour afficher les données pour retrouver l'article a modifier
-        $modification = $app['idiorm.db']->for_table('products')
-        ->find_one($ID_product);
 
-    }
-    else
-    {
-    	$ID_product = 0;
-        $modification ='';
-    }
-
-    return $app['twig']->render('commerce/ajout_produit.html.twig', [
-        'categories'  => $app['categories'],      
-        'error'       => [] ,
-        'errors'      => [],
-        'modification'=> $modification,
-        'ID_product'  => $ID_product,
-    ]);
+//recupération du token de session
+  	$token = $app['security.token_storage']->getToken();  
+	
+	//test d'authentification
+  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+  	 {
+  	 	//récupération de l'ID_user
+    	$user = $token->getUser();
+    	$ID_user = $user->getID_user();
+    	
+	   
+	   if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
+	       {
+	               //appel de base pour afficher les données pour retrouver l'article a modifier
+	           $modification = $app['idiorm.db']->for_table('products')
+	           ->find_one($ID_product);
+	   
+	       }
+	       else
+	       {
+	       	$ID_product = 0;
+	           $modification ='';
+	       }
+	   
+	       return $app['twig']->render('commerce/ajout_produit.html.twig', [
+	           'categories'  => $app['categories'],      
+	           'error'       => [] ,
+	           'errors'      => [],
+	           'modification'=> $modification,
+	           'ID_product'  => $ID_product,
+	       ]);
+   	}
+	else
+	{
+	 	  return $app->redirect('../inscription/erreur');
+	}
 }
 
 
@@ -661,240 +678,280 @@ public function createCustomerAction(Application $app, Request $request)
     {
     	//gestion du formulaire d'ajout de produit  sur ajout_produit.html
 
-    	if($app['session']->get('token') == $request->get('token'))
-    	{
-    		        //utilisation de la fonction de vérification dans Model\Vérifications
-	        $Verifications = new Verifications;
+    	$token = $app['security.token_storage']->getToken();
 
-	        $verifs =  $Verifications->VerificationNewAd($request, $app);
+  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+    	
+    		$user = $token->getUser();    		
+    		$ID_user = $user->getID_user();
 
+	    	if($app['session']->get('token') == $request->get('token'))
+	    	{
+	    		        //utilisation de la fonction de vérification dans Model\Vérifications
+		        $Verifications = new Verifications;
 
-	        
-	         //Retour des variables de VerificationNewAd
-	        $errors         = $verifs['errors'];
-	        $error          = $verifs['error'];
-	        $finalFileName1 = $verifs['finalFileName1'];
-	        $finalFileName2 = $verifs['finalFileName2'];
-	        $finalFileName3 = $verifs['finalFileName3'];
-
-	        $ID_product = $request->get('ID_product');
-
-	        if(empty($errors) && empty($error)){
-	          
+		        $verifs =  $Verifications->VerificationNewAd($request, $app);
 
 
-	                //SI c'est une modification d'article :
-	            if($request->get('ID_product')>0)
-	            {
+		        
+		         //Retour des variables de VerificationNewAd
+		        $errors         = $verifs['errors'];
+		        $error          = $verifs['error'];
+		        $finalFileName1 = $verifs['finalFileName1'];
+		        $finalFileName2 = $verifs['finalFileName2'];
+		        $finalFileName3 = $verifs['finalFileName3'];
+
+		        $ID_product = $request->get('ID_product');
+
+		        if(empty($errors) && empty($error)){
+		          
 
 
-		              $modification = $app['idiorm.db']->for_table('products')
-		              ->find_one($request->get('ID_product'))
-		              ->set(array(
-
-		                  'name'             => $request->get('name'),
-		                  'brand'            => $request->get('brand'),
-		                  'price'            => $request->get('price'),
-		                  'description'      => $request->get('description'),
-		                  'image_1'          => $finalFileName1,
-		                  'image_2'          => $finalFileName2,
-		                  'image_3'          => $finalFileName3,
-		                  'ID_category'      => $request->get('category'),
-		                  'shipping_charges' => $request->get('shipping_charges')
-		              ));
-
-
-
-			            $modification->save();
-
-						$success = "Votre produit a bien été ajouté ";
-
-						//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
-						$topic = $app['idiorm.db']->for_table('topic')
-						->where($request->get('ID_product'))
-						->find_one()
-						->set(array(
-
-							'title' 	 => $request->get('name'),
-							'ID_category'=> $request->get('category'),
-
-						));
-
-						$topic->save();
-							
-		              $success = "Votre produit a bien été modifié et le topic sur le sujet également";
-		          }
-		          else
-		          {
-
-	    				//Connexion à la bdd
-		            $product = $app['idiorm.db']->for_table('products')->create();
-
-
-		    				//Affectation des valeurs
-		            $product->name             = $request->get('name');
-		            $product->brand            = $request->get('brand');
-		            $product->price            = $request->get('price');
-		            $product->description      = $request->get('description');
-		            $product->image_1          = $finalFileName1;
-		            $product->image_2          = $finalFileName2;
-		            $product->image_3          = $finalFileName3;
-		            $product->ID_category      = $request->get('category');
-		            $product->creation_date    = strtotime('now');
-
-	    				//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
-		            if((float)$request->get('shipping_charges') == 0.0)
+		                //SI c'est une modification d'article :
+		            if($request->get('ID_product')>0)
 		            {
 
-		               $product->shipping_charges = 0.0;
 
-		           }
-		           else
-		           {
+			              $modification = $app['idiorm.db']->for_table('products')
+			              ->find_one($request->get('ID_product'))
+			              ->set(array(
 
-		               $product->shipping_charges  = $request->get('shipping_charges');
-		           }
+			                  'name'             => $request->get('name'),
+			                  'brand'            => $request->get('brand'),
+			                  'price'            => $request->get('price'),
+			                  'description'      => $request->get('description'),
+			                  'image_1'          => $finalFileName1,
+			                  'image_2'          => $finalFileName2,
+			                  'image_3'          => $finalFileName3,
+			                  'ID_category'      => $request->get('category'),
+			                  'shipping_charges' => $request->get('shipping_charges'),
+			              ));
 
-	    				//ON persi
-		            $product->save();
-		            $last_insert_id = $product->id();
 
-					$success = "Votre produit a bien été ajouté et un topic a été créer sur le sujet";
 
-					//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
-					$topic = $app['idiorm.db']->for_table('topic')->create();
+				            $modification->save();
 
-					$topic->title 	 	  = $request->get('name');
-					$topic->ID_category   = $request->get('category');
-					$topic->ID_product 	  = $last_insert_id;
-					$topic->creation_date = strtotime('now');
+							$success = "Votre produit a bien été ajouté ";
 
-					$topic->save();
+							//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
+							$topic = $app['idiorm.db']->for_table('topic')
+							->where($request->get('ID_product'))
+							->find_one()
+							->set(array(
 
-	       }
-	       
-		       return $app['twig']->render('commerce/ajout_produit.html.twig',[
-		        'success'     => $success,
-		        'errors'      => [] ,
-		        'error'       => [] ,
-		        'categories'  => $app['categories'],
-		        'modification'=> $modification,
-		   		]);
+								'title' 	 => $request->get('name'),
+								'ID_category'=> $request->get('category'),
 
-		    }
-		    else
-		    {
-		    	if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
-			    {//meme en cas d'erreur
-			            //appel de base pour afficher les données pour retrouver l'article a modifier
-			        $modification = $app['idiorm.db']->for_table('products')
-			        ->find_one($ID_product);
+							));
+
+							$topic->save();
+								
+			              $success = "Votre produit a bien été modifié et le topic sur le sujet également";
+			          }
+			          else
+			          {
+
+		    				//Connexion à la bdd
+			            $product = $app['idiorm.db']->for_table('products')->create();
+
+
+			    				//Affectation des valeurs
+			            $product->name             = $request->get('name');
+			            $product->brand            = $request->get('brand');
+			            $product->price            = $request->get('price');
+			            $product->description      = $request->get('description');
+			            $product->image_1          = $finalFileName1;
+			            $product->image_2          = $finalFileName2;
+			            $product->image_3          = $finalFileName3;
+			            $product->ID_category      = $request->get('category');
+			            $product->creation_date    = strtotime('now');
+			            $product->ID_user		   = $ID_user;
+
+		    				//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
+			            if((float)$request->get('shipping_charges') == 0.0)
+			            {
+
+			               $product->shipping_charges = 0.0;
+
+			           }
+			           else
+			           {
+
+			               $product->shipping_charges  = $request->get('shipping_charges');
+			           }
+
+		    				//ON persiste
+			            $product->save();
+			            $last_insert_id = $product->id();
+
+						$success = "Votre produit a bien été ajouté et un topic a été créer sur le sujet";
+
+						//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
+						$topic = $app['idiorm.db']->for_table('topic')->create();
+
+						$topic->title 	 	  = $request->get('name');
+						$topic->ID_category   = $request->get('category');
+						$topic->ID_product 	  = $last_insert_id;
+						$topic->creation_date = strtotime('now');
+						$topic->ID_user		  = $ID_user;	
+
+						$topic->save();
+
+		       }
+		       
+			       return $app['twig']->render('commerce/ajout_produit.html.twig',[
+			        'success'     => $success,
+			        'errors'      => [] ,
+			        'error'       => [] ,
+			        'categories'  => $app['categories'],
+			        'modification'=> '',
+			   		]);
 
 			    }
 			    else
 			    {
-			    	$ID_product = 0;
-			        $modification ='';
-			    }
-			     return $app['twig']->render('commerce/ajout_produit.html.twig',[
-			        'errors'      => $errors,
-			        'error'       => $error,
-			        'categories'  => $app['categories'],
-			        'modification'=> $modification,
-			        'ID_product'  => $request->get('ID_product'),
+			    	if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
+				    {//meme en cas d'erreur
+				            //appel de base pour afficher les données pour retrouver l'article a modifier
+				        $modification = $app['idiorm.db']->for_table('products')
+				        ->find_one($ID_product);
 
-			    ]);
+				    }
+				    else
+				    {
+				    	$ID_product = 0;
+				        $modification ='';
+				    }
+				     return $app['twig']->render('commerce/ajout_produit.html.twig',[
+				        'errors'      => $errors,
+				        'error'       => $error,
+				        'categories'  => $app['categories'],
+				        'modification'=> $modification,
+				        'ID_product'  => $request->get('ID_product'),
 
-			}
+				    ]);
 
-   	 }
-   	 else
-   	 {
-   	 	 $app->get('/redirect', function() use ($app) {
-	    return $app->redirect($app["url_generator"]->generate("inscription_post"));
-			});
-   	 }
+				}
 
+	   	 }
+	   	 else
+	   	 {
+	   	 	  return $app->redirect('../inscription/erreur');
+	   	 }
 
+	}
+	else
+   	{
+   	 	  return $app->redirect('../inscription/erreur');
+   	}
 
     }
-
-    public function listProducts(Application $app, $ID_user=2) //penser a passer l'ID_User ac la sessions
+//gestion des produits en ventes par un utlisateur
+    public function listProducts(Application $app) //penser a passer l'ID_User ac la sessions
     {
-    //gestion des produits en ventes par un utlisateur
 
-        $products = $app['idiorm.db']->for_table('view_products')
-        ->where('ID_user',2)  //penser a passer l'ID_User ac la sessions
-        ->find_result_set();
+    	$token = $app['security.token_storage']->getToken();
 
-        return $app['twig']->render('commerce/list_products.html.twig',[
-            'products' => $products,
+  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+    	
+    		$user = $token->getUser();    		
+    		$ID_user = $user->getID_user();
 
-        ]);
+	    	 $products = $app['idiorm.db']->for_table('view_products')
+	        ->where('ID_user',$ID_user)  //penser a passer l'ID_User ac la sessions
+	        ->find_result_set();
+
+	        return $app['twig']->render('commerce/list_products.html.twig',[
+	            'products' => $products,
+
+	        ]);
+	}
+	else
+   	{
+   	 	  return $app->redirect('../inscription/erreur');
+   	}
+    
+
+       
     }
 
-    public function deleteProduct(Application $app, Request $request)//ID USER !!!
+    public function deleteProduct(Application $app, Request $request)
     {//supprimer un produit
 
+    	$token = $app['security.token_storage']->getToken();
 
-        $products = $app['idiorm.db']->for_table('view_products')
-        ->where('ID_user',2)//penser a passer l'ID_User ac la sessions
-        ->find_result_set();
+  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+    	
+    		$user = $token->getUser();    		
+    		$ID_user = $user->getID_user();
 
-
-        if($request->get('token') == $app['session']->get('token'))
-        {
-
-        	$suppression = $app['idiorm.db']->for_table('products')
-    			->where('ID_product', $request->get('ID_product'))
-    			->find_one();
+    		 $products = $app['idiorm.db']->for_table('view_products')
+	        ->where('ID_user',$ID_user)//penser a passer l'ID_User ac la sessions
+	        ->find_result_set();
 
 
-			if(!empty($suppression->get('image_1')))
-			{
-				unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_1'));
-			}
+	        if($request->get('token') == $app['session']->get('token'))
+	        {
+
+	        	$suppression = $app['idiorm.db']->for_table('products')
+	    			->where('ID_product', $request->get('ID_product'))
+	    			->find_one();
 
 
-			if(!empty($suppression->get('image_2')))
-			{
-				unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_2'));
-			}
-
-			if(!empty($suppression->get('image_3')))
-			{
-				unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_3'));
-			}
-			$suppression->delete();
-
-			$topic = $app['idiorm.db']->for_table('topic')
-    			->where('ID_product', $request->get('ID_product'))
-    			->find_one()
-    			->set(array(
-					'ID_product' => 0,
-				));
-
-            $success = 'Le produit a été supprimé de la liste';
+				if(!empty($suppression->get('image_1')))
+				{
+					unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_1'));
+				}
 
 
-           
-        }
-        else
-        {
-           $success = 'Vous ne pouvez supprimé un élément sans être connecté';
-           
-        }
+				if(!empty($suppression->get('image_2')))
+				{
+					unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_2'));
+				}
 
-         return $app['twig']->render('commerce/list_products.html.twig',[
-                'success'=>$success,
-                'products'=>$products
-            ]);
+				if(!empty($suppression->get('image_3')))
+				{
+					unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_3'));
+				}
+				$suppression->delete();
+
+				$topic = $app['idiorm.db']->for_table('topic')
+	    			->where('ID_product', $request->get('ID_product'))
+	    			->find_one()
+	    			->set(array(
+						'ID_product' => 0,
+					));
+
+	            $success = 'Le produit a été supprimé de la liste';
+
+
+	           
+	        }
+	        else
+	        {
+	           $success = 'Vous ne pouvez supprimé un élément sans être connecté';
+	           
+	        }
+
+	         return $app['twig']->render('commerce/list_products.html.twig',[
+	                'success'=>$success,
+	                'products'=>$products
+	            ]);
 
 		
+		}
+		else
+	   	{
+	   	 	
+		    return $app->redirect('../inscription/erreur');
+
+	   	}
+       
 	}  
 
 
- public function inscriptionPostAction(Application $app, Request $request) {
+ public function inscriptionPostAction(Application $app, Request $request, $url_error) {
+ 		
         # Création du Formulaire permettant l'ajout d'un User
         # use Symfony\Component\Form\Extension\Core\Type\FormType;
         $form = $app['form.factory']->createBuilder(FormType::class)
@@ -1099,12 +1156,34 @@ public function createCustomerAction(Application $app, Request $request)
             
         
         endif;
+
+        if($url_error == 'erreur')
+        {
+        	
+        	$url_error =  " Vous devez être connecté pour pouvoir accéder à cette page " ; 
+
+        	$error = $url_error;
+        	 # Affichage du Formulaire dans la Vue
+        	return $app['twig']->render('commerce/inscription.html.twig', [
+        		'form' => $form->createView(),
+        		'error'=> $error
+        	]);
+        }else
+        {	
+        	$url_error =  "" ; 
+
+        	$error = $url_error;
+
+        	 # Affichage du Formulaire dans la Vue
+	        return $app['twig']->render('commerce/inscription.html.twig', [
+	        	'form' => $form->createView(),
+	        	'error'=> $error
+	        ]);
+        }
         
-        # Affichage du Formulaire dans la Vue
-        return $app['twig']->render('commerce/inscription.html.twig', [
-            'form' => $form->createView()
-        ]);
-}
+        
+       
+    }
 }
 
 ?>

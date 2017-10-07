@@ -146,7 +146,9 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('connexion');
 
 		$controllers
-		->match('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionPostAction')
+		->match('/inscription/{url_error}', 'Application\Controller\InterfaceCommerceController::inscriptionPostAction')
+		->assert('url_error', 'erreur')
+		->value('url_error', '')
 		->method('GET|POST')
 		->bind('inscription_post');
 
