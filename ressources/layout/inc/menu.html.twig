@@ -18,7 +18,6 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shop<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="{{ url('shop') }}">Acheter</a></li>
-							<li><a href="{{ url('view_newAd') }}">Vendre</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -29,8 +28,19 @@
 						</ul>
 					</li>
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
 
+				<form action="{{ url('search') }}" class="navbar-form navbar-left" method="post">
+					<div class="form-group">
+						<input type="text" name="searchString" class="form-control" required/>
+					</div> 
+					<button type="submit" class="btn btn-default">
+						Submit
+					</button>
+				</form>
+
+
+
+				<ul class="nav navbar-nav navbar-right">
 					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 						<li><a href="{{ path('deconnexion') }}">Déconnexion</a></li>
 						<li><a href="{{ url('suivi') }}">Suivi commandes</a></li>
@@ -39,7 +49,6 @@
 						<li><a href="{{ url('connexion') }}">Connexion</a></li>
 					{% endif %}
 				
-					<li><a href="{{ url('suivi') }}">Suivi commandes</a></li>			
 					<li><a href="{{ url('panier') }}">Panier (<span class="total_product">{{ app.session.get('total_product') }}</span>)</a></li>
 				</ul>
 			</div>

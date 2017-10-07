@@ -45,7 +45,7 @@ class InterfaceCommerceController
 
 	}
 
-	public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
+	public function shopAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
 	{
 		$offset=(($page-1)*$nbPerPage);
 
@@ -71,7 +71,7 @@ class InterfaceCommerceController
 		]);
 	}
 
-	public function categoriePageAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
+	public function shopPageAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
 	{
 		$offset=(($page-1)*$nbPerPage);
 
@@ -164,6 +164,7 @@ class InterfaceCommerceController
 				}
 			}
 		}
+
 		$products=$app['idiorm.db']->for_table('view_products')->where_id_in($panierProducts)->order_by_asc('name')->find_result_set();
 
 		return $app['twig']->render('commerce/panier.html.twig',[
@@ -171,6 +172,32 @@ class InterfaceCommerceController
 
 		]);
 	}
+
+
+	public function paiementAction(Application $app)
+	{
+
+		$panierProducts[]=0;
+		
+		if (!empty($app['session']->get('panier')))
+		{
+			foreach ($app['session']->get('panier') as $key => $value)
+			{
+				if ($value>0)
+				{
+					$panierProducts[]=$key;
+				}
+			}
+		}
+
+		$products=$app['idiorm.db']->for_table('view_products')->where_id_in($panierProducts)->order_by_asc('name')->find_result_set();
+
+		return $app['twig']->render('commerce/paiement.html.twig',[
+			'products' => $products
+
+		]);
+	}
+
 
 
 
@@ -300,11 +327,12 @@ class InterfaceCommerceController
 		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'incrementation'));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
-
+		$app['session']->set('total_price_by_id', $this->getTotalPriceById($app));
 		$array = array(
 			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+			'total_price_by_id' => $app['session']->get('total_price_by_id'),
 		);
 
 		return new Response(json_encode($array));
@@ -314,11 +342,13 @@ class InterfaceCommerceController
 	{
 
 		$panier = $app['session']->get('panier');
+		$num_product = 0;
 
 		if(isset($panier[$request->get('id')]))
 		{
 			if(($panier[$request->get('id')] - 1) == 0)
 			{
+				$num_product = $panier[$request->get('id')];
 				unset($panier[$request->get('id')]);
 			}
 			else
@@ -326,18 +356,17 @@ class InterfaceCommerceController
 				$panier[$request->get('id')] -= 1;
 			}
 			$app['session']->set('panier', $panier);
-
-			
 		}
 
-		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementation'));
+		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementation', $num_product));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
-
+		$app['session']->set('total_price_by_id', $this->getTotalPriceById($app));
 		$array = array(
 			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+			'total_price_by_id' => $app['session']->get('total_price_by_id'),			
 		);
 
 		return new Response(json_encode($array)); 
@@ -361,11 +390,12 @@ class InterfaceCommerceController
 		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementationAll', $num_product));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
-
+		$app['session']->set('total_price_by_id', $this->getTotalPriceById($app));
 		$array = array(
 			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+			'total_price_by_id' => $app['session']->get('total_price_by_id'),	
 		);
 
 		return new Response(json_encode($array));
@@ -473,6 +503,35 @@ class InterfaceCommerceController
 
 		return round($total_price);
 	}
+
+	public function getTotalPriceById(Application $app)
+	{
+		$total_price_by_id = array();
+
+		$panier = $app['session']->get('panier');
+
+		if(!empty($panier))
+		{
+			foreach ($panier as $key => $data)
+			{
+				if(isset($panier[$key]))
+				{
+					$product = $app['idiorm.db']->for_table('products')->where('ID_product', $key)->find_result_set();
+					$price = $product[0]->price;
+					$shipping_charges = $product[0]->shipping_charges;	
+
+					$total_price_by_id[$key] = round(($price + $shipping_charges) * $data);			
+				}
+			}  
+		}
+
+		return $total_price_by_id;
+	}
+
+
+
+
+
 
 
 public function createCustomerAction(Application $app, Request $request)
@@ -598,15 +657,6 @@ public function createCustomerAction(Application $app, Request $request)
 
 	}
 
-
-
-
-
-
-
-
-
-
 	public function faqAction(Application $app)
 	{
 		return $app['twig']->render('commerce/FAQ.html.twig');
@@ -632,7 +682,6 @@ public function createCustomerAction(Application $app, Request $request)
 		));
 
 	}
-
  
 //affichage de la page formulair ajout de produit ac les eventuelles données deu produit en cas de modification	
   public function newAdAction(Application $app, $ID_product){
@@ -773,18 +822,18 @@ public function createCustomerAction(Application $app, Request $request)
 			            $product->creation_date    = strtotime('now');
 			            $product->ID_user		   = $ID_user;
 
-		    				//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
+
+		    			//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
 			            if((float)$request->get('shipping_charges') == 0.0)
 			            {
 
-			               $product->shipping_charges = 0.0;
-
-			           }
-			           else
-			           {
+			            	$product->shipping_charges = 0.0;
+			            }
+			            else
+			            {
 
 			               $product->shipping_charges  = $request->get('shipping_charges');
-			           }
+			            }
 
 		    				//ON persiste
 			            $product->save();
@@ -871,14 +920,11 @@ public function createCustomerAction(Application $app, Request $request)
 	            'products' => $products,
 
 	        ]);
-	}
-	else
-   	{
-   	 	  return $app->redirect('../inscription/erreur');
-   	}
-    
-
-       
+		}
+		else
+	   	{
+	   	 	  return $app->redirect('../inscription/erreur');
+	   	}
     }
 
     public function deleteProduct(Application $app, Request $request)
@@ -929,9 +975,6 @@ public function createCustomerAction(Application $app, Request $request)
 					));
 
 	            $success = 'Le produit a été supprimé de la liste';
-
-
-	           
 	        }
 	        else
 	        {
@@ -939,25 +982,21 @@ public function createCustomerAction(Application $app, Request $request)
 	           
 	        }
 
-	         return $app['twig']->render('commerce/list_products.html.twig',[
-	                'success'=>$success,
-	                'products'=>$products
-	            ]);
-
-		
+            return $app['twig']->render('commerce/list_products.html.twig',[
+                'success'=>$success,
+                'products'=>$products
+            ]);
 		}
 		else
 	   	{
-	   	 	
-		    return $app->redirect('../inscription/erreur');
-
+	   	 	return $app->redirect('../inscription/erreur');
 	   	}
        
 	}  
 
 
- public function inscriptionPostAction(Application $app, Request $request, $url_error) {
- 		
+	public function inscriptionPostAction(Application $app, Request $request, $url_error) {
+
         # Création du Formulaire permettant l'ajout d'un User
         # use Symfony\Component\Form\Extension\Core\Type\FormType;
         $form = $app['form.factory']->createBuilder(FormType::class)
@@ -1186,10 +1225,182 @@ public function createCustomerAction(Application $app, Request $request)
 	        	'error'=> $error
 	        ]);
         }
-        
-        
-       
     }
+
+
+// ----------------------- recherche -------------------------------------
+
+	public function searchAction(Application $app, Request $request)
+	{
+		
+	/*   Format de tableau pour la recherche
+		array(
+			'for_table' => array(
+				'table_1' => array(
+					'field_1',
+					'field_2'
+				),
+			),
+			'search_text' => 'une longue chaine de caractere a rechercher...',
+		)
+	*/
+
+
+		$array = array(
+			'for_table' => array(
+				'products' => array(
+					'name',
+					'brand',
+					'description',
+				),
+				'event' => array(
+					'event_title',
+					'event_description',
+				),			
+				'topic' => array(
+					'title',
+				),
+				'post' => array(
+					'content',
+				),
+			),
+			'search_text' => $request->get('searchString'),
+		);
+
+		if($array['search_text'])
+		{
+			$result = array();
+
+			$search_text = preg_replace("#[,./\\;]*#", " ", $array['search_text']);
+
+			$search_text_array = explode($search_text, ' ');
+
+			if($array['for_table'])
+			{
+				if(gettype($array['for_table']) == 'array')
+				{
+					foreach ($array['for_table'] as $table_key => $table_value)
+					{
+						echo $table_key . '<br>';
+
+						if(gettype($array['for_table'][$table_key]) == 'array')
+						{
+							foreach ($array['for_table'][$table_key] as $field_key => $field_value)
+							{
+																
+
+								$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $array['search_text'] . '%')->find_array();
+								$text = '';
+								foreach ($search_text_array as $text_value)
+								{
+									if($text_value != ' ')
+									{
+										if(mb_strlen($text_value) <= 3 || strpos($text_value, "'"))
+										{
+											if(mb_strlen($text) > 0)
+											{
+												$text .= ' ' . $text_value;
+											}
+											else
+											{
+												$text .= $text_value;
+											}
+										}
+										elseif(mb_strlen($text_value) > 3)
+										{
+											$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text_value . '%')->find_array();
+
+											if(mb_strlen($text) > 0)
+											{
+												$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text . ' ' . $text_value . '%')->find_array();
+											}
+										}
+									}
+								}
+							}
+						}
+						else
+						{
+							$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $array['search_text'] . '%')->find_array();
+							$text = '';
+							$str_cache = '';
+
+							foreach ($search_text_array as $text_value)
+							{
+								if($text_value != ' ')
+								{
+									if(mb_strlen($text_value) <= 3 || strpos($text_value, "'"))
+									{
+										if(mb_strlen($text) > 0)
+										{
+											$text .= ' ' . $text_value;
+										}
+										else
+										{
+											$text .= $text_value;
+										}
+									}
+									elseif(mb_strlen($text_value) > 3)
+									{
+										$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text_value . '%')->find_array();
+
+										if(mb_strlen($text) > 0)
+										{
+											$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text . ' ' . $text_value . '%')->find_array();
+											$str_cache .= $text . ' ' . $text_value;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					$result[] = 'le champs < for_table > n\'a pas été renseigné sous forme tableau';
+				}
+			}
+			else
+			{
+				$result[] = 'le tableau < for_table > n\'a pas été renseigné dans les données de recherche';
+			}
+		}
+		else
+		{
+			$result[] = 'le champs < search_text > n\'a pas été renseigné dans les données de recherche';
+		}
+
+		if(count($result) == 0)
+		{
+			$result[] = 'Aucun résultat trouvé pour <' . $array['search_text'] . ' >.';
+			$nbResultats = 0;
+		}
+		else
+		{
+			print_r($result);
+			die();
+
+			//$resultset[] = array_unique($result);
+			//$nbResultats = count($resultset);
+		}
+
+
+
+
+		return $app['twig']->render('public/searchresults.html.twig',[
+			'results' => $resultset,
+			'nbResultats' => $nbResultats,
+		]);
+
+		//return json_encode($result);
+	}
+
+
+
+
+
+
+
 }
 
 ?>

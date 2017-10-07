@@ -9,17 +9,7 @@
 		<div class="col-xs-6 col-xs-push-3">
 			<h2 class="text-center">Connexion</h2>
 			<br>
-			{# {% if  errors is defined %}
-				{% if  errors is not empty %}
-					<div class="alert alert-danger" role=alert>
-						{% for value in errors %}
-							<p>{{value}}</p><br>
-						{% endfor %}
-					</div><br>
-				{% endif %}
-			{% endif %} #}
-
-			{# {% if success is defined %} #}
+			
 			{% if error is defined %}
 				<p style="color:red; font-size:2em;">{{error}}</p>
 			{% endif %}
@@ -31,6 +21,8 @@
 			{% endif %}
 
 			<form class="form-horizontal" action="{{ url('admin_login_check') }}" method="POST">
+				<h3 class="col-xs-12">Connexion</h3>
+				<br>
 				<!-- Email -->
 				<div class="form-group">
 					<label class="col-md-3 control-label">Email</label>
@@ -53,7 +45,7 @@
 					</div>
 				</div>
 			</form>
-			<a href="#">MOT DE PASSE OUBLIE</a>
+			<a href="http://reactionimage.org/img/gallery/1697803721.jpg">MOT DE PASSE OUBLIE</a>
 		</div>
 	</div>
 	<br>

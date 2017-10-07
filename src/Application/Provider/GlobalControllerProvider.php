@@ -16,8 +16,8 @@ class GlobalControllerProvider implements ControllerProviderInterface
 	    		->get('/',  function() use($app){
 	    			return $app->redirect('accueil');
 	    		});
-
-	    	
+	
+    	
 
 	    	return $controllers;
 	    }

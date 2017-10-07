@@ -1,3 +1,7 @@
+.headerTopic{
+  padding-top: 50px;
+}
+
 .logo{
   letter-spacing: 1px;
   font-family: 'Monoton', cursive;
@@ -7,42 +11,6 @@
   font-family: monoton;
   color: RGBA(242, 189, 87, 1.00);
 }
-
-@media (min-width: 768px) {
-  /* Navbar positioning foo */
-  .navbar-wrapper {
-    margin-top: 20px;
-  }
-  .navbar-wrapper .container {
-    padding-right: 15px;
-    padding-left: 15px;
-  }
-  .navbar-wrapper .navbar {
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  /* The navbar becomes detached from the top, so we round the corners */
-  .navbar-wrapper .navbar {
-    border-radius: 4px;
-  }
-
-  .navbar-nav>li>.dropdown-menu {
-    margin-top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    background: black;
-  }
-
-  .list-group-item{
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    background: black;
-  }
-
-  a.list-group-item, button.list-group-item {
-    color: white;
-  }
 
   .thumbnail {
     padding: 5px;
@@ -62,3 +30,6 @@
     border-color: RGBA(242, 189, 87, 1.00);
   }
 
+h2{
+  font-size: 1.5em;
+}
