@@ -74,9 +74,8 @@
 	    }
 
 		public function ConditionsAction(Application $app)
-			{
-				return $app['twig']->render('public/conditions.html.twig');
-			}
-
+		{
+			return $app['twig']->render('public/conditions.html.twig');
+		}
 	}
 ?>

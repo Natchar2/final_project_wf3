@@ -592,15 +592,6 @@ public function createCustomerAction(Application $app, Request $request)
 
 	}
 
-
-
-
-
-
-
-
-
-
 	public function faqAction(Application $app)
 	{
 		return $app['twig']->render('commerce/FAQ.html.twig');
@@ -939,7 +930,7 @@ public function createCustomerAction(Application $app, Request $request)
 	}  
 
 
- public function inscriptionPostAction(Application $app, Request $request, $url_error) {
+	public function inscriptionPostAction(Application $app, Request $request, $url_error) {
 
         # Création du Formulaire permettant l'ajout d'un User
         # use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -1169,10 +1160,182 @@ public function createCustomerAction(Application $app, Request $request)
 	        	'error'=> $error
 	        ]);
         }
-        
-        
-       
     }
+
+
+// ----------------------- recherche -------------------------------------
+
+	public function searchAction(Application $app, Request $request)
+	{
+		
+	/*   Format de tableau pour la recherche
+		array(
+			'for_table' => array(
+				'table_1' => array(
+					'field_1',
+					'field_2'
+				),
+			),
+			'search_text' => 'une longue chaine de caractere a rechercher...',
+		)
+	*/
+
+
+		$array = array(
+			'for_table' => array(
+				'products' => array(
+					'name',
+					'brand',
+					'description',
+				),
+				'event' => array(
+					'event_title',
+					'event_description',
+				),			
+				'topic' => array(
+					'title',
+				),
+				'post' => array(
+					'content',
+				),
+			),
+			'search_text' => $request->get('searchString'),
+		);
+
+		if($array['search_text'])
+		{
+			$result = array();
+
+			$search_text = preg_replace("#[,./\\;]*#", " ", $array['search_text']);
+
+			$search_text_array = explode($search_text, ' ');
+
+			if($array['for_table'])
+			{
+				if(gettype($array['for_table']) == 'array')
+				{
+					foreach ($array['for_table'] as $table_key => $table_value)
+					{
+						echo $table_key . '<br>';
+
+						if(gettype($array['for_table'][$table_key]) == 'array')
+						{
+							foreach ($array['for_table'][$table_key] as $field_key => $field_value)
+							{
+																
+
+								$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $array['search_text'] . '%')->find_array();
+								$text = '';
+								foreach ($search_text_array as $text_value)
+								{
+									if($text_value != ' ')
+									{
+										if(mb_strlen($text_value) <= 3 || strpos($text_value, "'"))
+										{
+											if(mb_strlen($text) > 0)
+											{
+												$text .= ' ' . $text_value;
+											}
+											else
+											{
+												$text .= $text_value;
+											}
+										}
+										elseif(mb_strlen($text_value) > 3)
+										{
+											$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text_value . '%')->find_array();
+
+											if(mb_strlen($text) > 0)
+											{
+												$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text . ' ' . $text_value . '%')->find_array();
+											}
+										}
+									}
+								}
+							}
+						}
+						else
+						{
+							$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $array['search_text'] . '%')->find_array();
+							$text = '';
+							$str_cache = '';
+
+							foreach ($search_text_array as $text_value)
+							{
+								if($text_value != ' ')
+								{
+									if(mb_strlen($text_value) <= 3 || strpos($text_value, "'"))
+									{
+										if(mb_strlen($text) > 0)
+										{
+											$text .= ' ' . $text_value;
+										}
+										else
+										{
+											$text .= $text_value;
+										}
+									}
+									elseif(mb_strlen($text_value) > 3)
+									{
+										$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text_value . '%')->find_array();
+
+										if(mb_strlen($text) > 0)
+										{
+											$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text . ' ' . $text_value . '%')->find_array();
+											$str_cache .= $text . ' ' . $text_value;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					$result[] = 'le champs < for_table > n\'a pas été renseigné sous forme tableau';
+				}
+			}
+			else
+			{
+				$result[] = 'le tableau < for_table > n\'a pas été renseigné dans les données de recherche';
+			}
+		}
+		else
+		{
+			$result[] = 'le champs < search_text > n\'a pas été renseigné dans les données de recherche';
+		}
+
+		if(count($result) == 0)
+		{
+			$result[] = 'Aucun résultat trouvé pour <' . $array['search_text'] . ' >.';
+			$nbResultats = 0;
+		}
+		else
+		{
+			print_r($result);
+			die();
+
+			//$resultset[] = array_unique($result);
+			//$nbResultats = count($resultset);
+		}
+
+
+
+
+		return $app['twig']->render('public/searchresults.html.twig',[
+			'results' => $resultset,
+			'nbResultats' => $nbResultats,
+		]);
+
+		//return json_encode($result);
+	}
+
+
+
+
+
+
+
 }
 
 ?>

@@ -189,6 +189,15 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 
+		$controllers
+		->post('/search', 'Application\Controller\InterfaceCommerceController::searchAction')
+		->bind('search');
+
+
+
+
+
+
 		return $controllers;
 	}
 }
