@@ -93,14 +93,14 @@ class InterfaceForumController
   	  	{
             //appel de base pour afficher les données pour retrouver l'topic a modifier
 			$topics = $app['idiorm.db']->for_table('view_topics')
-			->where('ID_topic',2)
+			->where('ID_topic', $ID_topic)
 			->find_one();
 
 
 
 			//appel de la page pour tranche de 5 posts
 			$posts = $app['idiorm.db']->for_table('view_posts')
-			->where('ID_topic',2)
+			->where('ID_topic',$ID_topic)
 			->order_by_desc('post_date')
 	 		->limit(5)
 			->find_result_set();
@@ -133,7 +133,7 @@ class InterfaceForumController
 		$number_post = $request->get('number_post');
 
 		$posts = $app['idiorm.db']->for_table('view_posts')
-		->where('ID_topic', 2)
+		->where('ID_topic', $ID_topic)
 		->order_by_desc('post_date')
 		->limit(5)
 		->offset($number_post)
@@ -143,7 +143,7 @@ class InterfaceForumController
 	}
 
 //ajout de commentaire sur la page topic.html
-	public function newPostAction(Application $app, Request $request, $slugTopic=1 ,$ID_topic=2)
+	public function newPostAction(Application $app, Request $request, $slugTopic ,$ID_topic)
 	{
 
 		//gestion du formulaire d'ajout de produit  sur add_event.html
@@ -178,7 +178,7 @@ class InterfaceForumController
 					$post->ID_topic  = filter_var($request->get('ID_topic'), FILTER_VALIDATE_INT);
 					$post->ID_user   = $request->get('ID_user');
 					$post->post_date = strtotime('now');
-					$post->ID_user = $ID_user;
+					$post->ID_user   = $ID_user;
 	
 					$post->save();
 	
@@ -324,6 +324,87 @@ class InterfaceForumController
 
 			
 	}
+
+	//gestion des topics mis en ligne par un utlisateur
+    public function listTopics(Application $app) //penser a passer l'ID_User ac la sessions
+    {
+
+    	$token = $app['security.token_storage']->getToken();
+
+  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+    	
+    		$user = $token->getUser();    		
+    		$ID_user = $user->getID_user();
+
+	    	 $topics = $app['idiorm.db']->for_table('view_topics')
+	        ->where('ID_user',$ID_user)  
+	        ->find_result_set();
+
+	        return $app['twig']->render('forum/list_topic.html.twig',[
+	            'topics' => $topics,
+
+	        ]);
+		}
+		else
+	   	{
+	   	 	  return $app->redirect('../inscription/erreur');
+	   	}
+    
+
+       
+    }
+
+    public function deleteTopic(Application $app, Request $request)
+    {//supprimer un produit
+
+    	$token = $app['security.token_storage']->getToken();
+
+  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+    	
+    		$user = $token->getUser();    		
+    		$ID_user = $user->getID_user();
+
+    		 $topic = $app['idiorm.db']->for_table('view_topics')
+	        ->where('ID_user',$ID_user)//penser a passer l'ID_User ac la sessions
+	        ->find_result_set();
+
+
+	        if($request->get('token') == $app['session']->get('token'))
+	        {
+
+	        	$suppression = $app['idiorm.db']->for_table('topic')
+	    			->where('ID_topic', $request->get('ID_topic'))
+	    			->find_one();
+
+				$suppression->delete();
+
+				
+	            $success = 'Le topic a été supprimé de la liste';
+
+
+	           
+	        }
+	        else
+	        {
+	           $success = 'Vous ne pouvez supprimé un élément sans être connecté';
+	           
+	        }
+
+	         return $app['twig']->render('forum/list_topic.html.twig',[
+	                'success'=>$success,
+	                'topics'=>$topics
+	            ]);
+
+		
+		}
+		else
+	   	{
+	   	 	
+		    return $app->redirect('../inscription/erreur');
+
+	   	}
+       
+	}  
 
 }
  ?>

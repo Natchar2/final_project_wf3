@@ -32,7 +32,7 @@ class InterfaceForumControllerProvider implements ControllerProviderInterface
 		->bind('accueil_forum_page');
 
 		$controllers
-		->get('/topic/{slugTopic}_{ID_topic}','Application\Controller\InterfaceForumController::topicAction')
+		->get('/topic/{slugTopic}_{ID_topic}.html','Application\Controller\InterfaceForumController::topicAction')
 		->assert('slugTopic', '[\w\-\_\|]+')
 		->assert('ID_topic', '\d+')
 		->bind('forum_topic');
@@ -54,6 +54,14 @@ class InterfaceForumControllerProvider implements ControllerProviderInterface
 		$controllers
 		->post('/topic/ajouter', 'Application\Controller\InterfaceForumController::newTopicPostAction')
 		->bind('new_topic_post');
+
+		$controllers
+		->get('/topic/liste', 'Application\Controller\InterfaceForumController::listTopics')
+		->bind('list_topics');
+
+		$controllers
+		->post('/topic/liste', 'Application\Controller\InterfaceForumController::deleteTopic')
+		->bind('deleteTopic');
 
 		return $controllers;
 	}

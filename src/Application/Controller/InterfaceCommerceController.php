@@ -104,11 +104,17 @@ class InterfaceCommerceController
 		$product = $app['idiorm.db']->for_table('view_products')->find_one($ID_product);
 		$suggests = $app['idiorm.db']->for_table('view_products')->raw_query('SELECT * FROM view_products WHERE ID_category=' . $product->ID_category . ' AND ID_product<>' . $ID_product . ' ORDER BY RAND() LIMIT 3 ')->find_result_set();   
 
-		$topic = $app['idiorm.db']->for_table('view_topics')->where('ID_product', $ID_product)->find_one();
-
+		$topic = $app['idiorm.db']->for_table('view_topics')
+		->where('ID_product', $ID_product)
+		->find_one();
+		
 		if (isset($topic) AND !empty($topic))
 		{
-			$posts = $app['idiorm.db']->for_table('view_topics')->where('ID_topic', $topic['ID_topic'])->find_result_set();
+			$posts = $app['idiorm.db']->for_table('view_posts')
+			->where('ID_topic', $topic['ID_topic'])
+			->order_by_desc('post_date')
+			->limit(5)
+			->find_result_set();
 		}
 		else
 		{
