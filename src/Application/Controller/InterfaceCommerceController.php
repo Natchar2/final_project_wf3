@@ -45,7 +45,7 @@ class InterfaceCommerceController
 
 	}
 
-	public function categorieAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
+	public function shopAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
 	{
 		$offset=(($page-1)*$nbPerPage);
 
@@ -71,7 +71,7 @@ class InterfaceCommerceController
 		]);
 	}
 
-	public function categoriePageAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
+	public function shopPageAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
 	{
 		$offset=(($page-1)*$nbPerPage);
 
@@ -626,7 +626,6 @@ public function createCustomerAction(Application $app, Request $request)
 		));
 
 	}
-
  
 //affichage de la page formulair ajout de produit ac les eventuelles données deu produit en cas de modification	
   public function newAdAction(Application $app, $ID_product){
@@ -767,18 +766,18 @@ public function createCustomerAction(Application $app, Request $request)
 			            $product->creation_date    = strtotime('now');
 			            $product->ID_user		   = $ID_user;
 
-		    				//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
+
+		    			//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
 			            if((float)$request->get('shipping_charges') == 0.0)
 			            {
 
-			               $product->shipping_charges = 0.0;
-
-			           }
-			           else
-			           {
+			            	$product->shipping_charges = 0.0;
+			            }
+			            else
+			            {
 
 			               $product->shipping_charges  = $request->get('shipping_charges');
-			           }
+			            }
 
 		    				//ON persiste
 			            $product->save();
@@ -865,14 +864,11 @@ public function createCustomerAction(Application $app, Request $request)
 	            'products' => $products,
 
 	        ]);
-	}
-	else
-   	{
-   	 	  return $app->redirect('../inscription/erreur');
-   	}
-    
-
-       
+		}
+		else
+	   	{
+	   	 	  return $app->redirect('../inscription/erreur');
+	   	}
     }
 
     public function deleteProduct(Application $app, Request $request)
@@ -923,9 +919,6 @@ public function createCustomerAction(Application $app, Request $request)
 					));
 
 	            $success = 'Le produit a été supprimé de la liste';
-
-
-	           
 	        }
 	        else
 	        {
@@ -933,25 +926,21 @@ public function createCustomerAction(Application $app, Request $request)
 	           
 	        }
 
-	         return $app['twig']->render('commerce/list_products.html.twig',[
-	                'success'=>$success,
-	                'products'=>$products
-	            ]);
-
-		
+            return $app['twig']->render('commerce/list_products.html.twig',[
+                'success'=>$success,
+                'products'=>$products
+            ]);
 		}
 		else
 	   	{
-	   	 	
-		    return $app->redirect('../inscription/erreur');
-
+	   	 	return $app->redirect('../inscription/erreur');
 	   	}
        
 	}  
 
 
  public function inscriptionPostAction(Application $app, Request $request, $url_error) {
- 		
+
         # Création du Formulaire permettant l'ajout d'un User
         # use Symfony\Component\Form\Extension\Core\Type\FormType;
         $form = $app['form.factory']->createBuilder(FormType::class)

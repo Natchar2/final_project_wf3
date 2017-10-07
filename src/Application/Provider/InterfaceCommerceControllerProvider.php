@@ -25,6 +25,9 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/panier', 'Application\Controller\InterfaceCommerceController::panierAction')
 		->bind('panier');
 
+		$controllers
+		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+		->bind('addItem');
 
 		
 		$controllers
@@ -73,25 +76,29 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-		->get('/shop/{category_name}', 'Application\Controller\InterfaceCommerceController::categorieAction')
-		->assert('category_name','[^/]+')
-		->value('category_name','all')
-		->bind('shop');
+        ->get('/shop/{category_name}', 'Application\Controller\InterfaceCommerceController::shopAction')
+        ->assert('category_name','[^/]+')
+        ->value('category_name','all')
+        ->bind('shop');
 
 
-		$controllers
-		->get('/shop/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::categoriePageAction')
-		->assert('category_name','[^/]+')
-		->value('category_name','all')
-		->assert('page','[0-9]+')	
-		->value('page','1')		
-		->bind('shop_page');
+        $controllers
+        ->get('/shop/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::shopPageAction')
+        ->assert('category_name','[^/]+')
+        ->value('category_name','all')
+        ->assert('page','[0-9]+')    
+        ->value('page','1')        
+        ->bind('shop_page');
 
 		$controllers
 		->get('/{category_name}/{slugproduct}_{ID_product}.html','Application\Controller\InterfaceCommerceController::articleAction')
 		->assert('category_name','[^/]+')
 		->assert('ID_product','[0-9]+')
 		->bind('article');
+
+		$controllers
+		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
+		->bind('addItem');
 
 		$controllers
 		->get('/faq', 'Application\Controller\InterfaceCommerceController::faqAction')
@@ -102,8 +109,11 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('about');
 
 
+		$controllers
+		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
+		->bind('item');
 
-	
+
 
 		$controllers
 		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
@@ -116,6 +126,8 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->assert('ID_product', '\d+')
 		->value('ID_product', '0')
 		->bind('newAd');
+
+
 
 		$controllers
 		->get('/contact', 'Application\Controller\GlobalController::contactAction')
@@ -134,7 +146,8 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('listProducts');
 
 		$controllers
-		->post('/produit/liste', 'Application\Controller\InterfaceCommerceController::deleteProduct')
+		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
+		->assert('ID_product', '\d+')
 		->bind('deleteProduct');
 
 		$controllers
@@ -145,12 +158,34 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
 		->bind('connexion');
 
+		// $controllers
+		// ->get('/inscription', 'Application\Controller\InterfaceCommerceController::inscriptionAction')
+		// ->bind('inscription');
+
 		$controllers
 		->match('/inscription/{url_error}', 'Application\Controller\InterfaceCommerceController::inscriptionPostAction')
 		->assert('url_error', 'erreur')
 		->value('url_error', '')
 		->method('GET|POST')
 		->bind('inscription_post');
+
+
+		$controllers
+		->get('/agenda', 'Application\Controller\InterfaceCommerceController::AgendaAction')
+		->bind('agenda');
+
+
+		$controllers
+		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
+		->bind('forumAjoutPost');
+
+		$controllers
+		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
+		->bind('forumIndex');
+
+		$controllers
+		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
+		->bind('forumPostDetail');
 
 
 

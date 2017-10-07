@@ -138,14 +138,14 @@
 				<div class="row">
 					<div class="col-xs-12 tableau">
 
-						<h2>Forum</h2>
+						<h2 class="titleForum">Forum</h2>
 
 						<br>
 						<table class="table">
 							<thead>
 								<tr>
-									<th width=100>Date</th>
-									<th width=130>Auteur</th>
+									<th>Date</th>
+									<th class="hidden-xs">Auteur</th>
 									<th>Sujet</th>
 								</tr>
 							</thead>
@@ -155,7 +155,7 @@
 								{% for topic in topics %}
 									<tr>
 										<td>{{ topic.creation_date|date('d/m/Y') }}</td>
-										<td>{{ topic.pseudo }}</td>
+										<td class="hidden-xs">{{ topic.pseudo }}</td>
 										<td>{{ topic.title }} <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
 									</tr>
 

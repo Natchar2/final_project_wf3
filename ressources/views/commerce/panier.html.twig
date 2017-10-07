@@ -2,85 +2,98 @@
 
 {% block contenu %}
 
-	<br><br><br><br>
-	<h1 class="my-4">Panier</h1>
+	<br>
 
 	{% if products is defined and products is not empty %}
+	<div class="container padMenu">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="table-responsive">
+					<table class="table table-striped" id="myTable">
 
-		<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
-			<thead>
-				<tr>
-					<th width="80"> </th>
-					<th>Produit</th>
-					<th width="80">Quantité</th>
-					<th width="120">Prix</th>
-					<th width="80"> </th>				
-				</tr>
-			</thead>
-			<tbody>
+						<thead>
+							<tr>
+								<th width="80"> </th>
+								<th class="small">Produit</th>
+								<th width="80">Quantité</th>
+								<th width="120">Prix</th>
+								<th width="80"> </th>
+							</tr>
+						</thead>
 
-				{% for product in products %}
+						<tbody>
+							{% for product in products %}
+								<tr>
+									<td>
+										{% if (product.image_1>"") %}
+											<img src="{{ asset('assets/images/'~product.image_1) }}" style="width:70px;height:auto;">
+										{% endif %}
+									</td>
+									<td class="small">
+										<h3>{{ product.name }}</h3>
+										<br>
+										{{ product.description|accroche }}
+									</td>
+									<td>
+										<button class="remove_one_product btn btn-primary" ID-product="{{ product.ID_product }}"> - </button>
 
-					<tr>
-						<td>
-							{% if (product.image_1>"") %}
-								<img src="{{ asset('assets/images/'~product.image_1) }}" style="width:70px;height:auto;">
-							{% endif %}
+										<span class="total_by_id" ID-product="{{ product.ID_product }}"> 
+											{% if app.session.get('total_product_by_id')[product.ID_product] is defined %}
+												{{ app.session.get('total_product_by_id')[product.ID_product] }}
+											{% else %}
+												0
+											{% endif %}
+										</span>
 
-						</td>
-						<td>
-							<h3>{{ product.name }}</h3>
-							<br>
-							{{ product.description|accroche }}
-						</td>
-						<td>
+										<button class="add_product btn btn-success" ID-product="{{ product.ID_product }}"> + </button>
+									</td>
+									<td>le total on verra</td>
+									<td>
+										<button class="remove_all_product btn btn-danger" ID-product="{{ product.ID_product }}">Supprimer</button>
+									</td>
+								</tr>
 
-							<button class="remove_one_product btn btn-primary" ID-product="{{ product.ID_product }}"> - </button>
+							{% endfor %}
+							
+						</tbody>
 
+						<tfoot>
 
-							<span class="total_by_id" ID-product="{{ product.ID_product }}"> 
-								{% if app.session.get('total_product_by_id')[product.ID_product] is defined %}
-									{{ app.session.get('total_product_by_id')[product.ID_product] }}
-								{% else %}
-									0
-								{% endif %}
-							</span>
+							<tr>
+								<td> </td>
+								<td align="right">Total</td>
+								<td>
+									<span class="total_product"> {{ app.session.get('total_product') }} </span> produits
+								</td>
+								<td>
+									€ <span class="total_price"> {{ app.session.get('total_price')|number_format(2, '.', ' ') }} </span> 
+								</td>
+								<td>
+									<a href={{ url('panier') }} class="btn btn-primary">Rafraichir</a>
+									</td>				
+								</tr>
 
-							<button class="add_product btn btn-success" ID-product="{{ product.ID_product }}"> + </button>
-						</td>
-						<td>le total on verra</td>
-						<td>
-							<button class="remove_all_product btn btn-danger" ID-product="{{ product.ID_product }}">Supprimer</button>
-						</td>
-					</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 
-
-
-
-				{% endfor %}
-				
-			</tbody>
-			<tfoot>
-				<tr>
-					<td> </td>
-					<td align="right">Total</td>
-					<td>
-						<span class="total_product"> {{ app.session.get('total_product') }} </span> produits
-					</td>
-					<td>
-						€ <span class="total_price"> {{ app.session.get('total_price')|number_format(2, '.', ' ') }} </span> 
-					</td>
-					<td>
-						<a href={{ url('panier') }} class="btn btn-primary">Rafraichir</button>
-						</td>				
-					</tr>
-				</tfoot>
-			</table>
 		{% else %}
 			<div class="alert alert-warning" role=alert>
-				<p>Aucun produits dans le panier</p>
+				<p>Aucun produit dans le panier</p>
 			</div>		
 		{% endif %}
+
+
+
+
+
+
+
+
+
 	</div>
 
 	<div class="ui main container">
@@ -101,8 +114,6 @@
 
 
 <!--
-
-
 
 	<h1><div> <span class="total_price">{{ app.session.get('total_price') }}</span> <span>EUR</span> </div></h1>
 	<h1><div> <span class="total_product"> {{ app.session.get('total_product') }} </span><span> produits</span> </div></h1>
@@ -126,6 +137,11 @@
 -->
 
 
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
 {% endblock %}
 
 

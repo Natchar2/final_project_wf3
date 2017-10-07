@@ -20,12 +20,10 @@
         {% block contenu %}
 
             <!-- Page Content -->
-            <br><br><br><br>
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
                         <h4 class="lead">Agenda</h4>
-
 
                         {{ render (controller('Application\\Controller\\InterfaceAgendaController::menuAgenda', { 'active':active } )) }}
 
@@ -59,14 +57,9 @@
                                 </div>
 
                             </div>
-                            <!-- /.row -->
 
-                            <br><br>
                             <hr>
                         {% endif %}
-
-
-
 
                         <div class="row">
 
@@ -79,7 +72,7 @@
                                     {% endif %}
                                 </h3>
                             </div>
-                            <br><br><br><br>
+                            
                             {% if events is empty %}
                                 <div class="alert alert-warning">Il n'y a pas encore d'événements dans cette catégorie</div>
                             {% else %}
@@ -165,23 +158,19 @@
                         </div> 
                     {% endif %}
 
-
-
-
-
-
-
-
-
-
-
                 </div>
             </div>
-
-
-
 
         {% endblock %}
 
 
+        {# include footer #}
+        {% block footer %}
+            {% include 'commerce/footer.html.twig' %}
+        {% endblock %}
 
+        {% block javascripts %}
+            {{ parent() }}
+            <script src="{{ asset("js/notify.min.js")}}"></script>
+            <script src="{{ asset('js/panier.js') }}"></script>
+        {% endblock %}
