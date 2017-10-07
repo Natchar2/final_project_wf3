@@ -26,8 +26,8 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('panier');
 
 		$controllers
-		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-		->bind('addItem');
+		->get('/paiement', 'Application\Controller\InterfaceCommerceController::paiementAction')
+		->bind('paiement');
 
 		
 		$controllers
