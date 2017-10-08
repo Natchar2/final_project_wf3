@@ -27,6 +27,7 @@ class InterfaceCommerceController
 
 	public function accueilAction(Application $app)
 	{
+		$this->getRacineSite();
 		$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
 		$topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
 		$events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
@@ -1247,6 +1248,232 @@ class InterfaceCommerceController
         }
     }
 
+    public function setProfil(Application $app, $token_user)
+    {
+    	$token = $app['security.token_storage']->getToken();
+    	if($token_user != $app['session']->get('token'))
+    	{
+    		$app->redirect('403');
+    	}
+
+  		if($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+  		{
+    	
+    		$user = $token->get_user();    		
+    		$ID_user = $user->getID_user();
+    	}
+    	else
+    	{
+    		$app->redirect('connexion');
+    	}
+
+    	$user = $app['idiorm.db']->for_table('users')->where('ID_user', $ID_user);
+
+    	$form = $app['form.factory']->createBuilder(FormType::class)
+        
+        ->add('name', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un nom')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+                'value' => $user->name,
+            )                
+        ])
+
+        ->add('surname', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un prénom')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+                'value' => $user->surname,
+            )               
+        ])
+
+        ->add('pseudo', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un pseudo')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+                'value' => $user->pseudo,
+            )                
+        ])
+
+        ->add('street', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir une adresse')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+                'value' => $user->street,
+            )                
+        ])
+
+        ->add('zip_code', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un code postal')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+                'value' => $user->zip_code,
+            )                
+        ])
+
+        ->add('city', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir une ville')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+                'value' => $user->city,
+            )                
+        ])
+
+        ->add('email', TextType::class, [
+            'constraints' => new Assert\Email(),
+            'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com')
+        ])
+        
+        ->add('phone', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un numéro de téléphone')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+                'value' => $user->phone,
+            )                
+        ])
+
+        ->add('society_name', TextType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un nom de société')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+                'value' => $user->society_name,
+            )                
+        ])
+
+        ->add('avatar', FileType::class, [
+            'required'      => false,
+            'label'         => false,
+            'attr'          => [
+                'class' => 'dropify',
+            ]
+        ])
+
+        ->add('password', PasswordType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir votre mot de passe')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+
+        ->add('passwordVerif', PasswordType::class, [
+            'required'      => true,
+            'label'         => false,
+            'constraints'   => array(new NotBlank(
+                    array('message'=>'Vous devez saisir un mot de passe')
+                )
+            ),
+            'attr'          => array(
+                'class'         => 'form-control',
+            )                
+        ])
+        
+
+        ->add('submit', SubmitType::class, ['label' => 'Modifier'])
+        
+        ->getForm();
+
+         # Traitement des données POST
+        $form->handleRequest($request);
+        
+        # Vérifier si le Formulaire est valid
+        if($form->isValid())
+        {   
+            # Récupération des données du Formulaire
+            $infosProfil = $form->getData();
+
+            $infosProfil['password'] = $app['security.encoder.digest']->encodePassword($infosProfil['password'], '');
+
+			if($infosProfil['password'] != $token->get_user()->getPassword())
+			{
+				$error = "Mot de passe incorrecte";
+			}
+			else{
+				# Récupération de l'image
+            if(!empty($infosProfil['avatar']))
+            {
+            	$image = $infosProfil['avatar'];
+            	$newname = $this->createFileName(10);
+
+            	$chemin = PUBLIC_ROOT.'/assets/images/avatar/';
+            	$image->move($chemin, $newname.'.jpg');
+        	}
+
+            # Insertion en BDD
+            $infosProfilDb = $app['idiorm.db']->for_table('users')->create();
+            
+            #On associe les colonnes de notre BDD avec les valeurs du Formulaire
+            #Colonne mySQL                         #Valeurs du Formulaire
+            $infosProfilDb->name            =   $infosProfil['name'];
+            $infosProfilDb->surname         =   $infosProfil['surname'];
+            $infosProfilDb->pseudo          =   $infosProfil['pseudo'];
+            $infosProfilDb->street          =   $infosProfil['street'];
+            $infosProfilDb->zip_code        =   $infosProfil['zip_code'];
+            $infosProfilDb->city            =   $infosProfil['city'];
+            $infosProfilDb->mail            =   $infosProfil['email'];
+            $infosProfilDb->phone           =   $infosProfil['phone'];
+            $infosProfilDb->society_name    =   $infosProfil['society_name'];
+            if(!empty($infosProfil['avatar'])) $infosProfilDb->avatar =	$newname.'.jpg';
+            
+            # Insertion en BDD
+            $infosProfilDb->save();
+            
+            # Redirection
+            return $app->redirect('profil/success_modification');
+        }
+
+    	 # Affichage du Formulaire dans la Vue
+        return $app['twig']->render('commerce/profil_modification.html.twig', [
+        	'form' => $form->createView(),
+        	'error'=> $error
+        ]);
+    }
+}
+
 
 // ----------------------- recherche -------------------------------------
 
@@ -1354,7 +1581,6 @@ class InterfaceCommerceController
 							}
 
 							$text = '';
-							$str_cache = '';
 
 							foreach ($search_text_array as $text_value)
 							{
@@ -1392,8 +1618,6 @@ class InterfaceCommerceController
 													$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
 												}
 											}
-
-											$str_cache .= $text . ' ' . $text_value;
 										}
 									}
 								}
@@ -1436,15 +1660,18 @@ class InterfaceCommerceController
 
 	public function constructUrl(Application $app, $table, $args = null)
 	{
-		$url = '<br/><a href="http://127.0.0.1/WF3/final_project_wf3/final_project_wf3/web/';
+		$url = '<br/><a href="' . $this->getRacineSite();
 		switch($table)
 		{
 			case 'event':
 				$url .= "agenda/all/" . $this->generateSlug($args->event_title) . "_" . $args->ID_event . ".html";
 				break;
 			case 'post':
-				$topic = $app['idiorm.db']->for_table('topic')->where('ID_topic', $args->ID_topic)->find_result_set()[0];
-				$url .= "forum/topic/" . $this->generateSlug($topic->title) . "_" . $topic->ID_topic . ".html";
+				$topic = $app['idiorm.db']->for_table('topic')->where('ID_topic', $args->ID_topic)->find_result_set();
+				if(isset($topic->ID_topic))
+				{
+					$url .= "forum/topic/" . $this->generateSlug($topic->title) . "_" . $topic->ID_topic . ".html";
+				}
 				break;
 			case 'products':
 				$url .= "all/" . $this->generateSlug($args->name) . "_" . $args->ID_product . ".html";
