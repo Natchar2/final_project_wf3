@@ -3,6 +3,12 @@
 {% block contenu %}
 <h1>searchresults motherfucker !</h1>
 
+<h2>{{ nbResultats }} résultat{% if nbResultats > 1 %}s{% endif %} pour <b>"{{ searchText }}"</b></h2>
+
+{% for result in results %}
+	<p>{{ result | balise }}</p>
+{% endfor %}
+
 
 
 
