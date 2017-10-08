@@ -204,7 +204,19 @@ class InterfaceCommerceController
 
 	public function suiviAction(Application $app, $errors = "")
 	{
-		$idUser=1;
+		$token = $app['security.token_storage']->getToken();  
+		
+		//test d'authentification
+		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+		{
+	  	 	//récupération de l'ID_user
+			$user = $token->getUser();
+			$idUser = $user->getID_user();
+		}
+		else
+		{
+			return $app->redirect('connexion');
+		}
 
         #format index.php/business/une-formation-innovante-a-lyon_87943512.html
 		$buyers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_buyer=' . $idUser . ' AND users.ID_user=ID_seller ORDER BY order_date DESC')->find_result_set();			
@@ -536,71 +548,79 @@ class InterfaceCommerceController
 
 	public function createCustomerAction(Application $app, Request $request)
 	{
-		\Stripe\Stripe::setApiKey("sk_test_QmSww6Ib9W6e27EL24MysACJ");
-
-		$customer = \Stripe\Customer::create(array(
-			"email" => $request->get('email'),
-			"source" => $request->get('token'),
-		));
-
-		if(empty($customer->failure_code))
+		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
 		{
-			$globalController = new GlobalController();
+			\Stripe\Stripe::setApiKey("sk_test_QmSww6Ib9W6e27EL24MysACJ");
 
-			$subject = "Street Connect - [" . $customer->id . "] Demande prise en compte";
-			$from = "postmaster@localhost";
-			$to = $request->get('customer_email');
-			$content = "Bonjour " . $request->get('customer_name') . ", votre demande a bien été prise en compte. Nous attendons la confirmation du vendeur avant de vous de vous débiter. Cordialement.";
-			
-			$globalController->sendMailAction($app, $subject, $from, $to, $content);
+			$customer = \Stripe\Customer::create(array(
+				"email" => $request->get('email'),
+				"source" => $request->get('token'),
+			));
 
-			// -- Envoie de mail au vendeur
-			$product_by_id = $app['session']->get('total_product_by_id');
-
-			foreach ($product_by_id as $key => $value)
+			if(empty($customer->failure_code))
 			{
-				$product = $app['idiorm.db']->for_table('products')->where('ID_product', $key)->find_result_set()[0];
-				$seller = $app['idiorm.db']->for_table('users')->where('ID_user', $product->ID_user)->find_result_set()[0];
-
 				$globalController = new GlobalController();
+				$token = $app['security.token_storage']->getToken();
 
-				$subject = "Street Connect - Un client demande vos articles";
+				$user = $token->getUser();    		
+				$ID_user = $user->getID_user();
+
+				$subject = "Street Connect - [" . $customer->id . "] Demande prise en compte";
 				$from = "postmaster@localhost";
-				$to = $seller->mail;
-
-				$strTemp = ($value > 1) ? "s" : "";
-				$content = "Bonjour " . $seller->name . ", un client vous demande " . $value . " article" . $strTemp . ", cliquez sur le lien suivant pour accepter la vente: <br/><a href='" . PUBLIC_ROOT . "suivi'>Accepter la vente</a><br/><b>Cordialement.</b>";
+				$to = $request->get('customer_email');
+				$content = "Bonjour " . $request->get('customer_name') . ", votre demande a bien été prise en compte. Nous attendons la confirmation du vendeur avant de vous de vous débiter. Cordialement.";
 				
 				$globalController->sendMailAction($app, $subject, $from, $to, $content);
 
+				// -- Envoie de mail au vendeur
+				$product_by_id = $app['session']->get('total_product_by_id');
+				$price_by_id = $app['session']->get('total_price_by_id');
+
+				foreach ($product_by_id as $key => $value)
+				{
+					$product = $app['idiorm.db']->for_table('products')->where('ID_product', $key)->find_result_set()[0];
+					$seller = $app['idiorm.db']->for_table('users')->where('ID_user', $product->ID_user)->find_result_set()[0];
+
+
+					$globalController = new GlobalController();
+
+					$subject = "Street Connect - Un client demande vos articles";
+					$from = "postmaster@localhost";
+					$to = $seller->mail;
+
+					$strTemp = ($value > 1) ? "s" : "";
+					$content = "Bonjour " . $seller->name . ", un client vous demande " . $value . " article" . $strTemp . ", cliquez sur le lien suivant pour accepter la vente: <br/><a href='" . PUBLIC_ROOT . "suivi'>Accepter la vente</a><br/><b>Cordialement.</b>";
+					
+					$globalController->sendMailAction($app, $subject, $from, $to, $content);
+
+					$order = $app['idiorm.db']->for_table('orders')->create();
+					$order->ID_seller = $seller->ID_user;
+					$order->ID_buyer = $ID_user;
+					$order->ID_customer= $customer->id;
+					$order->ID_product = $key;
+					$order->name = $product->name;			
+					$order->quantity = $value;
+					$order->total_price = $price_by_id[$key];
+					$order->seller_status = 0;
+					$order->buyer_status = 0;
+					$order->order_date = strtotime('now');
+					$order->payment_token = $request->get('token');
+					$order->save();
+				}
+
+				return 'Votre demande a bien été prise en compte';
+			}
+			else
+			{
 				$order = $app['idiorm.db']->for_table('orders')->create();
-				$order->ID_seller = $seller->ID_user;
-//---------------------------------------------------------------ATTENTION, ecrire la session des que fonctionnelle ------------------------------
-				$order->ID_buyer = 1;
-				$order->ID_customer= $customer->id;
-				$order->ID_product = $key;
-				$order->name = $product->name;			
-				$order->quantity = $value;
-//---------------------------------------------------------------ATTENTION, ecrire la session des que fonctionnelle ------------------------------
-				$order->total_price = 112;
-				$order->seller_status = 0;
-				$order->buyer_status = 0;
-				$order->order_date = strtotime('now');
-				$order->payment_token = $request->get('token');
+				$order->error_code = $charge->failure_code;
 				$order->save();
 			}
-			// ----------------------------
 
-			return 'Votre demande a bien été prise en compte';
-		}
-		else
-		{
-			$order = $app['idiorm.db']->for_table('orders')->create();
-			$order->error_code = $charge->failure_code;
-			$order->save();
+			return 'Une erreur c\'est produite, veuillez réessayer';
 		}
 
-		return 'Une erreur c\'est produite, veuillez réessayer';
+		return $app->redirect('connexion');
 
 	}
 
@@ -657,11 +677,6 @@ class InterfaceCommerceController
 
 	}
 
-	public function profilAction(Application $app)
-	{
-		return $app['twig']->render('commerce/profil.html.twig');
-	}
-
 	public function faqAction(Application $app)
 	{
 		return $app['twig']->render('commerce/FAQ.html.twig');
@@ -683,11 +698,16 @@ class InterfaceCommerceController
 	{
 		return $app['twig']->render('commerce/connexion.html.twig', array(
 			'error' => $app['security.last_error']($request),
-			'success' => 'Inscription validée, veuillez vous connecter',
 			'last_username' => $app['session']->get('_security.last_username'),
 		));
 
 	}
+
+	public function profilAction(Application $app)
+	{
+		return $app['twig']->render('commerce/profil.html.twig');
+	}
+
 	
 //affichage de la page formulair ajout de produit ac les eventuelles données deu produit en cas de modification	
 	public function newAdAction(Application $app, $ID_product){
@@ -1226,80 +1246,121 @@ public function newAdPostAction(Application $app, Request $request)
 			$error = $url_error;
 
         	 # Affichage du Formulaire dans la Vue
-			
 			return $app['twig']->render('commerce/inscription.html.twig', [
 				'form' => $form->createView(),
 				'error'=> $error
 			]);
 		}
-		
 	}
-}
 
 
 // ----------------------- recherche -------------------------------------
 
-public function searchAction(Application $app, Request $request)
-{
-
-	/*   Format de tableau pour la recherche
-	array(
-		'for_table' => array(
-			'table_1' => array(
-				'field_1',
-				'field_2'
-			),
-		),
-		'search_text' => 'une longue chaine de caractere a rechercher...',
-	)
-	*/
-
-
-	$array = array(
-		'for_table' => array(
-			'products' => array(
-				'name',
-				'brand',
-				'description',
-			),
-			'event' => array(
-				'event_title',
-				'event_description',
-			),			
-			'topic' => array(
-				'title',
-			),
-			'post' => array(
-				'content',
-			),
-		),
-		'search_text' => $request->get('searchString'),
-	);
-
-	if($array['search_text'])
+	public function searchAction(Application $app, Request $request)
 	{
-		$result = array();
+		$array = array(
+			'for_table' => array(
+				'products' => array(
+					'name',
+					'brand',
+					'description',
+				),
+				'event' => array(
+					'event_title',
+					'event_description',
+				),			
+				'topic' => array(
+					'title',
+				),
+				'post' => array(
+					'content',
+				),
+			),
+			'search_text' => $request->get('searchString'),
+		);
 
-		$search_text = preg_replace("#[,./\\;]*#", " ", $array['search_text']);
-
-		$search_text_array = explode($search_text, ' ');
-
-		if($array['for_table'])
+		if($array['search_text'])
 		{
-			if(gettype($array['for_table']) == 'array')
+			$result = array();
+
+			$search_text = preg_replace("#[,\./\\;]#", " ", $array['search_text']);
+
+			$search_text_array = explode(' ', $search_text);
+
+			if($array['for_table'])
 			{
-				foreach ($array['for_table'] as $table_key => $table_value)
+				if(gettype($array['for_table']) == 'array')
 				{
-					echo $table_key . '<br>';
-
-					if(gettype($array['for_table'][$table_key]) == 'array')
+					foreach ($array['for_table'] as $table_key => $table_value)
 					{
-						foreach ($array['for_table'][$table_key] as $field_key => $field_value)
+						if(gettype($array['for_table'][$table_key]) == 'array')
 						{
+							foreach ($array['for_table'][$table_key] as $field_key => $field_value)
+							{
+								$tmp_result = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $array['search_text'] . '%')->find_result_set();
+								if(count($tmp_result) > 0)
+								{
+									foreach ($tmp_result as $key => $result_tmp)
+									{
+										$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+									}
+								}
 
+								$text = '';
+								foreach ($search_text_array as $text_value)
+								{
+									if($text_value != ' ')
+									{
+										if(mb_strlen($text_value) <= 3 || strpos($text_value, "'"))
+										{
+											if(mb_strlen($text) > 0)
+											{
+												$text .= ' ' . $text_value;
+											}
+											else
+											{
+												$text .= $text_value;
+											}
+										}
+										elseif(mb_strlen($text_value) > 3)
+										{
+											$tmp_result = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text_value . '%')->find_result_set();
+											if(count($tmp_result) > 0)
+											{
+												foreach ($tmp_result as $key => $result_tmp)
+												{
+													$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+												}
+											}
+											if(mb_strlen($text) > 0)
+											{
+												$tmp_result = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text . ' ' . $text_value . '%')->find_result_set();
+												if(count($tmp_result) > 0)
+												{
+													foreach ($tmp_result as $key => $result_tmp)
+													{
+														$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						else
+						{
+							$tmp_result = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $array['search_text'] . '%')->find_result_set();
+							if(count($tmp_result) > 0)
+							{
+								foreach ($tmp_result as $key => $result_tmp)
+								{
+									$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+								}
+							}
 
-							$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $array['search_text'] . '%')->find_array();
 							$text = '';
+
 							foreach ($search_text_array as $text_value)
 							{
 								if($text_value != ' ')
@@ -1317,92 +1378,136 @@ public function searchAction(Application $app, Request $request)
 									}
 									elseif(mb_strlen($text_value) > 3)
 									{
-										$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text_value . '%')->find_array();
+										$tmp_result = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text_value . '%')->find_result_set();
+										if(count($tmp_result) > 0)
+										{
+											foreach ($tmp_result as $key => $result_tmp)
+											{
+												$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+											}
+										}
 
 										if(mb_strlen($text) > 0)
 										{
-											$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text . ' ' . $text_value . '%')->find_array();
+											$tmp_result = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text . ' ' . $text_value . '%')->find_result_set();
+											if(count($tmp_result) > 0)
+											{
+												foreach ($tmp_result as $key => $result_tmp)
+												{
+													$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+												}
+											}
 										}
 									}
 								}
 							}
 						}
 					}
-					else
-					{
-						$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $array['search_text'] . '%')->find_array();
-						$text = '';
-						$str_cache = '';
-
-						foreach ($search_text_array as $text_value)
-						{
-							if($text_value != ' ')
-							{
-								if(mb_strlen($text_value) <= 3 || strpos($text_value, "'"))
-								{
-									if(mb_strlen($text) > 0)
-									{
-										$text .= ' ' . $text_value;
-									}
-									else
-									{
-										$text .= $text_value;
-									}
-								}
-								elseif(mb_strlen($text_value) > 3)
-								{
-									$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text_value . '%')->find_array();
-
-									if(mb_strlen($text) > 0)
-									{
-										$result[] = $app['idiorm.db']->for_table($table_key)->where_like($field_value, '%' . $text . ' ' . $text_value . '%')->find_array();
-										$str_cache .= $text . ' ' . $text_value;
-									}
-								}
-							}
-						}
-					}
+				}
+				else
+				{
+					$result[] = 'le champs < for_table > n\'a pas été renseigné sous forme tableau';
 				}
 			}
 			else
 			{
-				$result[] = 'le champs < for_table > n\'a pas été renseigné sous forme tableau';
+				$result[] = 'le tableau < for_table > n\'a pas été renseigné dans les données de recherche';
 			}
 		}
 		else
 		{
-			$result[] = 'le tableau < for_table > n\'a pas été renseigné dans les données de recherche';
+			$result[] = 'le champs < search_text > n\'a pas été renseigné dans les données de recherche';
 		}
+
+		if(count($result) == 0)
+		{
+			$resultset[] = 'Aucun résultat trouvé pour <' . $array['search_text'] . ' >.';
+			$nbResultats = 0;
+		}
+		else
+		{
+			$resultset = $this->uniqueArray($result);
+			$nbResultats = count($resultset);
+		}
+
+		return $app['twig']->render('public/searchresults.html.twig',[
+			'results' => $resultset,
+			'nbResultats' => $nbResultats,
+			'searchText' => $array['search_text'],
+		]);
 	}
-	else
+
+	public function constructUrl(Application $app, $table, $args = null)
 	{
-		$result[] = 'le champs < search_text > n\'a pas été renseigné dans les données de recherche';
+		$url = '<br/><a href="http://127.0.0.1/WF3/final_project_wf3/final_project_wf3/web/';
+		switch($table)
+		{
+			case 'event':
+			$url .= "agenda/all/" . $this->generateSlug($args->event_title) . "_" . $args->ID_event . ".html";
+			break;
+			case 'post':
+			$topic = $app['idiorm.db']->for_table('topic')->where('ID_topic', $args->ID_topic)->find_result_set()[0];
+			$url .= "forum/topic/" . $this->generateSlug($topic->title) . "_" . $topic->ID_topic . ".html";
+			break;
+			case 'products':
+			$url .= "all/" . $this->generateSlug($args->name) . "_" . $args->ID_product . ".html";
+			break;
+			default:
+				// code...
+			break;
+		}
+
+		$url .= '">Voir ce résultat</a>';
+
+		return $url;
 	}
 
-	if(count($result) == 0)
+	public function uniqueArray($array, $aleatory_string = '', $lev = 0)
 	{
-		$result[] = 'Aucun résultat trouvé pour <' . $array['search_text'] . ' >.';
-		$nbResultats = 0;
+		if($lev == 0)
+		{
+			$string = "*ù%£$!:;./§?,&é'(-è_çà)='";
+			for ($i = 0; $i < 5; $i++)
+			{
+				$aleatory_string .= $string[mt_rand(0,mb_strlen($string) - 1)];
+			}
+		}
+
+
+		$array_result = array();
+		$tmp_text = '';
+		if(is_Array($array))
+		{
+			if(count($array) > 0)
+			{
+				foreach ($array as $key => $value)
+				{
+					if(is_Array($value))
+					{
+						$tmp_text .= $this->uniqueArray($value, $aleatory_string, $lev + 1);
+					}
+					else
+					{
+						$tmp_text .= $value . $aleatory_string;
+					}
+				}
+			}
+		}
+
+		if($lev == 0)
+		{
+			$array_result = explode($aleatory_string, $tmp_text);
+			unset($array_result[count($array_result) - 1]);
+			$array_result = array_unique($array_result);
+			return $array_result;
+		}
+		return $tmp_text;
 	}
-	else
-	{
-		print_r($result);
-		die();
-
-			//$resultset[] = array_unique($result);
-			//$nbResultats = count($resultset);
-	}
 
 
 
 
-	return $app['twig']->render('public/searchresults.html.twig',[
-		'results' => $resultset,
-		'nbResultats' => $nbResultats,
-	]);
 
-		//return json_encode($result);
-}
 
 
 }
