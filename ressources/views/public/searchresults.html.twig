@@ -6,7 +6,9 @@
 <h2>{{ nbResultats }} résultat{% if nbResultats > 1 %}s{% endif %} pour <b>"{{ searchText }}"</b></h2>
 
 {% for result in results %}
-	<p>{{ result | balise }}</p>
+	<p>{{ result | search_construct['category'] }}</p>
+	<p>{{ result | search_construct['content'] }}</p>
+	<p>{{ result | search_construct['url'] | balise }}</p>
 {% endfor %}
 
 

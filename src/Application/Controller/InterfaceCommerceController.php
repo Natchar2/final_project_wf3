@@ -1523,7 +1523,7 @@ class InterfaceCommerceController
 								{
 									foreach ($tmp_result as $key => $result_tmp)
 									{
-										$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+										$result[] = $tmp_result[$key]->$field_value . $this->optionsResult($app, $table_key, $tmp_result[$key]);
 									}
 								}
 
@@ -1550,7 +1550,7 @@ class InterfaceCommerceController
 											{
 												foreach ($tmp_result as $key => $result_tmp)
 												{
-													$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+													$result[] = $tmp_result[$key]->$field_value . $this->optionsResult($app, $table_key, $tmp_result[$key]);
 												}
 											}
 											if(mb_strlen($text) > 0)
@@ -1560,7 +1560,7 @@ class InterfaceCommerceController
 												{
 													foreach ($tmp_result as $key => $result_tmp)
 													{
-														$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+														$result[] = $tmp_result[$key]->$field_value . $this->optionsResult($app, $table_key, $tmp_result[$key]);
 													}
 												}
 											}
@@ -1576,7 +1576,7 @@ class InterfaceCommerceController
 							{
 								foreach ($tmp_result as $key => $result_tmp)
 								{
-									$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+									$result[] = $tmp_result[$key]->$field_value . $this->optionsResult($app, $table_key, $tmp_result[$key]);
 								}
 							}
 
@@ -1604,7 +1604,7 @@ class InterfaceCommerceController
 										{
 											foreach ($tmp_result as $key => $result_tmp)
 											{
-												$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+												$result[] = $tmp_result[$key]->$field_value . $this->optionsResult($app, $table_key, $tmp_result[$key]);
 											}
 										}
 
@@ -1615,7 +1615,7 @@ class InterfaceCommerceController
 											{
 												foreach ($tmp_result as $key => $result_tmp)
 												{
-													$result[] = $tmp_result[$key]->$field_value . $this->constructUrl($app, $table_key, $tmp_result[$key]);
+													$result[] = $tmp_result[$key]->$field_value . $this->optionsResult($app, $table_key, $tmp_result[$key]);
 												}
 											}
 										}
@@ -1642,7 +1642,7 @@ class InterfaceCommerceController
 
 		if(count($result) == 0)
 		{
-			$resultset[] = 'Aucun résultat trouvé pour <' . $array['search_text'] . ' >.';
+			$resultset[] = "";
 			$nbResultats = 0;
 		}
 		else
@@ -1658,29 +1658,55 @@ class InterfaceCommerceController
 		]);
 	}
 
-	public function constructUrl(Application $app, $table, $args = null)
+	public function optionsResult(Application $app, $table, $args)
 	{
-		$url = '<br/><a href="' . $this->getRacineSite();
+		$separate_string = "(&é'(-è_çà)=$^*ù:!;,)";
+		$url = $separate_string;
+		// CATEGORY NAME
+		switch ($table)
+		{
+			case 'event':
+				$url .= "Evénement";
+				break;
+			case 'post':
+				$url .= "Post";
+				break;
+			case 'topic':
+				$url .= "Topic";
+				break;
+			case 'products':
+				$product = $app['idiorm.db']->for_table('category')->where('ID_category', $args->ID_category)->find_result_set();
+				$url .= 'Shop - ' . $category_name;
+				break;
+			default:
+				'titre non trouvé';
+				break;
+		}
+		// CONSTRUCTION DU LIEN
+		$url .= $separate_string;
+		$url .= '<a href="';
 		switch($table)
 		{
 			case 'event':
-				$url .= "agenda/all/" . $this->generateSlug($args->event_title) . "_" . $args->ID_event . ".html";
+				$url .= $this->getRacineSite() . "agenda/all/" . $this->generateSlug($args->event_title) . "_" . $args->ID_event . ".html";
 				break;
 			case 'post':
 				$topic = $app['idiorm.db']->for_table('topic')->where('ID_topic', $args->ID_topic)->find_result_set();
 				if(isset($topic->ID_topic))
 				{
-					$url .= "forum/topic/" . $this->generateSlug($topic->title) . "_" . $topic->ID_topic . ".html";
+					$url .= $this->getRacineSite() . "forum/topic/" . $this->generateSlug($topic->title) . "_" . $topic->ID_topic . ".html";
 				}
 				break;
+			case 'topic':
+				$url .= $this->getRacineSite() . "forum/topic/" . $this->generateSlug($args->title) . "_" . $args->ID_topic . ".html";
+				break;
 			case 'products':
-				$url .= "all/" . $this->generateSlug($args->name) . "_" . $args->ID_product . ".html";
+				$url .= $this->getRacineSite() . "all/" . $this->generateSlug($args->name) . "_" . $args->ID_product . ".html";
 				break;
 			default:
-				// code...
+				'lien non crée';
 				break;
 		}
-
 		$url .= '">Voir ce résultat</a>';
 
 		return $url;

@@ -1,12 +1,33 @@
 <?php
 namespace Application\Extension;
 
+use Silex\Application;
+
 class ApplicationTwigExtension extends \Twig_Extension 
 {
 	public function getFilters()
 	{
 				return array(
 
+			new \Twig_Filter('search_construct', function($text)
+			{
+				$array = explode("(&é'(-è_çà)=$^*ù:!;,)", $text);
+
+				$result['content'] = strip_tags($array[0]);
+
+				if(count($array) > 1)
+				{
+					$result['category'] = $array[1];
+					$result['url'] = $array[2];
+				}
+				else
+				{
+					$result['category'] = "";
+					$result['url'] = "";
+				}
+
+				return $result;
+			}),
 			//https://twig.symfony.com/doc/2.x/advanced.html#filters
 			new \Twig_Filter('accroche', function($text)
 			{
