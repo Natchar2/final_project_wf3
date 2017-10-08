@@ -77,11 +77,17 @@ class InterfaceAgendaController
 		$event = $app['idiorm.db']->for_table('view_events')->find_one($ID_event);
 		$suggests = $app['idiorm.db']->for_table('view_events')->raw_query('SELECT * FROM view_events WHERE ID_category=' . $event->ID_category . ' AND ID_event<>' . $ID_event . ' ORDER BY RAND() LIMIT 3 ')->find_result_set();   
 
-		$topic = $app['idiorm.db']->for_table('view_topics')->where('ID_event', $ID_event)->find_one();
-
+		$topic = $app['idiorm.db']->for_table('view_topics')
+		->where('ID_event', $ID_event)
+		->find_one();
+		
 		if (isset($topic) AND !empty($topic))
 		{
-			$posts = $app['idiorm.db']->for_table('view_topics')->where('ID_topic', $topic['ID_topic'])->find_result_set();
+			$posts = $app['idiorm.db']->for_table('view_posts')
+			->where('ID_topic', $topic['ID_topic'])
+			->order_by_desc('post_date')
+			->limit(5)
+			->find_result_set();
 		}
 		else
 		{
@@ -334,7 +340,7 @@ class InterfaceAgendaController
 
     }
 
-    public function listEvents(Application $app, $ID_user, $category_name) //penser a passer l'ID_User ac la sessions
+    public function listEvents(Application $app)
     {
 
     		//recupération du token de session

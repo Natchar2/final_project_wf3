@@ -138,6 +138,7 @@
 						</div>
 						<div class="card-body row">
 
+
 							{% if posts is empty %}
 								<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
 							{% else %}
@@ -151,25 +152,39 @@
 								{% endfor %}
 							{% endif %}
 
+							{% if posts is empty %}
+								<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
+							{% else %}
+								{% for post in posts %}
+									<p class= "pull-right">
+										par {{post.pseudo}} le : {{post.post_date | date('d/m/Y')}}</p>
+										<br>
+										<hr>
+										{{ post.content | balise }}
+										<br><hr><br>
+									{% endfor %}
+								{% endif %}
+
+
+							</div>
 						</div>
 					</div>
+
+					<br><br>						
+					<br><br>
+
 				</div>
-
-				<br><br>						
-				<br><br>
-
 			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}
 
-{# include footer #}
-{% block footer %}
-	{% include 'commerce/footer.html.twig' %}
-{% endblock %}
+	{# include footer #}
+	{% block footer %}
+		{% include 'commerce/footer.html.twig' %}
+	{% endblock %}
 
-{% block javascripts %}
-	{{ parent() }}
-	<script src="{{ asset("js/notify.min.js")}}"></script>
-	<script src="{{ asset('js/panier.js') }}"></script>
-{% endblock %}
+	{% block javascripts %}
+		{{ parent() }}
+		<script src="{{ asset("js/notify.min.js")}}"></script>
+		<script src="{{ asset('js/panier.js') }}"></script>
+	{% endblock %}

@@ -26,8 +26,8 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('panier');
 
 		$controllers
-		->post('/addItem', 'Application\Controller\InterfaceCommerceController::addItemAction')
-		->bind('addItem');
+		->get('/paiement', 'Application\Controller\InterfaceCommerceController::paiementAction')
+		->bind('paiement');
 
 		
 		$controllers
@@ -191,6 +191,15 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		$controllers
 		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
 		->bind('forumPostDetail');
+
+
+
+		$controllers
+		->post('/search', 'Application\Controller\InterfaceCommerceController::searchAction')
+		->bind('search');
+
+
+
 
 
 

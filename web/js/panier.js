@@ -23,10 +23,13 @@ $('.add_product').click(function(e){
 			id: ID_product
 		},
 		success: function(data){
-			console.log(data);
+			console.log(data.total_price_by_id);
 			$.notify('Produit Ajouté', 'success');
 			$('.total_price').text(data.total_price);
 			$('.total_product').text(data.total_product);
+			$('.total_price_by_id').attr('ID-product', function(id){
+				$(this).text(data.total_price_by_id[$(this).attr('ID-product')]);
+			});
 			$('.total_by_id').attr('ID-product', function(id){
 				$(this).text(data.total_product_by_id[$(this).attr('ID-product')]);
 			});
@@ -56,10 +59,18 @@ $('.remove_one_product').click(function(e){
 			id: ID_product
 		},
 		success: function(data){
-			console.log(data);
 			if(data.total_product_by_id[$this.attr('ID-product')] >= 0) $.notify('Produit Supprimé', 'success');
 			$('.total_price').text(data.total_price);
 			$('.total_product').text(data.total_product);
+			
+			$('.total_price_by_id').attr('ID-product', function(id)
+			{
+				if(data.total_price_by_id[$(this).attr('ID-product')])
+				{
+					$(this).text(data.total_price_by_id[$(this).attr('ID-product')]);
+				}
+			});
+
 			$('.total_by_id').attr('ID-product', function(id){
 				if(data.total_product_by_id[$(this).attr('ID-product')])
 				{
@@ -107,6 +118,17 @@ $('.remove_all_product').click(function(e){
 				$('.total_price').text(data.total_price);
 			}
 			$('.total_product').text(data.total_product);
+
+
+			$('.total_price_by_id').attr('ID-product', function(id)
+			{
+				if(data.total_price_by_id[$(this).attr('ID-product')])
+				{
+					$(this).text(data.total_price_by_id[$(this).attr('ID-product')]);
+				}
+			});
+
+
 			$('.total_by_id').attr('ID-product', function(id){
 				if(data.total_product_by_id[$(this).attr('ID-product')])
 				{

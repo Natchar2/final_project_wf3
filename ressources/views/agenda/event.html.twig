@@ -41,10 +41,66 @@
 					</div>
 					<br><br>
 					<hr>
+				</div>
+				<div class="row">
+					<div class="col-md-4 col-md-push-3">
+						<div class="card-header">
+							Infos et contact
+						</div>
+						<div class="card-body">
+							<p>
+								Le {{event.start_date | date('d/m/Y')}}
+								{% if event.end_date is not empty %}
+									jusqu'au {{event.end_date | date('d/m/Y')}}	
+								{% endif %}			
+							</p>
+							<p>
+								<hr>
+								{{event.street_name}}<br>
+								{{event.zip_code}}<br>
+								{{event.city}}
+							</p>
+							<p>
+								<hr>
+								Contacts :<br>
+								{{event.mail}}<br>
+								{{event.phone}}<br>
+								{{event.url_1}}<br>
+								{% if 'facebook' in event.url_2 %}
+									<i class="fa fa-facebook-official" aria-hidden="true"></i> {{event.url_2}}<br>
+								{% elseif 'twitter' in event.url_2 %}
+									<i class="fa fa-twitter" aria-hidden="true"></i> {{event.url_2}}<br>
+								{% elseif 'instagram' in event.url_2 %}
+									<i class="fa fa-instagram" aria-hidden="true"></i> {{event.url_2}}<br>
+								{% else %}
+									{{event.url_2}}<br>
+								{% endif %}
+
+								{% if 'facebook' in event.url_3  %}
+									<i class="fa fa-facebook-official" aria-hidden="true"></i> {{event.url_3 }}<br>
+								{% elseif 'twitter' in event.url_3  %}
+									<i class="fa fa-twitter" aria-hidden="true"></i> {{event.url_3 }}<br>
+								{% elseif 'instagram' in event.url_3  %}
+									<i class="fa fa-instagram" aria-hidden="true"></i> {{event.url_3 }}<br>
+								{% else %}
+									{{event.url_3 }}<br>
+								{% endif %}
+
+							</p>
+						</div>
+					</div>
+					<div class="col-md-5 col-md-push-3">
+						<div class="card-body">
+						<div id="map"></div>
+					</div>
+					</div>
+				</div>
+
 
 					<div class="card card-outline-secondary my-4">
 
 						<div class="card-header">
+							<hr>
 							Suggestions
 							<br><br>
 						</div>
@@ -78,24 +134,32 @@
 					</div>
 					<br><br>
 					<br><br>
+				</div>
+				<div class="row">
+					<div class="card card-outline-secondary my-4">
 
-					{% if posts is not empty %}
-
-						<div class="card card-outline-secondary my-4">
-
-							<br><br>
-							<hr>
-							<br><br>
-							<div class="card-header">
-								Posts sur les produit
-							</div>
-							<div class="card-body">
-
-
-							</div>
+						<br><br>
+						<hr>
+						<br><br>
+						<div class="card-header">
+							<h4 class="lead">Discussion autour de l'événement</h4>
 						</div>
-					{% endif %}
-
+						<div class="card-body">
+							{% if posts is empty %}
+								<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
+							{% else %}
+								{% for post in posts %}
+									<p class= "pull-right">
+									par {{post.pseudo}} le : {{post.post_date | date('d/m/Y')}}</p>
+									<br>
+									<hr>
+									{{ post.content | balise }}
+									<br><hr><br>
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+					
 					<br><br>						
 					<br><br>
 
@@ -113,4 +177,19 @@
 		{{ parent() }}
 		<script src="{{ asset("js/notify.min.js")}}"></script>
 		<script src="{{ asset('js/panier.js') }}"></script>
+		<script>
+	     function initMap() {
+	       var Notre_boutique = {lat: {{ event.latitude | number | json_encode() | raw }}, lng: {{ event.longitude | number |  json_encode()  | raw }} };
+	       var map = new google.maps.Map(document.getElementById('map'), {
+	         zoom: 14,
+	         center: Notre_boutique
+	       });
+	       var marker = new google.maps.Marker({
+	         position: Notre_boutique,
+	         map: map
+	       });
+	     }
+	   </script>	
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAovZOovHb3bqa8MJtf6bhygt0FRj0XErU&callback=initMap"></script>
+
 	{% endblock %}
