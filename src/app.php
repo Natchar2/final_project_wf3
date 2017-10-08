@@ -49,13 +49,17 @@
 		$app['session']->set('total_product', 0);
 	}
 
+	if($app['session']->get('total_price_by_id') == null)
+	{
+		$app['session']->set('total_price_by_id', array());
+	}
+
 	if($app['session']->get('total_product_by_id') == null)
 	{
 		$app['session']->set('total_product_by_id', array());
 	}
 
 	if($app['session']->get('token') == null)
-
 	{
 	   $string = "abcdefghijklmnopqrstuvwxyz/.!%=+ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 

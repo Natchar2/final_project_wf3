@@ -64,6 +64,11 @@ class ApplicationTwigExtension extends \Twig_Extension
 				printf($text);
 				return;
 			}), #fin twig_filter balise
+
+			new \Twig_Filter('number', function($text)
+			{
+				return floatval($text);
+			}),
 		);
 	}
 }

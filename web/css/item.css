@@ -19,6 +19,10 @@ a.list-group-item, button.list-group-item {
   margin: 5px;
 }
 
+#map{
+  width: 100%;
+  height: 300px;
+}
 
 /* FOOTER
 -------------------------------------------------- */

@@ -104,11 +104,17 @@ class InterfaceCommerceController
 		$product = $app['idiorm.db']->for_table('view_products')->find_one($ID_product);
 		$suggests = $app['idiorm.db']->for_table('view_products')->raw_query('SELECT * FROM view_products WHERE ID_category=' . $product->ID_category . ' AND ID_product<>' . $ID_product . ' ORDER BY RAND() LIMIT 3 ')->find_result_set();   
 
-		$topic = $app['idiorm.db']->for_table('view_topics')->where('ID_product', $ID_product)->find_one();
-
+		$topic = $app['idiorm.db']->for_table('view_topics')
+		->where('ID_product', $ID_product)
+		->find_one();
+		
 		if (isset($topic) AND !empty($topic))
 		{
-			$posts = $app['idiorm.db']->for_table('view_topics')->where('ID_topic', $topic['ID_topic'])->find_result_set();
+			$posts = $app['idiorm.db']->for_table('view_posts')
+			->where('ID_topic', $topic['ID_topic'])
+			->order_by_desc('post_date')
+			->limit(5)
+			->find_result_set();
 		}
 		else
 		{
@@ -158,6 +164,7 @@ class InterfaceCommerceController
 				}
 			}
 		}
+
 		$products=$app['idiorm.db']->for_table('view_products')->where_id_in($panierProducts)->order_by_asc('name')->find_result_set();
 
 		return $app['twig']->render('commerce/panier.html.twig',[
@@ -165,6 +172,32 @@ class InterfaceCommerceController
 
 		]);
 	}
+
+
+	public function paiementAction(Application $app)
+	{
+
+		$panierProducts[]=0;
+		
+		if (!empty($app['session']->get('panier')))
+		{
+			foreach ($app['session']->get('panier') as $key => $value)
+			{
+				if ($value>0)
+				{
+					$panierProducts[]=$key;
+				}
+			}
+		}
+
+		$products=$app['idiorm.db']->for_table('view_products')->where_id_in($panierProducts)->order_by_asc('name')->find_result_set();
+
+		return $app['twig']->render('commerce/paiement.html.twig',[
+			'products' => $products
+
+		]);
+	}
+
 
 
 
@@ -306,11 +339,12 @@ class InterfaceCommerceController
 		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'incrementation'));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
-
+		$app['session']->set('total_price_by_id', $this->getTotalPriceById($app));
 		$array = array(
 			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+			'total_price_by_id' => $app['session']->get('total_price_by_id'),
 		);
 
 		return new Response(json_encode($array));
@@ -320,11 +354,13 @@ class InterfaceCommerceController
 	{
 
 		$panier = $app['session']->get('panier');
+		$num_product = 0;
 
 		if(isset($panier[$request->get('id')]))
 		{
 			if(($panier[$request->get('id')] - 1) == 0)
 			{
+				$num_product = $panier[$request->get('id')];
 				unset($panier[$request->get('id')]);
 			}
 			else
@@ -332,18 +368,17 @@ class InterfaceCommerceController
 				$panier[$request->get('id')] -= 1;
 			}
 			$app['session']->set('panier', $panier);
-
-			
 		}
 
-		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementation'));
+		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementation', $num_product));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
-
+		$app['session']->set('total_price_by_id', $this->getTotalPriceById($app));
 		$array = array(
 			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+			'total_price_by_id' => $app['session']->get('total_price_by_id'),			
 		);
 
 		return new Response(json_encode($array)); 
@@ -367,11 +402,12 @@ class InterfaceCommerceController
 		$app['session']->set('total_price', $this->get_total_price($app, $request->get('id'), 'decrementationAll', $num_product));
 		$app['session']->set('total_product', $this->getTotalProduct($app));
 		$app['session']->set('total_product_by_id', $this->getTotalProductById($app));
-
+		$app['session']->set('total_price_by_id', $this->getTotalPriceById($app));
 		$array = array(
 			'total_price' => $app['session']->get('total_price'),
 			'total_product' => $app['session']->get('total_product'),
 			'total_product_by_id' => $app['session']->get('total_product_by_id'),
+			'total_price_by_id' => $app['session']->get('total_price_by_id'),	
 		);
 
 		return new Response(json_encode($array));
@@ -479,6 +515,35 @@ class InterfaceCommerceController
 
 		return round($total_price);
 	}
+
+	public function getTotalPriceById(Application $app)
+	{
+		$total_price_by_id = array();
+
+		$panier = $app['session']->get('panier');
+
+		if(!empty($panier))
+		{
+			foreach ($panier as $key => $data)
+			{
+				if(isset($panier[$key]))
+				{
+					$product = $app['idiorm.db']->for_table('products')->where('ID_product', $key)->find_result_set();
+					$price = $product[0]->price;
+					$shipping_charges = $product[0]->shipping_charges;	
+
+					$total_price_by_id[$key] = round(($price + $shipping_charges) * $data);			
+				}
+			}  
+		}
+
+		return $total_price_by_id;
+	}
+
+
+
+
+
 
 
 	public function createCustomerAction(Application $app, Request $request)

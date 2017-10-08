@@ -142,12 +142,12 @@
 									<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
 								{% else %}
 									{% for post in posts %}
-
-										{{ post.content }}
+										<p class= "pull-right">
+										par {{post.pseudo}} le : {{post.post_date | date('d/m/Y')}}</p>
+										<br>
+										<hr>
+										{{ post.content | balise }}
 										<br><hr><br>
-
-
-
 									{% endfor %}
 								{% endif %}
 
