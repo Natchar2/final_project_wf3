@@ -38,9 +38,11 @@ class InterfaceAgendaControllerProvider implements ControllerProviderInterface
 		->bind('agenda_article');
 
 		$controllers
-		->get('/event/ajouter/{ID_event}','Application\Controller\InterfaceAgendaController::addEventAction')
+		->get('/event/ajouter/{ID_event}/{token}','Application\Controller\InterfaceAgendaController::addEventAction')
 		->assert('ID_event', '\d+')
 		->value('ID_event', '0')
+		->assert('token', '\w+')
+		->value('token', '0')
 		->bind('view_agenda_add');
 
 		$controllers

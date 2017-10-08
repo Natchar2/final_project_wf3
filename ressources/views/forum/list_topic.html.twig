@@ -16,10 +16,8 @@
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
 					<thead>
 						<tr>
-							<th>Numéro du topic</th>
 							<th>Nom du topic</th>
 							<th>Date de création</th>
-							<th>Catégorie</th>
 							<th>Lien vers le produit ou l'événement associé</th>
 							<th>Action</th>
 						</tr>
@@ -27,13 +25,9 @@
 					<tbody>
 						{% for value in topics %}
 							<tr>
-								<td>{{value.ID_topic}}</td>
-
 								<td>{{value.title}}</td>
 
 								<td>{{value.creation_date | date('d/m/Y')}}</td>
-
-								<td>{{value.category_name}}</td>
 
 								<td>
 									{% if value.ID_product > 0 %}
@@ -51,11 +45,6 @@
 										<input type="hidden" name="ID_topic" value="{{value.ID_topic}}">
 										<input type="hidden" name="token" value="{{app.session.get('token')}}">
 										<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
-									</form>
-									<form action="{{ url('new_topic_post') }}"  method="post">
-										<input type="hidden" name="ID_topic" value="{{value.ID_topic}}">
-										<input type="hidden" name="token" value="{{app.session.get('token')}}">
-										<button  class="btn btn-warning">Modifier</button>
 									</form>
 								</td>
 							</tr>

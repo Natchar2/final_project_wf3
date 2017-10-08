@@ -38,7 +38,7 @@ class InterfaceForumControllerProvider implements ControllerProviderInterface
 		->bind('forum_topic');
 
 		$controllers
-		->post('/topic/{slugTopic}_{ID_topic}', 'Application\Controller\InterfaceForumController::newPostAction')
+		->post('/topic/{slugTopic}_{ID_topic}.html', 'Application\Controller\InterfaceForumController::newPostAction')
 		->assert('slugTopic', '[\w\-\_\|]+')
 		->assert('ID_topic', '\d+')
 		->bind('forum_topic_post');

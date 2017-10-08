@@ -613,12 +613,13 @@ class Verifications
         {
             $errors[]= "Veuillez remplir le champ Date de début";
         }
-
-        if (!preg_match('#^([0-9]{2}[/]){2}([0-9]){4}$#i',$request->get('end_date')))
-            {
-                $errors[] ='Veuillez rentrer un format de date valide (ex: 01/01/2001)';
-            }
-
+        if(null!=($request->get('end_date')) && !empty($request->get('end_date')))
+        {
+            if (!preg_match('#^([0-9]{2}[/]){2}([0-9]){4}$#i',$request->get('end_date')))
+                {
+                    $errors[] ='Veuillez rentrer un format de date valide (ex: 01/01/2001)';
+                }
+    }
         //verification du champ street name
         if(null!=($request->get('street_name')) && !empty($request->get('street_name')))
         {

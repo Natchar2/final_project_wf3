@@ -61,7 +61,8 @@ if($app['session']->get('total_product_by_id') == null)
 
 if($app['session']->get('token') == null)
 {
-	$string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+   $string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 	$token = "";
 
