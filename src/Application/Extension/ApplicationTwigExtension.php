@@ -7,7 +7,18 @@ class ApplicationTwigExtension extends \Twig_Extension
 {
 	public function getFilters()
 	{
-				return array(
+		return array(
+					
+			new \Twig_Filter('search_construct', function($text)
+			{
+				$text = explode("(&é'(-è_çà)=$^*ù:!;,)", $text);
+
+				$result['content'] = strip_tags($text[0]);
+				$result['category'] = $text[1];
+				$result['url'] = $text[2];
+
+				return $result;
+			}),
 
 			new \Twig_Filter('search_construct', function($text)
 			{

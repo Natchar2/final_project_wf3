@@ -206,35 +206,35 @@ class InterfaceCommerceController
 	public function suiviAction(Application $app, $errors = "")
 	{
 		$token = $app['security.token_storage']->getToken();  
-	
+		
 		//test d'authentification
 		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
 		{
 	  	 	//récupération de l'ID_user
-	    	$user = $token->getUser();
-	    	$idUser = $user->getID_user();
-	    }
-	    else
-	    {
-	    	return $app->redirect('connexion');
-	    }
+			$user = $token->getUser();
+			$idUser = $user->getID_user();
+		}
+		else
+		{
+			return $app->redirect('connexion');
+		}
 
         #format index.php/business/une-formation-innovante-a-lyon_87943512.html
 		$buyers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_buyer=' . $idUser . ' AND users.ID_user=ID_seller ORDER BY order_date DESC')->find_result_set();			
 		$sellers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_seller=' . $idUser . ' AND users.ID_user=ID_buyer ORDER BY order_date DESC')->find_result_set();
-	
+		
 
 		return $app['twig']->render('commerce/suivi.html.twig',[
 			'buyers' => $buyers,
 			'sellers' => $sellers,
 			'errors' => $errors
-	
+			
 		]);
 
 	}
 
-    public function suiviMajAction(Application $app, Request $request, $error = "")
-    {
+	public function suiviMajAction(Application $app, Request $request, $error = "")
+	{
 
 		$ID_order = $request->get('ID_order');
 
@@ -249,14 +249,14 @@ class InterfaceCommerceController
 			if ($request->get('seller_status') == 0)
 			{
 				$update->set(array(
-				 	'seller_status' => 1
+					'seller_status' => 1
 				));
-		        $update->save();
+				$update->save();
 			}
 
 			if ($request->get('seller_status') == 1 or $request->get('seller_status') == 2)
 			{
-	
+				
 				if(null!=($request->get('tracking_number')) && !empty($request->get('tracking_number')))
 				{
 					if (!preg_match('#^[a-z0-9\/ \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_]{3,50}$#i',$request->get('tracking_number')))
@@ -272,11 +272,11 @@ class InterfaceCommerceController
 				if (!isset($errors))
 				{
 					$update->set(array(
-					 	'seller_status' => 2,
-					 	'tracking_number' => $request->get('tracking_number')
+						'seller_status' => 2,
+						'tracking_number' => $request->get('tracking_number')
 					));
-			        $update->save();
-			    }
+					$update->save();
+				}
 			}
 		}
 
@@ -285,9 +285,9 @@ class InterfaceCommerceController
 			if ($request->get('seller_status') == 0)
 			{
 				$update->set(array(
-				 	'buyer_status' => 1
+					'buyer_status' => 1
 				));
-		        $update->save();
+				$update->save();
 			}
 		}
 
@@ -297,12 +297,12 @@ class InterfaceCommerceController
 			$errors = "";
 		}
 
-        $idUser=1;
+		$idUser=1;
 
         #format index.php/business/une-formation-innovante-a-lyon_87943512.html
 		$buyers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_buyer=' . $idUser . ' AND users.ID_user=ID_seller ORDER BY order_date DESC')->find_result_set();			
 		$sellers = $app['idiorm.db']->for_table('orders')->raw_query('SELECT orders.*,users.pseudo FROM orders,users WHERE ID_seller=' . $idUser . ' AND users.ID_user=ID_buyer ORDER BY order_date DESC')->find_result_set();
-	
+		
 
 		return $app['twig']->render('commerce/suivi.html.twig',[
 			'buyers' => $buyers,
@@ -312,7 +312,7 @@ class InterfaceCommerceController
 
 
 
-    }
+	}
 
 	public function addItemAction(Application $app, Request $request)
 
@@ -563,8 +563,8 @@ class InterfaceCommerceController
 				$globalController = new GlobalController();
 				$token = $app['security.token_storage']->getToken();
 
-	    		$user = $token->getUser();    		
-	    		$ID_user = $user->getID_user();
+				$user = $token->getUser();    		
+				$ID_user = $user->getID_user();
 
 				$subject = "Street Connect - [" . $customer->id . "] Demande prise en compte";
 				$from = "postmaster@localhost";
@@ -684,18 +684,18 @@ class InterfaceCommerceController
 	}
 
 
-    public function aboutAction(Application $app)
-    {
-    	return $app['twig']->render('commerce/about.html.twig');
-    }
+	public function aboutAction(Application $app)
+	{
+		return $app['twig']->render('commerce/about.html.twig');
+	}
 
 
-  public function shoppingCardAction(Application $app)
-  {
-      return $app['twig']->render('commerce/shoppingCard.html.twig');
-  }
+	public function shoppingCardAction(Application $app)
+	{
+		return $app['twig']->render('commerce/shoppingCard.html.twig');
+	}
 
-  public function connexionAction(Application $app, Request $request)
+	public function connexionAction(Application $app, Request $request)
 	{
 		return $app['twig']->render('commerce/connexion.html.twig', array(
 			'error' => $app['security.last_error']($request),
@@ -703,262 +703,274 @@ class InterfaceCommerceController
 		));
 
 	}
- 
-//affichage de la page formulair ajout de produit ac les eventuelles données deu produit en cas de modification	
-  public function newAdAction(Application $app, $ID_product){
+
+	//affichage de la page formulaire ajout de produit ac les eventuelles données deu produit en cas de modification	
+	public function newAdAction(Application $app, $ID_product,$token){
+
 
 //recupération du token de session
-  	$token = $app['security.token_storage']->getToken();  
-	
-	//test d'authentification
-  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
-  	 {
-  	 	//récupération de l'ID_user
-    	$user = $token->getUser();
-    	$ID_user = $user->getID_user();
-    	
-	   
-	   if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
-	       {
-	               //appel de base pour afficher les données pour retrouver l'article a modifier
-	           $modification = $app['idiorm.db']->for_table('products')
-	           ->find_one($ID_product);
-	   
-	       }
-	       else
-	       {
-	       	$ID_product = 0;
-	           $modification ='';
-	       }
-	   
-	       return $app['twig']->render('commerce/ajout_produit.html.twig', [
-	           'categories'  => $app['categories'],      
-	           'error'       => [] ,
-	           'errors'      => [],
-	           'modification'=> $modification,
-	           'ID_product'  => $ID_product,
-	       ]);
-   	}
-	else
-	{
-	 	  return $app->redirect('../inscription/erreur');
-	}
-}
+		$token1 = $app['security.token_storage']->getToken();  
+
+			//test d'authentification
+		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+		{
+	  	 	//récupération de l'ID_user
+			$user = $token1->getUser();
+			$ID_user = $user->getID_user();
+
+
+				   if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
+				   { 
+				   	if($app['session']->get('token') == $request->get('token'))
+				   	{
+				               //appel de base pour afficher les données pour retrouver l'article a modifier
+				   		$modification = $app['idiorm.db']->for_table('products')
+				   		->find_one($ID_product);
+
+				   	}
+				   	else
+				   	{
+				   		return $app->redirect('../inscription/erreur');
+				   	}	
+
+				   }
+
+				   else
+				   {
+				   	$ID_product = 0;
+				   	$modification ='';
+				   }
+				   
+				   return $app['twig']->render('commerce/ajout_produit.html.twig', [
+				   	'categories'  => $app['categories'],      
+				   	'error'       => [] ,
+				   	'errors'      => [],
+				   	'modification'=> $modification,
+				   	'ID_product'  => $ID_product,
+				   ]);
+
+				}else
+				{
+					return $app->redirect('../inscription/erreur');
+				}
+			}
 
 
 
 
 
 
-    public function newAdPostAction(Application $app, Request $request)
-    {
+			public function newAdPostAction(Application $app, Request $request)
+			{
     	//gestion du formulaire d'ajout de produit  sur ajout_produit.html
 
-    	$token = $app['security.token_storage']->getToken();
+				$token1 = $app['security.token_storage']->getToken();
 
-  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
-    	
-    		$user = $token->getUser();    		
-    		$ID_user = $user->getID_user();
+				if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
 
-	    	if($app['session']->get('token') == $request->get('token'))
-	    	{
+					$user = $token1->getUser();    		
+					$ID_user = $user->getID_user();
+
+
 	    		        //utilisation de la fonction de vérification dans Model\Vérifications
-		        $Verifications = new Verifications;
+					$Verifications = new Verifications;
 
-		        $verifs =  $Verifications->VerificationNewAd($request, $app);
+					$verifs =  $Verifications->VerificationNewAd($request, $app);
 
 
-		        
+
 		         //Retour des variables de VerificationNewAd
-		        $errors         = $verifs['errors'];
-		        $error          = $verifs['error'];
-		        $finalFileName1 = $verifs['finalFileName1'];
-		        $finalFileName2 = $verifs['finalFileName2'];
-		        $finalFileName3 = $verifs['finalFileName3'];
+					$errors         = $verifs['errors'];
+					$error          = $verifs['error'];
+					$finalFileName1 = $verifs['finalFileName1'];
+					$finalFileName2 = $verifs['finalFileName2'];
+					$finalFileName3 = $verifs['finalFileName3'];
 
-		        $ID_product = $request->get('ID_product');
+					$ID_product = $request->get('ID_product');
 
-		        if(empty($errors) && empty($error)){
-		          
+					if(empty($errors) && empty($error)){
+
 
 
 		                //SI c'est une modification d'article :
-		            if($request->get('ID_product')>0)
-		            {
+						if($request->get('ID_product')>0)
+						{
+							if($app['session']->get('token') == $request->get('token'))
+							{
 
 
-			              $modification = $app['idiorm.db']->for_table('products')
-			              ->find_one($request->get('ID_product'))
-			              ->set(array(
+								$modification = $app['idiorm.db']->for_table('products')
+								->find_one($request->get('ID_product'))
+								->set(array(
 
-			                  'name'             => $request->get('name'),
-			                  'brand'            => $request->get('brand'),
-			                  'price'            => $request->get('price'),
-			                  'description'      => $request->get('description'),
-			                  'image_1'          => $finalFileName1,
-			                  'image_2'          => $finalFileName2,
-			                  'image_3'          => $finalFileName3,
-			                  'ID_category'      => $request->get('category'),
-			                  'shipping_charges' => $request->get('shipping_charges'),
-			              ));
+									'name'             => $request->get('name'),
+									'brand'            => $request->get('brand'),
+									'price'            => $request->get('price'),
+									'description'      => $request->get('description'),
+									'image_1'          => $finalFileName1,
+									'image_2'          => $finalFileName2,
+									'image_3'          => $finalFileName3,
+									'ID_category'      => $request->get('category'),
+									'shipping_charges' => $request->get('shipping_charges'),
+								));
 
 
 
-				            $modification->save();
+								$modification->save();
 
-							$success = "Votre produit a bien été ajouté ";
+								$success = "Votre produit a bien été ajouté ";
 
 							//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
-							$topic = $app['idiorm.db']->for_table('topic')
-							->where($request->get('ID_product'))
-							->find_one()
-							->set(array(
+								$topic = $app['idiorm.db']->for_table('topic')
+								->where($request->get('ID_product'))
+								->find_one()
+								->set(array(
 
-								'title' 	 => $request->get('name'),
-								'ID_category'=> $request->get('category'),
+									'title' 	 => $request->get('name'),
+									'ID_category'=> $request->get('category'),
 
-							));
+								));
 
-							$topic->save();
+								$topic->save();
 								
-			              $success = "Votre produit a bien été modifié et le topic sur le sujet également";
-			          }
-			          else
-			          {
+								$success = "Votre produit a bien été modifié et le topic sur le sujet également";
+
+							}
+							else
+							{
+								return $app->redirect('../inscription/erreur');
+							}
+						}
+						else
+						{
 
 		    				//Connexion à la bdd
-			            $product = $app['idiorm.db']->for_table('products')->create();
+							$product = $app['idiorm.db']->for_table('products')->create();
 
 
 			    				//Affectation des valeurs
-			            $product->name             = $request->get('name');
-			            $product->brand            = $request->get('brand');
-			            $product->price            = $request->get('price');
-			            $product->description      = $request->get('description');
-			            $product->image_1          = $finalFileName1;
-			            $product->image_2          = $finalFileName2;
-			            $product->image_3          = $finalFileName3;
-			            $product->ID_category      = $request->get('category');
-			            $product->creation_date    = strtotime('now');
-			            $product->ID_user		   = $ID_user;
+							$product->name             = $request->get('name');
+							$product->brand            = $request->get('brand');
+							$product->price            = $request->get('price');
+							$product->description      = $request->get('description');
+							$product->image_1          = $finalFileName1;
+							$product->image_2          = $finalFileName2;
+							$product->image_3          = $finalFileName3;
+							$product->ID_category      = $request->get('category');
+							$product->creation_date    = strtotime('now');
+							$product->ID_user		   = $ID_user;
 
 
 		    			//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
-			            if((float)$request->get('shipping_charges') == 0.0)
-			            {
+							if((float)$request->get('shipping_charges') == 0.0)
+							{
 
-			            	$product->shipping_charges = 0.0;
-			            }
-			            else
-			            {
+								$product->shipping_charges = 0.0;
+							}
+							else
+							{
 
-			               $product->shipping_charges  = $request->get('shipping_charges');
-			            }
+								$product->shipping_charges  = $request->get('shipping_charges');
+							}
 
 		    				//ON persiste
-			            $product->save();
-			            $last_insert_id = $product->id();
+							$product->save();
+							$last_insert_id = $product->id();
 
-						$success = "Votre produit a bien été ajouté et un topic a été créer sur le sujet";
+							$success = "Votre produit a bien été ajouté et un topic a été créer sur le sujet";
 
 						//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
-						$topic = $app['idiorm.db']->for_table('topic')->create();
+							$topic = $app['idiorm.db']->for_table('topic')->create();
 
-						$topic->title 	 	  = $request->get('name');
-						$topic->ID_category   = $request->get('category');
-						$topic->ID_product 	  = $last_insert_id;
-						$topic->creation_date = strtotime('now');
-						$topic->ID_user		  = $ID_user;	
+							$topic->title 	 	  = $request->get('name');
+							$topic->ID_category   = $request->get('category');
+							$topic->ID_product 	  = $last_insert_id;
+							$topic->creation_date = strtotime('now');
+							$topic->ID_user		  = $ID_user;	
 
-						$topic->save();
+							$topic->save();
 
-		       }
-		       
-			       return $app['twig']->render('commerce/ajout_produit.html.twig',[
-			        'success'     => $success,
-			        'errors'      => [] ,
-			        'error'       => [] ,
-			        'categories'  => $app['categories'],
-			        'modification'=> '',
-			   		]);
+						}
 
-			    }
-			    else
-			    {
+						return $app['twig']->render('commerce/ajout_produit.html.twig',[
+							'success'     => $success,
+							'errors'      => [] ,
+							'error'       => [] ,
+							'categories'  => $app['categories'],
+							'modification'=> '',
+						]);
+
+					}
+					else
+					{
 			    	if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
 				    {//meme en cas d'erreur
 				            //appel de base pour afficher les données pour retrouver l'article a modifier
-				        $modification = $app['idiorm.db']->for_table('products')
-				        ->find_one($ID_product);
-
-				    }
-				    else
-				    {
-				    	$ID_product = 0;
-				        $modification ='';
-				    }
-				     return $app['twig']->render('commerce/ajout_produit.html.twig',[
-				        'errors'      => $errors,
-				        'error'       => $error,
-				        'categories'  => $app['categories'],
-				        'modification'=> $modification,
-				        'ID_product'  => $request->get('ID_product'),
-
-				    ]);
+				    $modification = $app['idiorm.db']->for_table('products')
+				    ->find_one($ID_product);
 
 				}
+				else
+				{
+					$ID_product = 0;
+					$modification ='';
+				}
+				return $app['twig']->render('commerce/ajout_produit.html.twig',[
+					'errors'      => $errors,
+					'error'       => $error,
+					'categories'  => $app['categories'],
+					'modification'=> $modification,
+					'ID_product'  => $request->get('ID_product'),
 
-	   	 }
-	   	 else
-	   	 {
-	   	 	  return $app->redirect('../inscription/erreur');
-	   	 }
+				]);
+
+			}
+
+
+		}
+		else
+		{
+			return $app->redirect('../inscription/erreur');
+		}
 
 	}
-	else
-   	{
-   	 	  return $app->redirect('../inscription/erreur');
-   	}
-
-    }
 //gestion des produits en ventes par un utlisateur
     public function listProducts(Application $app) //penser a passer l'ID_User ac la sessions
     {
 
     	$token = $app['security.token_storage']->getToken();
 
-  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
-    	
+    	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+
     		$user = $token->getUser();    		
     		$ID_user = $user->getID_user();
 
-	    	 $products = $app['idiorm.db']->for_table('view_products')
+    		$products = $app['idiorm.db']->for_table('view_products')
 	        ->where('ID_user',$ID_user)  //penser a passer l'ID_User ac la sessions
 	        ->find_result_set();
 
 	        return $app['twig']->render('commerce/list_products.html.twig',[
-	            'products' => $products,
+	        	'products' => $products,
 
 	        ]);
-		}
-		else
-	   	{
-	   	 	  return $app->redirect('../inscription/erreur');
-	   	}
-    }
+	    }
+	    else
+	    {
+	    	return $app->redirect('../inscription/erreur');
+	    }
+	}
 
-    public function deleteProduct(Application $app, Request $request)
+	public function deleteProduct(Application $app, Request $request)
     {//supprimer un produit
 
-    	$token = $app['security.token_storage']->getToken();
+    	$token1 = $app['security.token_storage']->getToken();
 
-  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
-    	
-    		$user = $token->getUser();    		
+    	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+
+    		$user = $token1->getUser();    		
     		$ID_user = $user->getID_user();
 
-    		 $products = $app['idiorm.db']->for_table('view_products')
+    		$products = $app['idiorm.db']->for_table('view_products')
 	        ->where('ID_user',$ID_user)//penser a passer l'ID_User ac la sessions
 	        ->find_result_set();
 
@@ -967,466 +979,467 @@ class InterfaceCommerceController
 	        {
 
 	        	$suppression = $app['idiorm.db']->for_table('products')
-	    			->where('ID_product', $request->get('ID_product'))
-	    			->find_one();
+	        	->where('ID_product', $request->get('ID_product'))
+	        	->find_one();
 
 
-				if(!empty($suppression->get('image_1')))
-				{
-					unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_1'));
-				}
+	        	if(!empty($suppression->get('image_1')))
+	        	{
+	        		unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_1'));
+	        	}
 
 
-				if(!empty($suppression->get('image_2')))
-				{
-					unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_2'));
-				}
+	        	if(!empty($suppression->get('image_2')))
+	        	{
+	        		unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_2'));
+	        	}
 
-				if(!empty($suppression->get('image_3')))
-				{
-					unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_3'));
-				}
-				$suppression->delete();
+	        	if(!empty($suppression->get('image_3')))
+	        	{
+	        		unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_3'));
+	        	}
+	        	$suppression->delete();
 
-				$topic = $app['idiorm.db']->for_table('topic')
-	    			->where('ID_product', $request->get('ID_product'))
-	    			->find_one()
-	    			->set(array(
-						'ID_product' => 0,
-					));
+	        	$topic = $app['idiorm.db']->for_table('topic')
+	        	->where('ID_product', $request->get('ID_product'))
+	        	->find_one()
+	        	->set(array(
+	        		'ID_product' => 0,
+	        	));
 
-	            $success = 'Le produit a été supprimé de la liste';
+	        	$success = 'Le produit a été supprimé de la liste';
 	        }
 	        else
 	        {
-	           $success = 'Vous ne pouvez supprimé un élément sans être connecté';
-	           
+	        	$success = 'Vous ne pouvez supprimé un élément sans être connecté';
+
 	        }
 
-            return $app['twig']->render('commerce/list_products.html.twig',[
-                'success'=>$success,
-                'products'=>$products
-            ]);
-		}
-		else
-	   	{
-	   	 	return $app->redirect('../inscription/erreur');
-	   	}
-       
+	        return $app['twig']->render('commerce/list_products.html.twig',[
+	        	'success'=>$success,
+	        	'products'=>$products
+	        ]);
+	    }
+	    else
+	    {
+	    	return $app->redirect('../inscription/erreur');
+	    }
+
 	}  
+
 
 
 	public function inscriptionPostAction(Application $app, Request $request, $url_error) {
 
         # Création du Formulaire permettant l'ajout d'un User
         # use Symfony\Component\Form\Extension\Core\Type\FormType;
-        $form = $app['form.factory']->createBuilder(FormType::class)
-        
-        ->add('name', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un nom')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		$form = $app['form.factory']->createBuilder(FormType::class)
+		
+		->add('name', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un nom')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('surname', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un prénom')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('surname', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un prénom')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('pseudo', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un pseudo')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('pseudo', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un pseudo')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('street', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir une adresse')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('street', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir une adresse')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('zip_code', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un code postal')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('zip_code', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un code postal')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('city', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir une ville')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('city', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir une ville')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('email', TextType::class, [
-            'constraints' => new Assert\Email(),
-            'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com')
-        ])
-        
-        ->add('phone', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un numéro de téléphone')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('email', TextType::class, [
+			'constraints' => new Assert\Email(),
+			'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com')
+		])
+		
+		->add('phone', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un numéro de téléphone')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('society_name', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un nom de société')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('society_name', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un nom de société')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('avatar', FileType::class, [
-            
-            'required'      => false,
-            'label'         => false,
-            'attr'          => [
-                'class' => 'dropify'
-            ]                
-        ])
+		->add('avatar', FileType::class, [
+			
+			'required'      => false,
+			'label'         => false,
+			'attr'          => [
+				'class' => 'dropify'
+			]                
+		])
 
-        ->add('password', PasswordType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un mot de passe')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('password', PasswordType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un mot de passe')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('passwordVerif', PasswordType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un mot de passe')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
-        
+		->add('passwordVerif', PasswordType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un mot de passe')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
+		
 
-        ->add('submit', SubmitType::class, ['label' => 'Publier'])
-        
-        ->getForm();
-        
+		->add('submit', SubmitType::class, ['label' => 'Publier'])
+		
+		->getForm();
+		
         # Traitement des données POST
-        $form->handleRequest($request);
-        
+		$form->handleRequest($request);
+		
         # Vérifier si le Formulaire est valid
-        if($form->isValid()) :
-            
+		if($form->isValid()) :
+			
             # Récupération des données du Formulaire
-            $inscription = $form->getData();
+			$inscription = $form->getData();
 
 			if($inscription['password'] != $inscription['passwordVerif'])
 			{
 				$error = "Les mots de passe ne sont pas identiques";
 				return $app['twig']->render('commerce/inscription.html.twig', [
-            'form' => $form->createView(),
-            'error'=> $error
-        		]);
+					'form' => $form->createView(),
+					'error'=> $error
+				]);
 			}
 			else{
 				# Récupération de l'image
-            if(!empty($inscription['avatar'])){
+				if(!empty($inscription['avatar'])){
 
-            $image = $inscription['avatar'];
-            $newname = $this->createFileName(10);
+					$image = $inscription['avatar'];
+					$newname = $this->createFileName(10);
 
-            $chemin = PUBLIC_ROOT.'/assets/images/avatar/';
-            $image->move($chemin, $newname.'.jpg');
+					$chemin = PUBLIC_ROOT.'/assets/images/avatar/';
+					$image->move($chemin, $newname.'.jpg');
 
-        	}
+				}
 
             # Insertion en BDD
-            $inscriptionDb = $app['idiorm.db']->for_table('users')->create();
-            
+				$inscriptionDb = $app['idiorm.db']->for_table('users')->create();
+				
             #On associe les colonnes de notre BDD avec les valeurs du Formulaire
             #Colonne mySQL                         #Valeurs du Formulaire
-            $inscriptionDb->name            =   $inscription['name'];
-            $inscriptionDb->surname         =   $inscription['surname'];
-            $inscriptionDb->pseudo          =   $inscription['pseudo'];
-            $inscriptionDb->street          =   $inscription['street'];
-            $inscriptionDb->zip_code        =   $inscription['zip_code'];
-            $inscriptionDb->city            =   $inscription['city'];
-            $inscriptionDb->mail            =   $inscription['email'];
-            $inscriptionDb->phone           =   $inscription['phone'];
-            $inscriptionDb->society_name    =   $inscription['society_name'];
-            if(!empty($inscription['avatar']))
-            $inscriptionDb->avatar          =	$newname.'.jpg';   
-            $inscriptionDb->password 		= 	$app['security.encoder.digest']->encodePassword($inscription['password'], '');
-            $inscriptionDb->creation_date	=	strtotime("now");
-            
+				$inscriptionDb->name            =   $inscription['name'];
+				$inscriptionDb->surname         =   $inscription['surname'];
+				$inscriptionDb->pseudo          =   $inscription['pseudo'];
+				$inscriptionDb->street          =   $inscription['street'];
+				$inscriptionDb->zip_code        =   $inscription['zip_code'];
+				$inscriptionDb->city            =   $inscription['city'];
+				$inscriptionDb->mail            =   $inscription['email'];
+				$inscriptionDb->phone           =   $inscription['phone'];
+				$inscriptionDb->society_name    =   $inscription['society_name'];
+				if(!empty($inscription['avatar']))
+					$inscriptionDb->avatar          =	$newname.'.jpg';   
+				$inscriptionDb->password 		= 	$app['security.encoder.digest']->encodePassword($inscription['password'], '');
+				$inscriptionDb->creation_date	=	strtotime("now");
+				
             # Insertion en BDD
-            $inscriptionDb->save();
-            
+				$inscriptionDb->save();
+				
             # Redirection
-            return $app->redirect( $app['url_generator'] ->generate('connexion', [ 
+				return $app->redirect( $app['url_generator'] ->generate('connexion', [ 
 
-            ]));
+				]));
 			}
-		
-		
-            
-        
-        endif;
+			
+			
+			
+			
+		endif;
 
-        if($url_error == 'erreur')
-        {
-        	
-        	$url_error =  " Vous devez être connecté pour pouvoir accéder à cette page " ; 
+		if($url_error == 'erreur')
+		{
+			
+			$url_error =  " Vous devez être connecté pour pouvoir accéder à cette page " ; 
 
-        	$error = $url_error;
+			$error = $url_error;
         	 # Affichage du Formulaire dans la Vue
-        	return $app['twig']->render('commerce/inscription.html.twig', [
-        		'form' => $form->createView(),
-        		'error'=> $error
-        	]);
-        }else
-        {	
-        	$url_error =  "" ; 
+			return $app['twig']->render('commerce/inscription.html.twig', [
+				'form' => $form->createView(),
+				'error'=> $error
+			]);
+		}else
+		{	
+			$url_error =  "" ; 
 
-        	$error = $url_error;
+			$error = $url_error;
 
         	 # Affichage du Formulaire dans la Vue
-	        return $app['twig']->render('commerce/inscription.html.twig', [
-	        	'form' => $form->createView(),
-	        	'error'=> $error
-	        ]);
-        }
-    }
+			return $app['twig']->render('commerce/inscription.html.twig', [
+				'form' => $form->createView(),
+				'error'=> $error
+			]);
+		}
+	}
 
-    public function setProfil(Application $app, $token_user)
-    {
-    	$token = $app['security.token_storage']->getToken();
-    	if($token_user != $app['session']->get('token'))
-    	{
-    		$app->redirect('403');
-    	}
+	public function setProfil(Application $app, $token_user)
+	{
+		$token = $app['security.token_storage']->getToken();
+		if($token_user != $app['session']->get('token'))
+		{
+			$app->redirect('403');
+		}
 
-  		if($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
-  		{
-    	
-    		$user = $token->get_user();    		
-    		$ID_user = $user->getID_user();
-    	}
-    	else
-    	{
-    		$app->redirect('connexion');
-    	}
+		if($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+		{
+			
+			$user = $token->get_user();    		
+			$ID_user = $user->getID_user();
+		}
+		else
+		{
+			$app->redirect('connexion');
+		}
 
-    	$user = $app['idiorm.db']->for_table('users')->where('ID_user', $ID_user);
+		$user = $app['idiorm.db']->for_table('users')->where('ID_user', $ID_user);
 
-    	$form = $app['form.factory']->createBuilder(FormType::class)
-        
-        ->add('name', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un nom')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-                'value' => $user->name,
-            )                
-        ])
+		$form = $app['form.factory']->createBuilder(FormType::class)
+		
+		->add('name', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un nom')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+				'value' => $user->name,
+			)                
+		])
 
-        ->add('surname', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un prénom')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-                'value' => $user->surname,
-            )               
-        ])
+		->add('surname', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un prénom')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+				'value' => $user->surname,
+			)               
+		])
 
-        ->add('pseudo', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un pseudo')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-                'value' => $user->pseudo,
-            )                
-        ])
+		->add('pseudo', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un pseudo')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+				'value' => $user->pseudo,
+			)                
+		])
 
-        ->add('street', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir une adresse')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-                'value' => $user->street,
-            )                
-        ])
+		->add('street', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir une adresse')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+				'value' => $user->street,
+			)                
+		])
 
-        ->add('zip_code', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un code postal')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-                'value' => $user->zip_code,
-            )                
-        ])
+		->add('zip_code', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un code postal')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+				'value' => $user->zip_code,
+			)                
+		])
 
-        ->add('city', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir une ville')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-                'value' => $user->city,
-            )                
-        ])
+		->add('city', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir une ville')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+				'value' => $user->city,
+			)                
+		])
 
-        ->add('email', TextType::class, [
-            'constraints' => new Assert\Email(),
-            'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com')
-        ])
-        
-        ->add('phone', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un numéro de téléphone')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-                'value' => $user->phone,
-            )                
-        ])
+		->add('email', TextType::class, [
+			'constraints' => new Assert\Email(),
+			'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com')
+		])
+		
+		->add('phone', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un numéro de téléphone')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+				'value' => $user->phone,
+			)                
+		])
 
-        ->add('society_name', TextType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un nom de société')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-                'value' => $user->society_name,
-            )                
-        ])
+		->add('society_name', TextType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un nom de société')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+				'value' => $user->society_name,
+			)                
+		])
 
-        ->add('avatar', FileType::class, [
-            'required'      => false,
-            'label'         => false,
-            'attr'          => [
-                'class' => 'dropify',
-            ]
-        ])
+		->add('avatar', FileType::class, [
+			'required'      => false,
+			'label'         => false,
+			'attr'          => [
+				'class' => 'dropify',
+			]
+		])
 
-        ->add('password', PasswordType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir votre mot de passe')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
+		->add('password', PasswordType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir votre mot de passe')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
 
-        ->add('passwordVerif', PasswordType::class, [
-            'required'      => true,
-            'label'         => false,
-            'constraints'   => array(new NotBlank(
-                    array('message'=>'Vous devez saisir un mot de passe')
-                )
-            ),
-            'attr'          => array(
-                'class'         => 'form-control',
-            )                
-        ])
-        
+		->add('passwordVerif', PasswordType::class, [
+			'required'      => true,
+			'label'         => false,
+			'constraints'   => array(new NotBlank(
+				array('message'=>'Vous devez saisir un mot de passe')
+			)
+		),
+			'attr'          => array(
+				'class'         => 'form-control',
+			)                
+		])
+		
 
-        ->add('submit', SubmitType::class, ['label' => 'Modifier'])
-        
-        ->getForm();
+		->add('submit', SubmitType::class, ['label' => 'Modifier'])
+		
+		->getForm();
 
          # Traitement des données POST
-        $form->handleRequest($request);
-        
+		$form->handleRequest($request);
+		
         # Vérifier si le Formulaire est valid
-        if($form->isValid())
-        {   
+		if($form->isValid())
+		{   
             # Récupération des données du Formulaire
-            $infosProfil = $form->getData();
+			$infosProfil = $form->getData();
 
-            $infosProfil['password'] = $app['security.encoder.digest']->encodePassword($infosProfil['password'], '');
+			$infosProfil['password'] = $app['security.encoder.digest']->encodePassword($infosProfil['password'], '');
 
 			if($infosProfil['password'] != $token->get_user()->getPassword())
 			{
@@ -1434,48 +1447,47 @@ class InterfaceCommerceController
 			}
 			else{
 				# Récupération de l'image
-            if(!empty($infosProfil['avatar']))
-            {
-            	$image = $infosProfil['avatar'];
-            	$newname = $this->createFileName(10);
+				if(!empty($infosProfil['avatar']))
+				{
+					$image = $infosProfil['avatar'];
+					$newname = $this->createFileName(10);
 
-            	$chemin = PUBLIC_ROOT.'/assets/images/avatar/';
-            	$image->move($chemin, $newname.'.jpg');
-        	}
+					$chemin = PUBLIC_ROOT.'/assets/images/avatar/';
+					$image->move($chemin, $newname.'.jpg');
+				}
 
             # Insertion en BDD
-            $infosProfilDb = $app['idiorm.db']->for_table('users')->create();
-            
+				$infosProfilDb = $app['idiorm.db']->for_table('users')->create();
+				
             #On associe les colonnes de notre BDD avec les valeurs du Formulaire
             #Colonne mySQL                         #Valeurs du Formulaire
-            $infosProfilDb->name            =   $infosProfil['name'];
-            $infosProfilDb->surname         =   $infosProfil['surname'];
-            $infosProfilDb->pseudo          =   $infosProfil['pseudo'];
-            $infosProfilDb->street          =   $infosProfil['street'];
-            $infosProfilDb->zip_code        =   $infosProfil['zip_code'];
-            $infosProfilDb->city            =   $infosProfil['city'];
-            $infosProfilDb->mail            =   $infosProfil['email'];
-            $infosProfilDb->phone           =   $infosProfil['phone'];
-            $infosProfilDb->society_name    =   $infosProfil['society_name'];
-            if(!empty($infosProfil['avatar'])) $infosProfilDb->avatar =	$newname.'.jpg';
-            
+				$infosProfilDb->name            =   $infosProfil['name'];
+				$infosProfilDb->surname         =   $infosProfil['surname'];
+				$infosProfilDb->pseudo          =   $infosProfil['pseudo'];
+				$infosProfilDb->street          =   $infosProfil['street'];
+				$infosProfilDb->zip_code        =   $infosProfil['zip_code'];
+				$infosProfilDb->city            =   $infosProfil['city'];
+				$infosProfilDb->mail            =   $infosProfil['email'];
+				$infosProfilDb->phone           =   $infosProfil['phone'];
+				$infosProfilDb->society_name    =   $infosProfil['society_name'];
+				if(!empty($infosProfil['avatar'])) $infosProfilDb->avatar =	$newname.'.jpg';
+				
             # Insertion en BDD
-            $infosProfilDb->save();
-            
+				$infosProfilDb->save();
+				
             # Redirection
-            return $app->redirect('profil/success_modification');
-        }
+				return $app->redirect('profil/success_modification');
+			}
 
     	 # Affichage du Formulaire dans la Vue
-        return $app['twig']->render('commerce/profil_modification.html.twig', [
-        	'form' => $form->createView(),
-        	'error'=> $error
-        ]);
-    }
-}
+			return $app['twig']->render('commerce/profil_modification.html.twig', [
+				'form' => $form->createView(),
+				'error'=> $error
+			]);
+		}
+	}
 
-
-// ----------------------- recherche -------------------------------------
+	// ----------------------- recherche -------------------------------------
 
 	public function searchAction(Application $app, Request $request)
 	{
@@ -1666,21 +1678,21 @@ class InterfaceCommerceController
 		switch ($table)
 		{
 			case 'event':
-				$url .= "Evénement";
-				break;
+			$url .= "Evénement";
+			break;
 			case 'post':
-				$url .= "Post";
-				break;
+			$url .= "Post";
+			break;
 			case 'topic':
-				$url .= "Topic";
-				break;
+			$url .= "Topic";
+			break;
 			case 'products':
-				$product = $app['idiorm.db']->for_table('category')->where('ID_category', $args->ID_category)->find_result_set();
-				$url .= 'Shop - ' . $category_name;
-				break;
+			$product = $app['idiorm.db']->for_table('category')->where('ID_category', $args->ID_category)->find_result_set();
+			$url .= 'Shop - ' . $category_name;
+			break;
 			default:
-				'titre non trouvé';
-				break;
+			'titre non trouvé';
+			break;
 		}
 		// CONSTRUCTION DU LIEN
 		$url .= $separate_string;
@@ -1688,24 +1700,24 @@ class InterfaceCommerceController
 		switch($table)
 		{
 			case 'event':
-				$url .= $this->getRacineSite() . "agenda/all/" . $this->generateSlug($args->event_title) . "_" . $args->ID_event . ".html";
-				break;
+			$url .= $this->getRacineSite() . "agenda/all/" . $this->generateSlug($args->event_title) . "_" . $args->ID_event . ".html";
+			break;
 			case 'post':
-				$topic = $app['idiorm.db']->for_table('topic')->where('ID_topic', $args->ID_topic)->find_result_set();
-				if(isset($topic->ID_topic))
-				{
-					$url .= $this->getRacineSite() . "forum/topic/" . $this->generateSlug($topic->title) . "_" . $topic->ID_topic . ".html";
-				}
-				break;
+			$topic = $app['idiorm.db']->for_table('topic')->where('ID_topic', $args->ID_topic)->find_result_set();
+			if(isset($topic->ID_topic))
+			{
+				$url .= $this->getRacineSite() . "forum/topic/" . $this->generateSlug($topic->title) . "_" . $topic->ID_topic . ".html";
+			}
+			break;
 			case 'topic':
-				$url .= $this->getRacineSite() . "forum/topic/" . $this->generateSlug($args->title) . "_" . $args->ID_topic . ".html";
-				break;
+			$url .= $this->getRacineSite() . "forum/topic/" . $this->generateSlug($args->title) . "_" . $args->ID_topic . ".html";
+			break;
 			case 'products':
-				$url .= $this->getRacineSite() . "all/" . $this->generateSlug($args->name) . "_" . $args->ID_product . ".html";
-				break;
+			$url .= $this->getRacineSite() . "all/" . $this->generateSlug($args->name) . "_" . $args->ID_product . ".html";
+			break;
 			default:
-				'lien non crée';
-				break;
+			'lien non crée';
+			break;
 		}
 		$url .= '">Voir ce résultat</a>';
 
@@ -1753,6 +1765,37 @@ class InterfaceCommerceController
 		}
 		return $tmp_text;
 	}
-}
 
+	public function profilAction(Application $app, $ID_user, $success_modification)
+	{
+		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+		{
+			$userProfil = $app['idiorm.db']->for_table('users')
+			->find_one($ID_user);
+
+			$topic = $app['idiorm.db']->for_table('topic')
+			->where('ID_user',$ID_user)
+			->order_by_desc('creation_date')
+			->limit(1)
+			->find_one();
+
+			$event = $app['idiorm.db']->for_table('event')
+			->where('ID_user',$ID_user)
+			->order_by_desc('creation_date')
+			->limit(1)
+			->find_one();
+
+			return $app['twig']->render('commerce/profil.html.twig',
+				['userProfil'			=>$userProfil,
+				'success_modification'	=>$success_modification,
+				'topic'					=>$topic,
+				'event'					=>$event
+			]);			
+		}
+		else
+		{
+			return $app->redirect('inscription');
+		}
+	}
+}
 ?>

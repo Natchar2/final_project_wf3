@@ -11,3 +11,7 @@ body {
 	margin-bottom: 20px;
 	color: RGBA(230, 230, 230, 1.00);
 }
+
+.modif{
+	color: gold !important;
+}

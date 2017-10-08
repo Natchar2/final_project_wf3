@@ -22,6 +22,12 @@ a.list-group-item, button.list-group-item {
   font-family: 'Monoton', cursive;
 }
 
+/*Button*/
+a.btn.btn-primary.pull-right{
+  background: RGBA(39, 40, 34, 1.00);
+  padding: 2px;
+}
+
 /* FOOTER
 -------------------------------------------------- */
 

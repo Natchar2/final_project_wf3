@@ -1,28 +1,31 @@
 {% extends 'defaultLayout.html.twig' %}
 
 {% block contenu %}
-<h1>searchresults motherfucker !</h1>
+	<div class="container result">
 
-<h2>{{ nbResultats }} résultat{% if nbResultats > 1 %}s{% endif %} pour <b>"{{ searchText }}"</b></h2>
+		<div class="row">
 
-{% for result in results %}
-	<p>{{ result | search_construct['category'] }}</p>
-	<p>{{ result | search_construct['content'] }}</p>
-	<p>{{ result | search_construct['url'] | balise }}</p>
-{% endfor %}
+			<div class="col-xs-12">
 
+				<h1>Résultats</h1>
 
+				<hr>
 
+				<h3>{{ nbResultats }} résultat{% if nbResultats > 1 %}s{% endif %} pour <span>"{{ searchText }}"</span></h3>
 
+				<br>
 
+				{% for result in results %}
+					<h4>{{ result | search_construct['category'] }}</h4>
+					<p>{{ result | search_construct['content'] }}</p>
+					<p>{{ result | search_construct['url'] | balise }}</p>
+				{% endfor %}
 
+			</div>
 
+		</div>
 
-
-
-
-
-
+	</div>
 
 {% endblock %}
 

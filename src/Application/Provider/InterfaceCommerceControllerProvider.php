@@ -114,12 +114,18 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
 		->bind('item');
 
-
-
-		$controllers
+		/*$controllers
 		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
 		->assert('ID_product', '\d+')
 		->value('ID_product', '0')
+		->bind('view_newAd');
+*/
+		$controllers
+		->get('/produit/ajouter/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::newAdAction')
+		->assert('ID_product', '\d+')
+		->value('ID_product', '0')
+		->assert('token', '\w+')
+		->value('token', '0')
 		->bind('view_newAd');
 
 		$controllers
@@ -127,8 +133,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->assert('ID_product', '\d+')
 		->value('ID_product', '0')
 		->bind('newAd');
-
-
 
 		$controllers
 		->get('/contact', 'Application\Controller\GlobalController::contactAction')
@@ -147,7 +151,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('listProducts');
 
 		$controllers
-		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
+		->get('/produit/liste', 'Application\Controller\InterfaceCommerceController::deleteProduct')
 		->assert('ID_product', '\d+')
 		->bind('deleteProduct');
 
@@ -172,7 +176,11 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-		->get('/profil', 'Application\Controller\InterfaceCommerceController::ProfilAction')
+		->get('/profil/{ID_user}/{success_modification}', 'Application\Controller\InterfaceCommerceController::ProfilAction')
+		->assert('ID_user','\d+')
+		->value('ID_user','0')
+		->assert('success_modification','success_modification')
+		->value('success_modification','0')
 		->bind('profil');
 
 		$controllers
@@ -198,8 +206,11 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->post('/search', 'Application\Controller\InterfaceCommerceController::searchAction')
 		->bind('search');
 
-
-
+		$controllers
+		->get('/modification_profil-{token}', 'Application\Controller\InterfaceCommerceController::setProfilAction')
+		->assert('token','\w+')
+		->value('token','0')
+		->bind('set_profil');
 
 
 

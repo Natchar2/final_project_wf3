@@ -28,7 +28,7 @@ a.list-group-item, button.list-group-item {
 -------------------------------------------------- */
 
 footer{
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
   text-align: center;
   padding-top: 30px;
   padding-bottom: 10px;

@@ -91,7 +91,7 @@ class InterfaceForumController
 	{
 		if($ID_topic>0)
   	  	{
-            //appel de base pour afficher les données pour retrouver l'topic a modifier
+            //appel de base pour afficher les données pour retrouver le topic a modifier
 			$topics = $app['idiorm.db']->for_table('view_topics')
 			->where('ID_topic', $ID_topic)
 			->find_one();
@@ -148,14 +148,14 @@ class InterfaceForumController
 
 		//gestion du formulaire d'ajout de produit  sur add_event.html
 
-    	$token = $app['security.token_storage']->getToken();  
+    	$token1 = $app['security.token_storage']->getToken();  
 		
 		//test d'authentification
 	  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
 	  	 {
 
 	  	 	//récupération de l'ID_user
-	    	$user = $token->getUser();
+	    	$user = $token1->getUser();
 	    	$ID_user = $user->getID_user();
 
     		if($app['session']->get('token') == $request->get('token'))
@@ -273,7 +273,8 @@ class InterfaceForumController
 		
 		//test d'authentification
 	  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
-	  	 {
+	  	 {	
+	  	 	$errors = [] ;
 
 	  	 	//récupération de l'ID_user
 	    	$user = $token->getUser();
@@ -290,12 +291,12 @@ class InterfaceForumController
 		        $errors = $verifs['errors'];
 
 		        		//Connexion à la bdd
-		            $topic = $app['idiorm.db']->for_table('topics')->create();
+		            $topic = $app['idiorm.db']->for_table('topic')->create();
 
 
 		    				//Affectation des valeurs
 		            $topic->title            = $request->get('title');
-		            $topic->ID_category      = $request->get('ID_category');
+		            $topic->ID_category      = $request->get('category');
 		 			$topic->creation_date    = strtotime('now');
 		 			$topic->ID_user			 = $ID_user;
 		 			
@@ -306,7 +307,8 @@ class InterfaceForumController
 
 				return $app['twig']->render('forum/new_topic.html.twig',[
 			        'errors'    => $errors,
-			        'categories'=> $app['categories']
+			        'categories'=> $app['categories'],
+			        'success'   => $success
 	        		   ]);
 	        
 	   		}
@@ -347,7 +349,7 @@ class InterfaceForumController
 		}
 		else
 	   	{
-	   	 	  return $app->redirect('../inscription/erreur');
+	   	 	  return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
 	   	}
     
 
@@ -357,54 +359,60 @@ class InterfaceForumController
     public function deleteTopic(Application $app, Request $request)
     {//supprimer un produit
 
-    	$token = $app['security.token_storage']->getToken();
 
-  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
-    	
-    		$user = $token->getUser();    		
-    		$ID_user = $user->getID_user();
+	    	$token1 = $app['security.token_storage']->getToken();
 
-    		 $topic = $app['idiorm.db']->for_table('view_topics')
-	        ->where('ID_user',$ID_user)//penser a passer l'ID_User ac la sessions
-	        ->find_result_set();
+	  		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+	    	
+	    		$user = $token1->getUser();    		
+	    		$ID_user = $user->getID_user();
 
-
-	        if($request->get('token') == $app['session']->get('token'))
-	        {
-
-	        	$suppression = $app['idiorm.db']->for_table('topic')
-	    			->where('ID_topic', $request->get('ID_topic'))
-	    			->find_one();
-
-				$suppression->delete();
-
-				
-	            $success = 'Le topic a été supprimé de la liste';
+	    		 $topic = $app['idiorm.db']->for_table('view_topics')
+		        ->where('ID_user',$ID_user)//penser a passer l'ID_User ac la sessions
+		        ->find_result_set();
 
 
-	           
-	        }
-	        else
-	        {
-	           $success = 'Vous ne pouvez supprimé un élément sans être connecté';
-	           
-	        }
+		        if($request->get('token') == $app['session']->get('token'))
+		        {
 
-	         return $app['twig']->render('forum/list_topic.html.twig',[
-	                'success'=>$success,
-	                'topics'=>$topics
-	            ]);
+		        	$suppression = $app['idiorm.db']->for_table('topic')
+		    			->where('ID_topic', $request->get('ID_topic'))
+		    			->find_one();
 
-		
-		}
-		else
-	   	{
-	   	 	
-		    return $app->redirect('../inscription/erreur');
+					$suppression->delete();
 
-	   	}
-       
-	}  
+					
+		            $success = 'Le topic a été supprimé de la liste';
 
+		             $topics = $app['idiorm.db']->for_table('view_topics')
+			        ->where('ID_user',$ID_user)  
+			        ->find_result_set();
+
+
+		           
+		        }
+		        else
+		        {
+		           $success = 'Vous ne pouvez supprimé un élément sans être connecté';
+		           
+		        }
+
+		         return $app['twig']->render('forum/list_topic.html.twig',[
+		                'success'=>$success,
+		                'topic'=>$topic,
+		                'topics'=>$topics
+		            ]);
+
+			
+			}
+			else
+		   	{
+		   	 	
+			    return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+
+		   	}
+            
+
+	}
 }
  ?>
