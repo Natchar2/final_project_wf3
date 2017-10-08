@@ -117,61 +117,72 @@ class InterfaceAgendaController
 		
 	}
 
-	public function addEventAction(Application $app, $ID_event)
+	public function addEventAction(Application $app, $ID_event,$token)
 	{
+	
 
 			//recupération du token de session
-	  	$token = $app['security.token_storage']->getToken();  
+	  	$token1 = $app['security.token_storage']->getToken();  
 		
 		//test d'authentification
 	  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
 	  	 {
-	  	 	//récupération de l'ID_user
-	    	$user = $token->getUser();
-	    	$ID_user = $user->getID_user();
 
-			if($ID_event>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
-				{
-				        //appel de base pour afficher les données pour retrouver l'article a modifier
-				    $modification = $app['idiorm.db']->for_table('event')
-				    ->find_one($ID_event);
+	  	 	
+	    			  	 	//récupération de l'ID_user
+		    	$user = $token1->getUser();
+		    	$ID_user = $user->getID_user();
 
-				}
-				else
-				{
-					$ID_event = 0;
-				    $modification ='';
-				}
+				if($ID_event>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
+					{
+					     if($app['session']->get('token') == $token)
+						{    
+						//appel de base pour afficher les données pour retrouver l'article a modifier
+						    $modification = $app['idiorm.db']->for_table('event')
+						    ->find_one($ID_event);
 
-				return $app['twig']->render('agenda/add_event.html.twig', [
-				    'categories'  => $app['categories'],      
-				    'error'       => [] ,
-				    'errors'      => [],
-				    'modification'=> $modification,
-				    'ID_event'    => $ID_event,
-				]);
+					   	}else
+						{
+							return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+						}
 
-		}
-		else
-		{
-		 	  return $app->redirect('inscription/erreur');
-		}
+					}
+					else
+					{
+						$ID_event = 0;
+					    $modification ='';
+					}
+
+					return $app['twig']->render('agenda/add_event.html.twig', [
+					    'categories'  => $app['categories'],      
+					    'error'       => [] ,
+					    'errors'      => [],
+					    'modification'=> $modification,
+					    'ID_event'    => $ID_event,
+					]);
+
+			}
+			else
+			{
+			 	  return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+			}
+		
 
 		
 	}
 
-//ajout d'evenement  et modification ac la création automatique d'un topic
+//ajout d'evenement  et modification ac la création automatique d'un evenement
 	public function agendaAddEventPostAction(Application $app, Request $request)
     {
     	
     		//recupération du token de session
-	  	$token = $app['security.token_storage']->getToken();  
+	  	$token1 = $app['security.token_storage']->getToken();  
 		
 		//test d'authentification
 	  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
 	  	{
 	  	 	//récupération de l'ID_user
-	    	$user = $token->getUser();
+	    	$user = $token1->getUser();
 	    	$ID_user = $user->getID_user();
 
 				//gestion du formulaire d'ajout de produit  sur add_event.html
@@ -328,13 +339,13 @@ class InterfaceAgendaController
 				}
 				else
 				{
-					return $app->redirect('inscription/erreur');
+					return $app->redirect('final_project_wf3/web/inscription/erreur');
 					
 				}
 		}
 		else
 		{
-			return $app->redirect('inscription/erreur');
+			return $app->redirect('final_project_wf3/web/inscription/erreur');
 			
 		} 
 
@@ -368,7 +379,7 @@ class InterfaceAgendaController
 		}
 	   	 else
 		{
-		return $app->redirect('inscription/erreur');
+		return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
 
 		} 	
     
@@ -377,72 +388,81 @@ class InterfaceAgendaController
     public function deleteEvent(Application $app, Request $request)
     {//supprimer un produit
 
-    		//recupération du token de session
-	  	$token = $app['security.token_storage']->getToken();  
-		
-		//test d'authentification
-	  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
-	  	 {
-	  	 	//récupération de l'ID_user
-	    	$user = $token->getUser();
-	    	$ID_user = $user->getID_user();
+    	  if($app['session']->get('token') == $request->get('token'))
+	    	{
 
-			$events = $app['idiorm.db']->for_table('view_events')
-	        ->where('ID_user', $ID_user)//penser a passer l'ID_User ac la sessions
-	        ->find_result_set();
+	    		//recupération du token de session
+		  	$token = $app['security.token_storage']->getToken();  
+			
+			//test d'authentification
+		  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+		  	 {
+		  	 	//récupération de l'ID_user
+		    	$user = $token->getUser();
+		    	$ID_user = $user->getID_user();
 
-
-	        if($request->get('token') == $app['session']->get('token'))
-	        {
-
-	        	$suppression = $app['idiorm.db']->for_table('event')
-	    			->where('ID_event', $request->get('ID_event'))
-	    			->find_one();
+				$events = $app['idiorm.db']->for_table('view_events')
+		        ->where('ID_user', $ID_user)//penser a passer l'ID_User ac la sessions
+		        ->find_result_set();
 
 
-				if(!empty($suppression->get('image')))
-				{
-					unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image'));
-				}
+		        if($request->get('token') == $app['session']->get('token'))
+		        {
 
-				$suppression->delete();
-
-				$topic = $app['idiorm.db']->for_table('topic')
-	    			->where('ID_event', $request->get('ID_event'))
-	    			->find_one()
-	    			->set(array(
-						'ID_event' => 0,
-					));
-
-	            $success = 'L\'événement a été supprimé de la liste';
+		        	$suppression = $app['idiorm.db']->for_table('event')
+		    			->where('ID_event', $request->get('ID_event'))
+		    			->find_one();
 
 
-	           
-	        }
-	        else
-	        {
-	           $success = 'Vous ne pouvez supprimé un événement sans être connecté';
-	           
-	        }
+					if(!empty($suppression->get('image')))
+					{
+						unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image'));
+					}
 
-	         return $app['twig']->render('agenda/list_events.html.twig',[
-	                'success'=>$success,
-	                'events'=>$events
-	            ]);
+					$suppression->delete();
+
+					$topic = $app['idiorm.db']->for_table('topic')
+		    			->where('ID_event', $request->get('ID_event'))
+		    			->find_one()
+		    			->set(array(
+							'ID_event' => null,
+						));
+
+		            $success = 'L\'événement a été supprimé de la liste';
+
+
+		           
+		        }
+		        else
+		        {
+		           $success = 'Vous ne pouvez supprimé un événement sans être connecté';
+		           
+		        }
+
+		         return $app['twig']->render('agenda/list_events.html.twig',[
+		                'success'=>$success,
+		                'events'=>$events
+		            ]);
+
+				
+			}
+
 
 			
-		}
+		   	 else
+		   	 {
+				return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+		   	 	
+		   	 } 	
 
 
-		
-	   	 else
-	   	 {
-			return $app->redirect('inscription/erreur');
-	   	 	
-	   	 } 	
+     }
+     else
+     	 {
+     	 	return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+     	 }
 
-
-     }  
+    }
 
 
 }

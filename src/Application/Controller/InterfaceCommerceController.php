@@ -683,44 +683,54 @@ public function createCustomerAction(Application $app, Request $request)
 
 	}
  
-//affichage de la page formulair ajout de produit ac les eventuelles données deu produit en cas de modification	
-  public function newAdAction(Application $app, $ID_product){
-
-//recupération du token de session
-  	$token = $app['security.token_storage']->getToken();  
+//affichage de la page formulaire ajout de produit ac les eventuelles données deu produit en cas de modification	
+  public function newAdAction(Application $app, $ID_product,$token){
 	
-	//test d'authentification
-  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
-  	 {
-  	 	//récupération de l'ID_user
-    	$user = $token->getUser();
-    	$ID_user = $user->getID_user();
-    	
 	   
-	   if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
-	       {
-	               //appel de base pour afficher les données pour retrouver l'article a modifier
-	           $modification = $app['idiorm.db']->for_table('products')
-	           ->find_one($ID_product);
-	   
-	       }
-	       else
-	       {
-	       	$ID_product = 0;
-	           $modification ='';
-	       }
-	   
-	       return $app['twig']->render('commerce/ajout_produit.html.twig', [
-	           'categories'  => $app['categories'],      
-	           'error'       => [] ,
-	           'errors'      => [],
-	           'modification'=> $modification,
-	           'ID_product'  => $ID_product,
-	       ]);
-   	}
-	else
+//recupération du token de session
+		  	$token1 = $app['security.token_storage']->getToken();  
+			
+			//test d'authentification
+		  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+		  	 {
+	  	 	//récupération de l'ID_user
+		    	$user = $token1->getUser();
+		    	$ID_user = $user->getID_user();
+
+			   
+				   if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
+				       { 
+				       	if($app['session']->get('token') == $request->get('token'))
+			    		{
+				               //appel de base pour afficher les données pour retrouver l'article a modifier
+				           $modification = $app['idiorm.db']->for_table('products')
+				           ->find_one($ID_product);
+				   
+				       }
+				       else
+						{
+						 	  return $app->redirect('../inscription/erreur');
+						}	
+
+					}
+				
+				       else
+				       {
+				       	$ID_product = 0;
+				           $modification ='';
+				       }
+				   
+				       return $app['twig']->render('commerce/ajout_produit.html.twig', [
+				           'categories'  => $app['categories'],      
+				           'error'       => [] ,
+				           'errors'      => [],
+				           'modification'=> $modification,
+				           'ID_product'  => $ID_product,
+				       ]);
+			   
+	}else
 	{
-	 	  return $app->redirect('../inscription/erreur');
+		 return $app->redirect('../inscription/erreur');
 	}
 }
 
@@ -733,15 +743,14 @@ public function createCustomerAction(Application $app, Request $request)
     {
     	//gestion du formulaire d'ajout de produit  sur ajout_produit.html
 
-    	$token = $app['security.token_storage']->getToken();
+    	$token1 = $app['security.token_storage']->getToken();
 
   		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
     	
-    		$user = $token->getUser();    		
+    		$user = $token1->getUser();    		
     		$ID_user = $user->getID_user();
 
-	    	if($app['session']->get('token') == $request->get('token'))
-	    	{
+	    	
 	    		        //utilisation de la fonction de vérification dans Model\Vérifications
 		        $Verifications = new Verifications;
 
@@ -765,6 +774,8 @@ public function createCustomerAction(Application $app, Request $request)
 		                //SI c'est une modification d'article :
 		            if($request->get('ID_product')>0)
 		            {
+		            	if($app['session']->get('token') == $request->get('token'))
+	    				{
 
 
 			              $modification = $app['idiorm.db']->for_table('products')
@@ -802,7 +813,13 @@ public function createCustomerAction(Application $app, Request $request)
 							$topic->save();
 								
 			              $success = "Votre produit a bien été modifié et le topic sur le sujet également";
-			          }
+			         
+			      	}
+				   	 else
+				   	 {
+				   	 	  return $app->redirect('../inscription/erreur');
+				   	 }
+					 }
 			          else
 			          {
 
@@ -888,12 +905,7 @@ public function createCustomerAction(Application $app, Request $request)
 
 				}
 
-	   	 }
-	   	 else
-	   	 {
-	   	 	  return $app->redirect('../inscription/erreur');
-	   	 }
-
+	   	 
 	}
 	else
    	{
@@ -930,11 +942,11 @@ public function createCustomerAction(Application $app, Request $request)
     public function deleteProduct(Application $app, Request $request)
     {//supprimer un produit
 
-    	$token = $app['security.token_storage']->getToken();
+    	$token1 = $app['security.token_storage']->getToken();
 
   		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
     	
-    		$user = $token->getUser();    		
+    		$user = $token1->getUser();    		
     		$ID_user = $user->getID_user();
 
     		 $products = $app['idiorm.db']->for_table('view_products')

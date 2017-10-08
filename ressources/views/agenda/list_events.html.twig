@@ -16,62 +16,21 @@
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
 					<thead>
 						<tr>
-							<th>Numéro de l'événement</th>
 							<th>Nom de l'événement</th>
-							<th>Date de début</th>
-							<th>Date de fin</th>
 							<th>Date d'ajout</th>
-							<th>Catégorie</th>
-							<th>Adresse</th>
-							<th>Code postal</th>
-							<th>Ville</th>
 							<th>Image</th>
-							<th>Adresse de site web</th>
-							<th>Réseau social 1</th>
-							<th>Réseau social 2</th>
-							<th>Email</th>
-							<th>Téléphone</th>
-							<th>Description</th>
-							<th>Coordonnées GPS</th>
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for value in events %}
 							<tr>
-								<td>{{value.ID_event}}</td>
 
 								<td>{{value.event_title}}</td>
 
-								<td>{{value.start_date | date('d/m/Y')}}</td>
-
-								<td>{{value.end_date | date('d/m/Y')}}</td>
-
 								<td>{{value.creation_date | date('d/m/Y')}}</td>
 
-								<td>{{value.category_name}}</td>
-
-								<td>{{value.street_name}}</td>
-
-								<td>{{value.zip_code}}</td>
-
-								<td>{{value.city}}</td>
-
 								<td><img src="{{ asset('assets/images/'~value.image)}}" class="img-fluid"></td>
-
-								<td>{{value.url_1}}</td>
-
-								<td>{{value.url_2}}</td>
-
-								<td>{{value.url_3}}</td>
-
-								<td>{{value.mail}}</td>
-
-								<td>{{value.phone}}</td>
-
-								<td>{{value.event_description}}</td>
-
-								<td>{{value.latitude}}, {{value.longitude}}</td>
 
 								<td>
 									<form action="{{ url('deleteEvent') }}"  method="post">
@@ -79,11 +38,7 @@
 										<input type="hidden" name="token" value="{{app.session.get('token')}}">
 										<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
 									</form>
-									<form action="{{ url('agenda_add') }}"  method="post">
-										<input type="hidden" name="ID_event" value="{{value.ID_event}}">
-										<input type="hidden" name="token" value="{{app.session.get('token')}}">
-										<button  class="btn btn-warning">Modifier</button>
-									</form>
+									<a href="{{ url('view_agenda_add',{'ID_event' : value.ID_event, 'token' : app.session.get('token')}) }}" class="btn btn-warning">Modifier</a>
 								</td>
 							</tr>
 						{% endfor %}
@@ -93,7 +48,7 @@
 		{% else %}
 			
 			<div class="alert alert-warning" role=alert>
-				<p>Vous n'avez pas encore de produits à afficher</p>
+				<p>Vous n'avez pas encore d'événement à afficher</p>
 			</div>		
 
 		{% endif %}

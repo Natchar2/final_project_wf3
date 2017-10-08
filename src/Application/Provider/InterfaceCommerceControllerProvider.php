@@ -113,12 +113,18 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/item', 'Application\Controller\InterfaceCommerceController::itemAction')
 		->bind('item');
 
-
-
-		$controllers
+		/*$controllers
 		->get('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdAction')
 		->assert('ID_product', '\d+')
 		->value('ID_product', '0')
+		->bind('view_newAd');
+*/
+		$controllers
+		->get('/produit/ajouter/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::newAdAction')
+		->assert('ID_product', '\d+')
+		->value('ID_product', '0')
+		->assert('token', '\w+')
+		->value('token', '0')
 		->bind('view_newAd');
 
 		$controllers
@@ -126,8 +132,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->assert('ID_product', '\d+')
 		->value('ID_product', '0')
 		->bind('newAd');
-
-
 
 		$controllers
 		->get('/contact', 'Application\Controller\GlobalController::contactAction')
@@ -146,7 +150,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('listProducts');
 
 		$controllers
-		->get('/produit/{ID_product}/{token}', 'Application\Controller\InterfaceCommerceController::deleteProduct')
+		->get('/produit/liste', 'Application\Controller\InterfaceCommerceController::deleteProduct')
 		->assert('ID_product', '\d+')
 		->bind('deleteProduct');
 

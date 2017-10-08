@@ -19,6 +19,14 @@
 	    		->get('/accueil', 'Application\Controller\AdminController::accueilAdminAction')
 	    		->bind('accueilAdmin');
 
+	    	$controllers
+				->get('/topic/liste', 'Application\Controller\AdminCommerceController::listTopics')
+				->bind('list_topics_admin');
+
+			$controllers
+				->post('/topic/liste', 'Application\Controller\AdminCommerceController::deleteTopic')
+				->bind('deleteTopic_admin');
+
 	    	return $controllers;
 	    }
 	}
