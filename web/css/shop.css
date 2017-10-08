@@ -18,15 +18,21 @@ a.list-group-item, button.list-group-item {
   padding: 5px;
 }
 
-/* .btn-primary{
-  padding: 1px;
-  } */
+.streetTitle{
+  font-family: 'Monoton', cursive;
+}
+
+/*Button*/
+a.btn.btn-primary.pull-right{
+  background: RGBA(39, 40, 34, 1.00);
+  padding: 2px;
+}
 
 /* FOOTER
 -------------------------------------------------- */
 
 footer{
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
   text-align: center;
   padding-top: 30px;
   padding-bottom: 10px;

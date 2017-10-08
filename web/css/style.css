@@ -5,11 +5,6 @@ html, body{
 	margin: 0;
 }
 
-body{
-	padding-top: 50px;
-}
-
-
 #myTable td{
 	color: black;
 	vertical-align:middle;

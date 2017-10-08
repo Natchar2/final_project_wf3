@@ -76,6 +76,22 @@ trait Shortcut{
 
 	}
 
+	public function dump($array)
+	{
+		echo "<pre>";
+		print_r($array);
+		echo '</pre>';
+	}
+
+	 public function getRacineSite()
+    {
+    	$racine_url = explode('/web', $_SERVER['REQUEST_URI'])[0];
+
+    	$racine_url .= '/web/';
+
+    	return $racine_url;
+    }
+
 
 
 }

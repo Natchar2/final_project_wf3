@@ -20,7 +20,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3">
-					<h4 class="lead">Street Connect - Shop</h4>
+					<h4 class="lead">Street Connect</h4>
 					{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
 				</div>
 
@@ -83,14 +83,14 @@
 						</div>
 					</div>
 					<button class="add_product btn btn-success pull-right" ID-product="{{ product.ID_product }}">Ajouter au panier</button>					
-				
+					
 
 					<br><br>
 					<hr>
 					<div class="row">
 						<div class="card card-outline-secondary my-4">
 							<div class="card-header">
-								<h4 class="lead">Suggestions</h4>
+								<h3>Suggestions</h3>
 							</div>
 							<div class="card-body">
 
@@ -103,13 +103,13 @@
 
 									{% for suggest in suggests %}
 
-									<div class=" row col-sm-4 col-lg-4 col-md-4 {{ suggest.category_name|lower }}">
-										<div class="thumbnail">
-											{% if suggest.image_1 > "" %}
-												<img src="{{ asset('assets/images/'~suggest.image_1) }}" alt="" style="height:150px;width:auto;margin-left:auto;margin-right:auto;">
-											{% else %}
-												<img src="http://placehold.it/320x150" alt="">
-											{% endif %}		
+										<div class=" row col-sm-4 col-lg-4 col-md-4 {{ suggest.category_name|lower }}">
+											<div class="thumbnail">
+												{% if suggest.image_1 > "" %}
+													<img src="{{ asset('assets/images/'~suggest.image_1) }}" alt="" style="height:150px;width:auto;margin-left:auto;margin-right:auto;">
+												{% else %}
+													<img src="http://placehold.it/320x150" alt="">
+												{% endif %}		
 
 												<div class="caption">
 
@@ -134,15 +134,31 @@
 						</div>
 
 						<div class="card-header row">
-							<h4 class="lead col-xs-12">Discussions autour du produit</h4>
+							<br>
+							<h3 class="col-xs-12">Discussions autour du produit</h3>
+							<hr>
 						</div>
 						<div class="card-body row">
 
-								{% if posts is empty %}
-									<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
-								{% else %}
-									{% for post in posts %}
-										<p class= "pull-right">
+
+							{% if posts is empty %}
+								<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
+							{% else %}
+								{% for post in posts %}
+
+									{{ post.content }}
+									<br><hr><br>
+
+
+
+								{% endfor %}
+							{% endif %}
+
+							{% if posts is empty %}
+								<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
+							{% else %}
+								{% for post in posts %}
+									<p class= "pull-right">
 										par {{post.pseudo}} le : {{post.post_date | date('d/m/Y')}}</p>
 										<br>
 										<hr>
@@ -150,6 +166,7 @@
 										<br><hr><br>
 									{% endfor %}
 								{% endif %}
+
 
 							</div>
 						</div>
