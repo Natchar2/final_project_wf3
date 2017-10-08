@@ -107,7 +107,6 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 	// 	}
 	// });
 
-	#----------------------------------------------------------------------
 
 require_once RESSOURCES_ROOT . 'config/database.config.php';
 
