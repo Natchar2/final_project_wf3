@@ -1,0 +1,13 @@
+body {
+	padding-top: 70px;
+}
+
+.img-center {
+	margin: 0 auto;
+}
+
+.intro{
+	background: RGBA(39, 40, 34, 1.00);
+	margin-bottom: 20px;
+	color: RGBA(230, 230, 230, 1.00);
+}

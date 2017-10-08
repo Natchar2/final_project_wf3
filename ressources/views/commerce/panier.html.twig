@@ -4,88 +4,87 @@
 
 	<br>
 
-	{% if products is defined and products is not empty %}
 	<div class="container padMenu">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="table-responsive">
-					<table class="table table-striped" id="myTable">
+		{% if products is defined and products is not empty %}
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-responsive">
+						<table class="table table-striped" id="myTable">
 
-						<thead>
-							<tr>
-								<th width="80"> </th>
-								<th class="small">Produit</th>
-								<th width="80">Quantité</th>
-								<th width="120">Prix</th>
-								<th width="80"> </th>
-							</tr>
-						</thead>
-
-						<tbody>
-							{% for product in products %}
+							<thead>
 								<tr>
-									<td>
-										{% if (product.image_1>"") %}
-											<img src="{{ asset('assets/images/'~product.image_1) }}" style="width:70px;height:auto;">
-										{% endif %}
-									</td>
-									<td class="small">
-										<h3>{{ product.name }}</h3>
-										<br>
-										{{ product.description|accroche }}
-									</td>
-									<td>
-										<button class="remove_one_product btn btn-primary" ID-product="{{ product.ID_product }}"> - </button>
-
-										<span class="total_by_id" ID-product="{{ product.ID_product }}"> 
-											{% if app.session.get('total_product_by_id')[product.ID_product] is defined %}
-												{{ app.session.get('total_product_by_id')[product.ID_product] }}
-											{% else %}
-												0
-											{% endif %}
-										</span>
-
-										<button class="add_product btn btn-success" ID-product="{{ product.ID_product }}"> + </button>
-									</td>
-									<td>le total on verra</td>
-									<td>
-										<button class="remove_all_product btn btn-danger" ID-product="{{ product.ID_product }}">Supprimer</button>
-									</td>
+									<th width="80"> </th>
+									<th class="small">Produit</th>
+									<th width="80">Quantité</th>
+									<th width="120">Prix</th>
+									<th width="80"> </th>
 								</tr>
+							</thead>
 
-							{% endfor %}
-							
-						</tbody>
+							<tbody>
+								{% for product in products %}
+									<tr>
+										<td>
+											{% if (product.image_1>"") %}
+												<img src="{{ asset('assets/images/'~product.image_1) }}" style="width:70px;height:auto;">
+											{% endif %}
+										</td>
+										<td class="small">
+											<h3>{{ product.name }}</h3>
+											<br>
+											{{ product.description|accroche }}
+										</td>
+										<td>
+											<button class="remove_one_product btn btn-primary" ID-product="{{ product.ID_product }}"> - </button>
 
-						<tfoot>
+											<span class="total_by_id" ID-product="{{ product.ID_product }}"> 
+												{% if app.session.get('total_product_by_id')[product.ID_product] is defined %}
+													{{ app.session.get('total_product_by_id')[product.ID_product] }}
+												{% else %}
+													0
+												{% endif %}
+											</span>
 
-							<tr>
-								<td> </td>
-								<td align="right">Total</td>
-								<td>
-									<span class="total_product"> {{ app.session.get('total_product') }} </span> produits
-								</td>
-								<td>
-									€ <span class="total_price"> {{ app.session.get('total_price')|number_format(2, '.', ' ') }} </span> 
-								</td>
-								<td>
-									<a href={{ url('panier') }} class="btn btn-primary">Rafraichir</a>
+											<button class="add_product btn btn-success" ID-product="{{ product.ID_product }}"> + </button>
+										</td>
+										<td>le total on verra</td>
+										<td>
+											<button class="remove_all_product btn btn-danger" ID-product="{{ product.ID_product }}">Supprimer</button>
+										</td>
+									</tr>
+
+								{% endfor %}
+
+							</tbody>
+
+							<tfoot>
+
+								<tr>
+									<td> </td>
+									<td align="right">Total</td>
+									<td>
+										<span class="total_product"> {{ app.session.get('total_product') }} </span> produits
+									</td>
+									<td>
+										€ <span class="total_price"> {{ app.session.get('total_price')|number_format(2, '.', ' ') }} </span> 
+									</td>
+									<td>
+										<a href={{ url('panier') }} class="btn btn-primary">Rafraichir</a>
 									</td>				
 								</tr>
 
-						</tfoot>
-					</table>
+							</tfoot>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-		{% else %}
-			<div class="alert alert-warning" role=alert>
-				<p>Aucun produit dans le panier</p>
-			</div>		
-		{% endif %}
-
+	{% else %}
+		<div class="alert alert-warning" role=alert>
+			<p>Aucun produit dans le panier</p>
+		</div>		
+	{% endif %}
 
 
 
@@ -94,21 +93,22 @@
 
 
 
-	</div>
 
-	<div class="ui main container">
-		<form action="{{ url('create_customer') }}" method="POST" id='payment_form'>
-			
-			<div class="form-goup">
-				<input type="text" name="customer_email"  class="form-control" value="root@localhost">
-			</div>
+</div>
 
-			<div id="card-element"></div>
-			
-			<div id="card-infos" role="alert"></div>
-			<button class="btn btn-primary">Payer</button>
-		</form>
-	</div>
+<div class="ui main container">
+	<form action="{{ url('create_customer') }}" method="POST" id='payment_form'>
+
+		<div class="form-goup">
+			<input type="text" name="customer_email"  class="form-control" value="root@localhost">
+		</div>
+
+		<div id="card-element"></div>
+
+		<div id="card-infos" role="alert"></div>
+		<button class="btn btn-primary">Payer</button>
+	</form>
+</div>
 
 
 
@@ -150,73 +150,72 @@
 	<script src="https://js.stripe.com/v3/"></script>
 
 	<script>
-		var stripeTokenHandler = function(token)
-		{
-			var form = document.getElementById('payment_form');
-			var hiddenInput = document.createElement('input');
-			hiddenInput.setAttribute('type', 'hidden');
-			hiddenInput.setAttribute('name', 'token');
-			hiddenInput.setAttribute('value', token.id);
-			form.appendChild(hiddenInput);
+	var stripeTokenHandler = function(token)
+	{
+		var form = document.getElementById('payment_form');
+		var hiddenInput = document.createElement('input');
+		hiddenInput.setAttribute('type', 'hidden');
+		hiddenInput.setAttribute('name', 'token');
+		hiddenInput.setAttribute('value', token.id);
+		form.appendChild(hiddenInput);
 
-			console.log(hiddenInput);
+		console.log(hiddenInput);
 
-			form.submit();
-		}
+		form.submit();
+	}
 
-		Stripe = Stripe('pk_test_1nodEki9IHop9LFxPCLhOkPJ');
+	Stripe = Stripe('pk_test_1nodEki9IHop9LFxPCLhOkPJ');
 
-		var style = {
-			base: {
+	var style = {
+		base: {
+			color: '#303238',
+			fontSize: '16px',
+			lineHeight: '48px',
+			fontSmoothing: 'antialiased',
+			'::placeholder': {
+				color: '#ccc',
+			},
+		},
+		invalid: {
+			color: '#e5424d',
+			':focus': {
 				color: '#303238',
-				fontSize: '16px',
-				lineHeight: '48px',
-				fontSmoothing: 'antialiased',
-				'::placeholder': {
-					color: '#ccc',
-				},
 			},
-			invalid: {
-				color: '#e5424d',
-				':focus': {
-					color: '#303238',
-				},
-			},
-		};
+		},
+	};
 
-		elements = Stripe.elements();
+	elements = Stripe.elements();
 
-		var cardElement = elements.create('card', {style: style})
+	var cardElement = elements.create('card', {style: style})
 
-		cardElement.mount('#card-element');
+	cardElement.mount('#card-element');
 
-		$('#payment_form').submit(function(e){
-			e.preventDefault();
+	$('#payment_form').submit(function(e){
+		e.preventDefault();
 
-			Stripe.createToken(cardElement).then(function(data){
-				if(data.error)
-				{
-					$('#card-infos').text(data.error.message).attr('class', 'alert alert-danger');
-				}
-				else
-				{
-					$('#payment_form').find('button').attr('disabled', true);
-					$result = "<p>ID_token: "  + data.token.id + "</p>";
-					$result += "<p>IP_client: "  + data.token.client_ip + "</p>";
-					$result += "<p>Effectuer le (timestamps): "  + data.token.created + "</p>";
-					if(data.token.used){ data.used = "oui"; } else { data.used = "non"; }
-					$result += "<p>Utilisé: "  + data.used + "</p>";
+		Stripe.createToken(cardElement).then(function(data){
+			if(data.error)
+			{
+				$('#card-infos').text(data.error.message).attr('class', 'alert alert-danger');
+			}
+			else
+			{
+				$('#payment_form').find('button').attr('disabled', true);
+				$result = "<p>ID_token: "  + data.token.id + "</p>";
+				$result += "<p>IP_client: "  + data.token.client_ip + "</p>";
+				$result += "<p>Effectuer le (timestamps): "  + data.token.created + "</p>";
+				if(data.token.used){ data.used = "oui"; } else { data.used = "non"; }
+				$result += "<p>Utilisé: "  + data.used + "</p>";
 
-					$('#card-infos').html($result).attr('class', 'alert alert-info');
-					
-					stripeTokenHandler(data.token);
-				}
+				$('#card-infos').html($result).attr('class', 'alert alert-info');
 
+				stripeTokenHandler(data.token);
+			}
 
-			});
 		});
+	});
 
-		</script>
+	</script>
 
 	<script src="{{ asset("js/notify.min.js")}}"></script>
 	<script src="{{ asset('js/panier.js') }}"></script>

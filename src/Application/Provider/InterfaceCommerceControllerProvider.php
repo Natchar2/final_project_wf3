@@ -56,6 +56,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 
+
 		$controllers
 		->get('/suivi', 'Application\Controller\InterfaceCommerceController::suiviAction')
 		->bind('suivi');
@@ -76,19 +77,19 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-        ->get('/shop/{category_name}', 'Application\Controller\InterfaceCommerceController::shopAction')
-        ->assert('category_name','[^/]+')
-        ->value('category_name','all')
-        ->bind('shop');
+		->get('/shop/{category_name}', 'Application\Controller\InterfaceCommerceController::shopAction')
+		->assert('category_name','[^/]+')
+		->value('category_name','all')
+		->bind('shop');
 
 
-        $controllers
-        ->get('/shop/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::shopPageAction')
-        ->assert('category_name','[^/]+')
-        ->value('category_name','all')
-        ->assert('page','[0-9]+')    
-        ->value('page','1')        
-        ->bind('shop_page');
+		$controllers
+		->get('/shop/{category_name}/page{page}', 'Application\Controller\InterfaceCommerceController::shopPageAction')
+		->assert('category_name','[^/]+')
+		->value('category_name','all')
+		->assert('page','[0-9]+')    
+		->value('page','1')        
+		->bind('shop_page');
 
 		$controllers
 		->get('/{category_name}/{slugproduct}_{ID_product}.html','Application\Controller\InterfaceCommerceController::articleAction')
@@ -169,6 +170,10 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->method('GET|POST')
 		->bind('inscription_post');
 
+
+		$controllers
+		->get('/profil', 'Application\Controller\InterfaceCommerceController::ProfilAction')
+		->bind('profil');
 
 		$controllers
 		->get('/agenda', 'Application\Controller\InterfaceCommerceController::AgendaAction')
