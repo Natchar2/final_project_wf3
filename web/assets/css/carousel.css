@@ -13,7 +13,7 @@ body {
 
 header{
   padding-top: 30px;
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
   background-size: 100px 10000px;
   background-image: url('../../img/geo.png');
 }
@@ -48,7 +48,7 @@ header{
 }
 
 .jumbotron h1{
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
   color: rgba(240,190,64,1);
   margin-top: 20px;
   margin-bottom: 20px;
@@ -99,7 +99,7 @@ header{
 }
 
 .carousel-caption .btn {
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
   color: white;
   border:  none;
 }
@@ -109,7 +109,7 @@ header{
 
 .newsletter{
   text-align: center;
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
   background-size: 100px 10000px;
   background-image: url('../../img/geo.png');
   padding-top: 90px;
@@ -188,12 +188,11 @@ header{
   letter-spacing: -1px;
 }
 
-
 /* FORUM
 -------------------------------------------------- */
 .container .forum{
   padding: 40px;
-  background: black;
+  background: RGBA(39, 40, 34, 1.00);
 }
 
 .tableau{
@@ -275,7 +274,7 @@ header{
 
 .social {
   text-align: center;
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
 }
 
 .social h2{
@@ -285,7 +284,7 @@ header{
 .reseaux{
   margin: 40px;
   margin-bottom: 20px;
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
   border-radius: 10px 10px;
 }
 
@@ -303,11 +302,15 @@ header{
  border-right : 150px solid transparent;
 }
 
+.lead{
+  font-family: monoton !important;
+}
+
 /* FOOTER
 -------------------------------------------------- */
 
 footer{
-  background-color: black;
+  background-color: RGBA(39, 40, 34, 1.00);
   text-align: center;
   padding-top: 30px;
   padding-bottom: 10px;
@@ -327,6 +330,7 @@ footer span{
 
 .footMargin{
   margin: 0px;
+  padding-top: 20px;
 }
 
 .contactFooter{
@@ -347,6 +351,9 @@ footer span{
 .featurette-heading {
   font-size: 50px;
 }
+
+#payment_form{
+  margin-bottom: 50px;
 }
 
 @media all and (min-width: 992px) {
@@ -354,6 +361,8 @@ footer span{
     margin-top: 120px;
   }
 }
+
+/*Tables*/
 
 @media all and (max-device-width: 480px)
 {
@@ -384,4 +393,11 @@ footer span{
     min-height: 14px
   }
   
+}
+
+/*Suivi*/
+
+.suivi{
+  padding-top: 20px;
+  font-family: monoton;
 }

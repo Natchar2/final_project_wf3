@@ -28,7 +28,7 @@
 							<div class="container">
 								<div class="carousel-caption">
 
-									<p><a class="btn btn-lg btn-default" href="#" role="button">Skate</a></p>
+									<p><a class="btn btn-lg btn-default" href="{{ url('shop', {'category_name': 'skate'}) }}" role="button">Skate</a></p>
 								</div>
 							</div>
 						</div>
@@ -37,7 +37,7 @@
 							<div class="container">
 								<div class="carousel-caption">
 									<p></p>
-									<p><a class="btn btn-lg btn-default" href="#" role="button">Roller</a></p>
+									<p><a class="btn btn-lg btn-default" href="{{ url('shop', {'category_name': 'roller'}) }}" role="button">Roller</a></p>
 								</div>
 							</div>
 						</div>
@@ -46,7 +46,7 @@
 							<div class="container">
 								<div class="carousel-caption">
 									<p></p>
-									<p><a class="btn btn-lg btn-default" href="#" role="button">Parkour</a></p>
+									<p><a class="btn btn-lg btn-default" href="{{ url('shop', {'category_name': 'parkour'}) }}" role="button">Parkour</a></p>
 								</div>
 							</div>
 						</div>
@@ -55,7 +55,7 @@
 							<div class="container">
 								<div class="carousel-caption">
 									<p></p>
-									<p><a class="btn btn-lg btn-default" href="#" role="button">Bmx</a></p>
+									<p><a class="btn btn-lg btn-default" href="{{ url('shop', {'category_name': 'bmx'}) }}" role="button">Bmx</a></p>
 								</div>
 							</div>
 						</div>
@@ -195,7 +195,7 @@
 									<br>
 									{{ event.city ~ ' (' ~ event.zip_code ~ ')'}}
 								</i></h4>
-								<p class="lead">{{ event.event_description|accroche }}.</p>
+								<p>{{ event.event_description|accroche }}.</p>
 								<a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-default pull-right">Infos &raquo;</a>
 							</div>
 							<div class="col-md-5  {% if bRevStyle == true %} col-md-pull-7 {% endif %}">

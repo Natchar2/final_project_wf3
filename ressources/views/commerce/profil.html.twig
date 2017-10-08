@@ -1,0 +1,59 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/profil.css')}}">
+{% endblock %}
+
+{% block contenu %}
+
+	<div class="container">
+
+		<div class="row">
+
+			<div class="col-xs-12 text-center intro">
+
+				<hr>
+				<img class="img-circle img-responsive img-center" src="http://placehold.it/200x200" alt="avatar">
+
+				<h3>Pseudo
+					<small> - Nom de société</small>
+				</h3>
+
+				<hr>
+
+			</div>
+
+			<div class="col-xs-12 col-md-6">
+
+				<h4>Topics postés</h4>
+				<hr>
+				<h5>Titre Topic</h5>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut beatae recusandae, blanditiis ipsam sint earum, voluptate autem! Illo exercitationem nulla beatae magnam, omnis eius consequatur quisquam minus numquam dicta? Ab.</p>
+
+			</div>
+
+			<div class="col-xs-12 col-md-6">
+
+				<h4>Evènement ajoutés</h4>
+				<hr>
+				<h5>Titre Topic</h5>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut beatae recusandae, blanditiis ipsam sint earum, voluptate autem! Illo exercitationem nulla beatae magnam, omnis eius consequatur quisquam minus numquam dicta? Ab.</p>
+
+			</div>
+
+		</div>
+		<br>
+	</div>
+	<br>
+
+{% endblock %}
+
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

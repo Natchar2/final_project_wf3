@@ -1,7 +1,8 @@
 {% extends 'defaultLayout.html.twig' %}
 
-{% block header %}
-	{{render(controller('Application\\Controller\\IncludeController::menuAction'))}}
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{asset('css/faq.css')}}">
 {% endblock %}
 
 {% block contenu %}

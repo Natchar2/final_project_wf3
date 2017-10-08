@@ -1727,13 +1727,6 @@ class InterfaceCommerceController
 		}
 		return $tmp_text;
 	}
-
-
-
-
-
-
-
 }
 
 ?>

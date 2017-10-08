@@ -3,157 +3,135 @@
 {% set active = global.request.get('category_name')|lower %}
 
 
-{% set pageMax = (totalTopics / nbPerPage)|round(0, 'ceil') %}
+	{% set pageMax = (totalTopics / nbPerPage)|round(0, 'ceil') %}
 
 
-{% block stylesheets %}
-	{{parent()}}
-	<link rel="stylesheet" href="{{asset('css/forumIndex.css')}}">
-{% endblock %}
+		{% block stylesheets %}
+			{{parent()}}
+			<link rel="stylesheet" href="{{asset('css/forumIndex.css')}}">
+		{% endblock %}
 
-{% block contenu %}
+		{% block contenu %}
 
 
-		{% if topics is empty %}
-			<div class="alert alert-warning">Il n'y a pas encore de topic dans cette catégorie</div>
-		{% else %}
+			{% if topics is empty %}
+				<div class="alert alert-warning">Il n'y a pas encore de topic dans cette catégorie</div>
+			{% else %}
 
-	<!-- Page Content -->
-	<div class="container forumHeader contactFooter">
-		<div class="row">
+				<!-- Page Content -->
+				<div class="container forumHeader contactFooter">
+					<div class="row">
 
-	<!-- include menu -->
-			<div class="col-md-3">
-					<h4 class="lead">Street Connect</h4>
-					{{ render (controller('Application\\Controller\\InterfaceForumController::menuForum', { 'active':active } )) }}
-			</div>
+						<!-- include menu -->
+						<div class="col-md-3">
+							<h4 class="lead">Street Connect</h4>
+							{{ render (controller('Application\\Controller\\InterfaceForumController::menuForum', { 'active':active } )) }}
+						</div>
 
-			<!-- Blog Entries Column -->
-			<div class="col-md-5">
-				<h1 class="my-4">Forum</h1>
-				<hr>
-				<h3>
-					{% if global.request.get('category_name') == "all" %}
-						Tous les topics
-					{% else %}
-						{{ global.request.get('category_name') }}
-					{% endif %}
-				</h3>
-				<hr>
-				<!-- Blog Post -->
-				<div class="card mb-4">
-					{% for value in topics %}
-					<div class="card-body">
-						<h2 class="card-title">{{value.title}}</h2>
-						<p class="card-text">{{value.content}}</p>
-						<a href="{{ url('forum_topic', {'slugTopic' : value.title | slug, 'ID_topic' : value.ID_topic}) }}" class="btn btn-primary">En savoir plus</a>
-					</div>
-					<div class="card-footer text-muted">
-						poster le {{value.creation_date | date('d/m/Y')}} Par <a href="#">{{value.name}}</a>
-					</div>
-					{% endfor %}
-				</div>
+						<!-- Blog Entries Column -->
+						<div class="col-md-5">
+							<h1 class="my-4">Forum</h1>
+							<hr>
+							<h3>
+								{% if global.request.get('category_name') == "all" %}
+									Tous les topics
+								{% else %}
+									{{ global.request.get('category_name') }}
+								{% endif %}
+							</h3>
+							<hr>
+							<!-- Blog Post -->
+							<div class="card mb-4">
+								{% for value in topics %}
+									<div class="card-body">
+										<h2 class="card-title">{{value.title}}</h2>
+										<p class="card-text">{{value.content}}</p>
+										<a href="{{ url('forum_topic', {'slugTopic' : value.title | slug, 'ID_topic' : value.ID_topic}) }}" class="btn btn-primary">En savoir plus</a>
+									</div>
+									<div class="card-footer text-muted">
+										poster le {{value.creation_date | date('d/m/Y')}} Par <a href="#">{{value.name}}</a>
+									</div>
+								{% endfor %}
+							</div>
 
-				
 
-				<!-- Pagination -->
-				{% if page is defined %}
 
-					<div class="paging col-xs-12" style="text-align:center;margin:25px 0;">
-						{% if (pageMax) > 1 %}
-							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
-						{% endif %}
+							<!-- Pagination -->
+							{% if page is defined %}
 
-						{% if (page - 1) > 1 %}
-							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>
-						{% endif %}
-						&nbsp;&nbsp;
-						{% if (page - 2) >= 1 %}
-							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>
-						{% endif %}
-						&nbsp;&nbsp;                       
-						{% if (page - 1) >= 1 %}
-							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>
-						{% endif %}
-						&nbsp;&nbsp;
-						<a href="#" class="btn btn-primary">{{ page }}</a>
-						&nbsp;&nbsp;
-						{% if (page + 1) <= pageMax %}
-							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>
-						{% endif %}
-						&nbsp;&nbsp;   
-						{% if (page + 2) < pageMax %}
-							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>
-						{% endif %}
-						&nbsp;&nbsp; 
-						{% if (page + 1) < pageMax %}
-							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>
-						{% endif %}
-						&nbsp;&nbsp;
-						
-						{% if (pageMax) > 1 %}
-							<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
-						{% endif %}							
-					</div> 
-				{% endif %}
-			</div>
+								<div class="paging col-xs-12" style="text-align:center;margin:25px 0;">
+									{% if (pageMax) > 1 %}
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
+									{% endif %}
 
-			<!-- Sidebar Widgets Column -->
-			<div class="col-md-4">
-				<div class="card my-4">
-					<h5 class="card-header">Profil</h5>
-					<div class="card-body">
-						<div class="input-group">
-							<div class="text-center mb-4">
-								<img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+									{% if (page - 1) > 1 %}
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>
+									{% endif %}
+									&nbsp;&nbsp;
+									{% if (page - 2) >= 1 %}
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>
+									{% endif %}
+									&nbsp;&nbsp;                       
+									{% if (page - 1) >= 1 %}
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>
+									{% endif %}
+									&nbsp;&nbsp;
+									<a href="#" class="btn btn-primary">{{ page }}</a>
+									&nbsp;&nbsp;
+									{% if (page + 1) <= pageMax %}
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>
+									{% endif %}
+									&nbsp;&nbsp;   
+									{% if (page + 2) < pageMax %}
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>
+									{% endif %}
+									&nbsp;&nbsp; 
+									{% if (page + 1) < pageMax %}
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>
+									{% endif %}
+									&nbsp;&nbsp;
+
+									{% if (pageMax) > 1 %}
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
+									{% endif %}							
+								</div> 
+							{% endif %}
+						</div>
+
+						<!-- Sidebar Widgets Column -->
+						<div class="col-md-4">
+
+							<div class="card my-4">
+								<h5 class="card-header">Contribuez</h5>
+								<div class="card-body">
+									<div class="input-group">
+										<span class="input-group-btn">
+											<a href="{{ url('new_topic') }}"><button class="btn btn-success" type="button">Ajoutez un topic</button></a>
+										</span>
+									</div>
+								</div>
+							</div>
+							<br>
+							<!-- Side Widget -->
+							<div class="card my-4">
+								<h5 class="card-header">Publicité</h5>
 								<br>
-								<h4>User Name</h4>
-								<p>What does this team member to? Keep it short! This is also a great spot for social links!</p>
-								<span>
-									<button class="btn btn-success" type="button">Profil</button>
-								</span>
+								<div class="card-body">
+									<img src="{{asset('img/cartier.jpg')}}" height="auto" width="300px" alt="cartier">
+								</div>
+								<br>
+								<div class="card-body">
+									<img src="{{asset('img/gucci.jpg')}}" height="auto" width="300px" alt="gucci">
+								</div>
+								<br>
 							</div>
 						</div>
 					</div>
 				</div>
+			{% endif %}
+		{% endblock %}
 
-				<div class="card my-4">
-					<h5 class="card-header">Contribuez</h5>
-					<div class="card-body">
-						<div class="input-group">
-							<span class="input-group-btn">
-								<a href="{{ url('new_topic') }}"><button class="btn btn-success" type="button">Ajoutez un topic</button></a>
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Search Widget -->
-				<div class="card my-4">
-					<h5 class="card-header">Search</h5>
-					<div class="card-body">
-						<div class="input-group">
-							<input type="text" class="form-control" placeholder="Search for...">
-							<span class="input-group-btn">
-								<button class="btn btn-secondary" type="button">Go!</button>
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Side Widget -->
-				<div class="card my-4">
-					<h5 class="card-header">Publicité</h5>
-					<div class="card-body">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	{% endif %}
-{% endblock %}
-
-{# include footer #}
-{% block footer %}
-	{% include 'commerce/footer.html.twig' %}
-{% endblock %}
+		{# include footer #}
+		{% block footer %}
+			{% include 'commerce/footer.html.twig' %}
+		{% endblock %}
