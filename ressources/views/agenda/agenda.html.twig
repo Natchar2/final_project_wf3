@@ -27,6 +27,8 @@
 
                         {{ render (controller('Application\\Controller\\InterfaceAgendaController::menuAgenda', { 'active':active } )) }}
 
+                        <button><a href="{{ url('agenda_add') }}">Ajoutez un évènement</a></button>
+
                     </div>
 
                     <div class="col-md-9">

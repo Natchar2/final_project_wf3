@@ -172,7 +172,11 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 
 
 		$controllers
-		->get('/profil', 'Application\Controller\InterfaceCommerceController::ProfilAction')
+		->get('/profil/{ID_user}/{success_modification}', 'Application\Controller\InterfaceCommerceController::ProfilAction')
+		->assert('ID_user','\d+')
+		->value('ID_user','0')
+		->assert('success_modification','success_modification')
+		->value('success_modification','0')
 		->bind('profil');
 
 		$controllers
@@ -198,8 +202,11 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->post('/search', 'Application\Controller\InterfaceCommerceController::searchAction')
 		->bind('search');
 
-
-
+		$controllers
+		->get('/modification_profil-{token}', 'Application\Controller\InterfaceCommerceController::setProfilAction')
+		->assert('token','\w+')
+		->value('token','0')
+		->bind('set_profil');
 
 
 

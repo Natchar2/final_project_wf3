@@ -30,7 +30,7 @@
 	<div class="padMenu container">
 		<div class="row">
 			<div class="col-md-3">
-				<h4 class="streetTitle">Street Connect</h4>
+				<h4 class="streetTitle">Shop</h4>
 
 				{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
 
@@ -70,6 +70,7 @@
 						{{ global.request.get('category_name') }}
 					{% endif %}
 				</h3>
+				<br>
 
 				<div class="row">
 

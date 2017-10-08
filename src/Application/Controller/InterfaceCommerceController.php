@@ -703,9 +703,36 @@ class InterfaceCommerceController
 
 	}
 
-	public function profilAction(Application $app)
+	public function profilAction(Application $app, $ID_user, $success_modification)
 	{
-		return $app['twig']->render('commerce/profil.html.twig');
+		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+		{
+			$userProfil = $app['idiorm.db']->for_table('users')
+			->find_one($ID_user);
+
+			$topic = $app['idiorm.db']->for_table('topic')
+			->where('ID_user',$ID_user)
+			->order_by_desc('creation_date')
+			->limit(1)
+			->find_one();
+
+			$event = $app['idiorm.db']->for_table('event')
+			->where('ID_user',$ID_user)
+			->order_by_desc('creation_date')
+			->limit(1)
+			->find_one();
+
+			return $app['twig']->render('commerce/profil.html.twig',
+				['userProfil'			=>$userProfil,
+				'success_modification'	=>$success_modification,
+				'topic'					=>$topic,
+				'event'					=>$event
+			]);			
+		}
+		else
+		{
+			return $app->redirect('inscription');
+		}
 	}
 
 	

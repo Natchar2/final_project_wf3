@@ -16,44 +16,58 @@
 				<hr>
 				<img class="img-circle img-responsive img-center" src="http://placehold.it/200x200" alt="avatar">
 
-				<h3>Pseudo
-					<small> - Nom de société</small>
+				<h3>
+					{% if userProfil is defined and userProfil is not empty %}
+						{{userProfil.pseudo}}
+						<small> - {{userProfil.society_name}}</small>
+					{% else %}
+						<div>Aucun utilisateur ne correspond à votre recherche</div>
+					{% endif %}
 				</h3>
 
+				<a class="modif" href="{{ url('set_profil',{'token':app.session.get('token')}) }}">Modifier le profil</a>
+
 				<hr>
 
 			</div>
 
 			<div class="col-xs-12 col-md-6">
 
-				<h4>Topics postés</h4>
-				<hr>
-				<h5>Titre Topic</h5>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut beatae recusandae, blanditiis ipsam sint earum, voluptate autem! Illo exercitationem nulla beatae magnam, omnis eius consequatur quisquam minus numquam dicta? Ab.</p>
+				<h4>
+					{% if topic is defined and topic is not empty %}
+						{{topic.ID_category}}</h4>
+						<hr>
+						<h5>{{topic.ID_product}}</h5>
+						<p>{{topic.title}}</p>
+					{% else %}
+						<div>Aucun topic ne correspond à votre recherche</div>
+					{% endif %}
+				</div>
+
+				<div class="col-xs-12 col-md-6">
+
+					<h4>{% if event is defined and event is not empty %}
+						{{event.ID_category}}</h4>
+						<hr>
+						<h5>{{event.event_title}}</h5>
+						<p>{{event.description}}</p>
+					{% else %}
+						<div>Aucun évènement ne correspond à votre recherche</div>
+					{% endif %}
+				</div>
 
 			</div>
-
-			<div class="col-xs-12 col-md-6">
-
-				<h4>Evènement ajoutés</h4>
-				<hr>
-				<h5>Titre Topic</h5>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut beatae recusandae, blanditiis ipsam sint earum, voluptate autem! Illo exercitationem nulla beatae magnam, omnis eius consequatur quisquam minus numquam dicta? Ab.</p>
-
-			</div>
-
+			<br>
 		</div>
 		<br>
-	</div>
-	<br>
 
-{% endblock %}
+	{% endblock %}
 
-{# include footer #}
-{% block footer %}
-	{% include 'commerce/footer.html.twig' %}
-{% endblock %}
+	{# include footer #}
+	{% block footer %}
+		{% include 'commerce/footer.html.twig' %}
+	{% endblock %}
 
-{% block javascripts %}
-	{{ parent() }}
-{% endblock %}
+	{% block javascripts %}
+		{{ parent() }}
+	{% endblock %}
