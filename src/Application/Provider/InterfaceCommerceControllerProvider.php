@@ -221,12 +221,12 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('reset_passwordPost');
 
 		$controllers
-
 		->get('profil/utilisateur/{ID_user}', 'Application\Controller\InterfaceCommerceController::ProfilUserAction')
 		->assert('ID_user','\d+')
 		->value('ID_user','0')
 		->bind('profilUser');
 
+		$controllers
 		->match('/newsletter', 'Application\Controller\GlobalController::newsletterPostAction')
 		->method('POST|GET')
 		->bind('newsletter');
