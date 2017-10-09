@@ -33,6 +33,14 @@
 				<h4 class="streetTitle">Shop</h4>
 
 				{{ render (controller('Application\\Controller\\InterfaceCommerceController::menuShop', { 'active':active } )) }}
+				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <center><a href="{{ url('view_newAd') }}" class="btn btn-primary">Ajoutez un produit</a></center>
+                        {% else %}
+                            Vous devez être connecté pour poster un produit
+                            <br>
+                            <center><a href="{{ path('connexion') }}" class="btn btn-success">Se connecter</a></center>
+                        {% endif %}
+
 
 			</div>
 

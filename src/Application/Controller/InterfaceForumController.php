@@ -385,7 +385,7 @@ class InterfaceForumController
 					$suppression->delete();
 
 					
-		            $success = 'Le topic a été supprimé de la liste ainsi que tt les posts correspondants';
+		            $success = 'Le topic a été supprimé de la liste ainsi que tous les posts correspondants';
 
 		             $topics = $app['idiorm.db']->for_table('view_topics')
 			        ->where('ID_user',$ID_user)  

@@ -3,6 +3,7 @@
 
 use Application\Extension\ApplicationTwigExtension;
 
+
 	# -- CONFIG APP
 $app['debug'] = true;
 
@@ -102,6 +103,7 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 	#----------------------------------------------------------------------
 
 	# -- ERROR
+
 	$app->error(function(\Exception $e, Symfony\Component\HttpFoundation\Request $request, $code) use ($app)
 	{
 		if($code == 404)
@@ -113,6 +115,7 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 			return $app['twig']->render('error/403.html.twig');
 		}
 	});
+
 
 
 require_once RESSOURCES_ROOT . 'config/database.config.php';

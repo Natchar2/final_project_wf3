@@ -46,9 +46,7 @@ class InterfaceAgendaControllerProvider implements ControllerProviderInterface
 		->bind('view_agenda_add');
 
 		$controllers
-		->post('/event/ajouter/{ID_event}','Application\Controller\InterfaceAgendaController::agendaAddEventPostAction')
-		->assert('ID_event', '\d+')
-		->value('ID_event', '0')
+		->post('/event/ajouter','Application\Controller\InterfaceAgendaController::agendaAddEventPostAction')
 		->bind('agenda_add');
 
 		$controllers

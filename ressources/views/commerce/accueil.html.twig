@@ -74,9 +74,6 @@
 	</header>
 
 
-	<!-- Marketing messaging and featurettes
-	================================================== -->
-	<!-- Wrap the rest of the page in another container to center all the content. -->
 	<div class="container marketing col-xs-12">
 		<div class="container">
 			<div class="row">
@@ -113,6 +110,7 @@
 		</div>
 
 		<!-- NEWSLETTER -->
+
 		<div class="container-fluid col-xs-12 newsletter" id="newsletter">
 				{% if mail_invalid is defined %}
 					<div class="col-xs-8 col-xs-offset-2 alert alert-danger">
@@ -190,7 +188,7 @@
 								{% for topic in topics %}
 									<tr>
 										<td>{{ topic.creation_date|date('d/m/Y') }}</td>
-										<td class="hidden-xs">{{ topic.pseudo }}</td>
+										<td class="hidden-xs"><a href="{{ url('profilUser', {'ID_user' : topic.ID_user}) }}">{{ topic.pseudo }}</a></td>
 										<td>{{ topic.title }} <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
 									</tr>
 

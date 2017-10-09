@@ -234,23 +234,24 @@ class InterfaceAgendaController
 				              ));
 
 
+				              	$ID_event = $request->get('ID_event');
 
 					            $modification->save();
 
 								$success = "Votre événement a bien été ajouté ";
 
 								//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
-								$topic = $app['idiorm.db']->for_table('topic')
-								->where($request->get('ID_event'))
-								->find_one()
-								->set(array(
-
+								$topic = $app['idiorm.db']->for_table('topic')->where('ID_event', (int)$request->get('ID_event'))->find_result_set();
+								if (count($topic)>0)
+					        	{
+					        		$topic->set(array(
 									'title' 	 => $request->get('event_title'),
 									'ID_category'=> $request->get('category'),
-
 									));
 
-								$topic->save();
+									$topic->save();
+								}
+								
 									
 				              $success = "Votre événement a bien été modifié et le topic sur le sujet également";
 				          }
@@ -311,6 +312,7 @@ class InterfaceAgendaController
 					        'error'       => [] ,
 					        'categories'  => $app['categories'],
 					        'modification'=> '',
+					        'ID_event'	  => $ID_event
 					   		]);
 
 				    }
@@ -333,7 +335,7 @@ class InterfaceAgendaController
 					        'error'       => $error,
 					        'categories'  => $app['categories'],
 					        'modification'=> $modification,
-					        'ID_event'    => $request->get('ID_event'),
+					       'ID_event'	  => $ID_event				        
 
 					    ]);
 
@@ -419,15 +421,16 @@ class InterfaceAgendaController
 
 					
 
-					$topic = $app['idiorm.db']->for_table('topic')
-		    			->where('ID_event', $request->get('ID_event'))
-		    			->find_one()
-		    			->set(array(
-							'ID_event' => 0,
-						));
+					$topic = $app['idiorm.db']->for_table('topic')->where('ID_event', (int)$request->get('ID_event'))->find_result_set();
+					if (count($topic)>0)
+		        	{
+		        		$topic->set(array(
+		        		'ID_event' => null,
+		        	));
 
-					$topic->save();
-
+						$topic->save();
+					}
+		    			
 					$suppression->delete();
 
 		            $success = 'L\'événement a été supprimé de la liste';
