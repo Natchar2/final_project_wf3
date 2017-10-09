@@ -116,7 +116,7 @@ class InterfaceAgendaController
 		
 		
 	}
-
+//affichage du formulaire ac eventuellement les données en base pour une modif
 	public function addEventAction(Application $app, $ID_event,$token)
 	{
 	
@@ -143,7 +143,7 @@ class InterfaceAgendaController
 
 					   	}else
 						{
-							return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+							return $app->redirect($this->getRacineSite().'inscription/erreur');
 						}
 
 					}
@@ -164,7 +164,7 @@ class InterfaceAgendaController
 			}
 			else
 			{
-			 	  return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+			 	  return $app->redirect($this->getRacineSite().'inscription/erreur');
 			}
 		
 
@@ -217,7 +217,7 @@ class InterfaceAgendaController
 
 				                  'event_title'   		=> $request->get('event_title'),
 				                  'start_date'    		=> strtotime($request->get('start_date')),
-				                  'end_date'      		=> strtotime($request->get('end_date')),
+									'end_date'      	=> strtotime($request->get('end_date')),
 				                  'event_description'   => $request->get('event_description'),
 				                  'image'         		=> $finalFileName1,
 								  'ID_category'   		=> $request->get('category'),
@@ -264,7 +264,10 @@ class InterfaceAgendaController
 				    				//Affectation des valeurs
 								$event->event_title   		= $request->get('event_title');
 								$event->start_date    		= strtotime($request->get('start_date'));
-								$event->end_date      		= strtotime($request->get('end_date'));
+								if(!empty($request->get('end_date'))){
+									$event->end_date      		= strtotime($request->get('end_date'));
+								}
+
 								$event->creation_date 		= strtotime('now');
 								$event->event_description   = $request->get('event_description');
 								$event->image        		= $finalFileName1;
@@ -339,13 +342,13 @@ class InterfaceAgendaController
 				}
 				else
 				{
-					return $app->redirect('final_project_wf3/web/inscription/erreur');
+					return $app->redirect($this->getRacineSite().'inscription/erreur');
 					
 				}
 		}
 		else
 		{
-			return $app->redirect('final_project_wf3/web/inscription/erreur');
+			return $app->redirect($this->getRacineSite().'inscription/erreur');
 			
 		} 
 
@@ -379,7 +382,7 @@ class InterfaceAgendaController
 		}
 	   	 else
 		{
-		return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+		return $app->redirect($this->getRacineSite().'inscription/erreur');
 
 		} 	
     
@@ -388,23 +391,18 @@ class InterfaceAgendaController
     public function deleteEvent(Application $app, Request $request)
     {//supprimer un produit
 
-    	  if($app['session']->get('token') == $request->get('token'))
-	    	{
 
 	    		//recupération du token de session
-		  	$token = $app['security.token_storage']->getToken();  
+		  	$token1 = $app['security.token_storage']->getToken();  
 			
 			//test d'authentification
 		  	if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
 		  	 {
 		  	 	//récupération de l'ID_user
-		    	$user = $token->getUser();
+		    	$user = $token1->getUser();
 		    	$ID_user = $user->getID_user();
 
-				$events = $app['idiorm.db']->for_table('view_events')
-		        ->where('ID_user', $ID_user)//penser a passer l'ID_User ac la sessions
-		        ->find_result_set();
-
+				
 
 		        if($request->get('token') == $app['session']->get('token'))
 		        {
@@ -419,47 +417,42 @@ class InterfaceAgendaController
 						unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image'));
 					}
 
-					$suppression->delete();
+					
 
 					$topic = $app['idiorm.db']->for_table('topic')
 		    			->where('ID_event', $request->get('ID_event'))
 		    			->find_one()
 		    			->set(array(
-							'ID_event' => null,
+							'ID_event' => 0,
 						));
+
+					$topic->save();
+
+					$suppression->delete();
 
 		            $success = 'L\'événement a été supprimé de la liste';
 
+		           $events = $app['idiorm.db']->for_table('view_events')
+		           ->where('ID_user',$ID_user)
+			       ->find_result_set();
 
-		           
-		        }
-		        else
-		        {
-		           $success = 'Vous ne pouvez supprimé un événement sans être connecté';
-		           
-		        }
 
 		         return $app['twig']->render('agenda/list_events.html.twig',[
 		                'success'=>$success,
 		                'events'=>$events
 		            ]);
-
-				
+			
 			}
-
-
 			
 		   	 else
 		   	 {
-				return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+				return $app->redirect($this->getRacineSite().'inscription/erreur');
 		   	 	
 		   	 } 	
-
-
      }
      else
      	 {
-     	 	return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+     	 	return $app->redirect($this->getRacineSite().'inscription/erreur');
      	 }
 
     }

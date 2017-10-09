@@ -131,6 +131,7 @@ class InterfaceForumController
 	public function addPostTopicAction(Application $app, Request $request)
 	{
 		$number_post = $request->get('number_post');
+		$ID_topic = $request->get('ID_topic');
 
 		$posts = $app['idiorm.db']->for_table('view_posts')
 		->where('ID_topic', $ID_topic)
@@ -186,14 +187,14 @@ class InterfaceForumController
 					  	  	{
 					            //appel de base pour afficher les données pour retrouver l'article a modifier
 								$topics = $app['idiorm.db']->for_table('view_topics')
-								->where('ID_topic',2)
+								->where('ID_topic',$ID_topic)
 								->find_one();
 	
 	
 	
 								//appel de la page pour tranche de 5 posts
 								$posts = $app['idiorm.db']->for_table('view_posts')
-								->where('ID_topic',2)
+								->where('ID_topic',$ID_topic)
 								->order_by_desc('post_date')
 						 		->limit(5)
 								->find_result_set();
@@ -225,12 +226,12 @@ class InterfaceForumController
 			}
 			else
 			{
-				return $app->redirect('inscription/erreur');
+				return $app->redirect($this->getRacineSite().'inscription/erreur');
 			}
 		}
 		else
 		{
-			return $app->redirect('inscription/erreur');
+			return $app->redirect($this->getRacineSite().'inscription/erreur');
 			
 		}
 
@@ -259,7 +260,7 @@ class InterfaceForumController
 		}
 		else
 		{
-			return $app->redirect('inscription/erreur');
+			return $app->redirect($this->getRacineSite().'inscription/erreur');
 			
 		}
 		
@@ -314,13 +315,13 @@ class InterfaceForumController
 	   		}
 	   		else
 	   		{
-	   			return $app->redirect('inscription/erreur');
+	   			return $app->redirect($this->getRacineSite().'inscription/erreur');
    			 
 	   		}
 		}
 		else
 		{
-			return $app->redirect('inscription/erreur');
+			return $app->redirect($this->getRacineSite().'inscription/erreur');
 			
 		}
 
@@ -349,7 +350,7 @@ class InterfaceForumController
 		}
 		else
 	   	{
-	   	 	  return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+	   	 	  return $app->redirect($this->getRacineSite().'inscription/erreur');
 	   	}
     
 
@@ -367,10 +368,6 @@ class InterfaceForumController
 	    		$user = $token1->getUser();    		
 	    		$ID_user = $user->getID_user();
 
-	    		 $topic = $app['idiorm.db']->for_table('view_topics')
-		        ->where('ID_user',$ID_user)//penser a passer l'ID_User ac la sessions
-		        ->find_result_set();
-
 
 		        if($request->get('token') == $app['session']->get('token'))
 		        {
@@ -379,39 +376,41 @@ class InterfaceForumController
 		    			->where('ID_topic', $request->get('ID_topic'))
 		    			->find_one();
 
+		    		$posts_suppression = $app['idiorm.db']->for_table('post')
+		    		->where('ID_topic', $request->get('ID_topic'))
+		    		->find_result_set();
+
+		    		$posts_suppression->delete();
+
 					$suppression->delete();
 
 					
-		            $success = 'Le topic a été supprimé de la liste';
+		            $success = 'Le topic a été supprimé de la liste ainsi que tt les posts correspondants';
 
 		             $topics = $app['idiorm.db']->for_table('view_topics')
 			        ->where('ID_user',$ID_user)  
 			        ->find_result_set();
 
+			        
+			         return $app['twig']->render('forum/list_topic.html.twig',[
+			                'success'=>$success,			                
+			                'topics'=>$topics
+			            ]);
 
-		           
-		        }
-		        else
-		        {
-		           $success = 'Vous ne pouvez supprimé un élément sans être connecté';
-		           
-		        }
+				}
+				else
+			   	{
+			   	 	
+				    return $app->redirect($this->getRacineSite().'inscription/erreur');
 
-		         return $app['twig']->render('forum/list_topic.html.twig',[
-		                'success'=>$success,
-		                'topic'=>$topic,
-		                'topics'=>$topics
-		            ]);
-
-			
+			   	}
 			}
 			else
 		   	{
 		   	 	
-			    return $app->redirect('/localhost/final_project_wf3/web/inscription/erreur');
+			    return $app->redirect($this->getRacineSite().'inscription/erreur');
 
-		   	}
-            
+		   	}           
 
 	}
 }

@@ -93,6 +93,8 @@ class ApplicationTwigExtension extends \Twig_Extension
 
 			new \Twig_Filter('balise', function($text)
 			{
+				$text = str_replace('%', 'pourcent', $text);
+
 				printf($text);
 				return;
 			}), #fin twig_filter balise
