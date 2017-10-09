@@ -61,6 +61,11 @@
   font-family: 'Monoton', cursive;
 }
 
+.navbar-right {
+    float: right !important;
+    margin-right: -29px;
+}
+
 @media all and (min-width: 768px) {
   /* Navbar positioning foo */
   .navbar-wrapper {
@@ -80,7 +85,11 @@
     border-radius: 4px;
   }
 
-  .navbar-right {
-    float: left !important;
-    margin-right: -15px;
 }
+
+
+/* @media all and (min-width: 500px){
+  .navbar-right {
+    float: left;
+  }
+} */
