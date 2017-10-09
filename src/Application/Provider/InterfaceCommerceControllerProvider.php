@@ -200,18 +200,40 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
 		->bind('forumPostDetail');
 
-
-
 		$controllers
 		->post('/search', 'Application\Controller\InterfaceCommerceController::searchAction')
 		->bind('search');
 
 		$controllers
-		->get('/modification_profil-{token}', 'Application\Controller\InterfaceCommerceController::setProfilAction')
+		->match('/profil/modification_profil-{token}', 'Application\Controller\InterfaceCommerceController::setProfilAction')
 		->assert('token','\w+')
 		->value('token','0')
+		->method('POST|GET')
 		->bind('set_profil');
 
+		$controllers
+		->get('/forgot_password-{token}', 'Application\Controller\GlobalController::forgot_passwordAction')
+		->assert('token','\w+')
+		->value('token','0')
+		->bind('forgot_password');
+
+		$controllers
+		->post('/forgot_password-{token}', 'Application\Controller\GlobalController::forgot_passwordPostAction')
+		->assert('token','\w+')
+		->value('token','0')
+		->bind('forgot_passwordPost');
+
+		$controllers
+		->get('/reset_password-{token}', 'Application\Controller\GlobalController::reset_passwordAction')
+		->assert('token','\w+')
+		->value('token','0')
+		->bind('reset_password');
+
+		$controllers
+		->post('/reset_password-{token}', 'Application\Controller\GlobalController::reset_passwordPostAction')
+		->assert('token','\w+')
+		->value('token','0')
+		->bind('reset_passwordPost');
 
 
 		return $controllers;

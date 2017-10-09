@@ -16,6 +16,7 @@
 				<br>
 
 				{% for result in results %}
+					<hr>
 					<h4>{{ result | search_construct['category'] }}</h4>
 					<p>{{ result | search_construct['content'] }}</p>
 					<p>{{ result | search_construct['url'] | balise }}</p>
