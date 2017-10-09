@@ -93,7 +93,9 @@
 										
 										<h4><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a>
 										</h4>
+
 										<p>{{ product.description| accroche | balise }}</p>
+
 									</div>
 									<div class="ratings">
 										<a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" class="btn btn-primary pull-right"> Details </a>

@@ -1,7 +1,5 @@
 {% extends 'defaultLayout.html.twig' %}
 
-
-
 {% block contenu %}
 	<br><br><br><br>
 	<div class="row">
@@ -11,9 +9,9 @@
 			</div>	
 		{% endif %}
 		
-
 		{% if products is not empty %}
 			<div class="col-md-12">
+				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
 					<thead>
 						<tr>
@@ -21,6 +19,7 @@
 							<th class="small">Nom ou Modèle</th>
 							<th class="small" width="80">Prix (€)</th>
 							<th class="small" width="80">Date de création</th>
+							<th class="small" width="80">Posté par</th>
 							<th class="small" width="80">Action</th>
 						</tr>
 					</thead>
@@ -35,6 +34,7 @@
 								<td>{{value.name}}</td>
 								<td align="right">{{value.price|number_format(2, '.', ' ')}}</td>
 								<td align="center">{{value.creation_date | date('d/m/Y')}}</td>
+								<td>{{value.pseudo}}</td>
 								<td align="center">
 									<a href="{{ url('view_newAd',{'ID_product' : value.ID_product, 'token' : app.session.get('token')}) }}" class="form-control btn btn-warning">Modifier</a>
 									<br><br>
@@ -58,9 +58,6 @@
 
 		{% endif %}
 	</div>
-
-
-
 {% endblock %}
 
 
