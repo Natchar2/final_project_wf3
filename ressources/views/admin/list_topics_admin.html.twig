@@ -1,35 +1,31 @@
 {% extends 'defaultLayout.html.twig' %}
 
-<<<<<<< HEAD
-{% block stylesheets %}
-	{{parent()}}
-	<link rel="stylesheet" href="{{asset('css/list_topic.css')}}">
-{% endblock %}
-
 {% block contenu %}
-	<div class="container topicPad">
-		<div class="row">
-			{% if success is defined %}
-				<div class="alert alert-danger" role=alert>
-					<p>{{ success }}</p>
-				</div>	
-			{% endif %}
-			
+	<br><br><br><br>
+	<div class="row">
+		{% if success is defined %}
+			<div class="alert alert-danger" role=alert>
+				<p>{{ success }}</p>
+			</div>	
+		{% endif %}
+		
 
-			{% if topics is not empty %}
-				<div class="col-md-12">
-					<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
-						<thead>
+		{% if topics is not empty %}
+			<div class="col-md-12">
+				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
+				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%"  id="myTable">
+					<thead>
+						<tr>
+							<th>Nom du topic</th>
+							<th class="small" width="80">Date de création</th>
+							<th class="small" width="300">Lien vers le produit ou l'événement associé</th>
+							<th class="small" width="80">Action</th>
+							<th class="small" width="80">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for value in topics %}
 							<tr>
-								<th>Nom du topic</th>
-								<th>Date de création</th>
-								<th>Lien vers le produit ou l'événement associé</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for value in topics %}
-								<tr>
 								<td>{{value.title}}</td>
 								<td>{{value.creation_date | date('d/m/Y')}}</td>
 								<td>
@@ -42,6 +38,7 @@
 									{% endif %}
 									
 								</td>
+								<td>{{value.pseudo}}</td>
 								<td>
 									<form action="{{ url('deleteTopic') }}"  method="post">
 										<input type="hidden" name="ID_topic" value="{{value.ID_topic}}">
@@ -50,24 +47,22 @@
 									</form>
 								</td>
 							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-			{% else %}
-				
-				<div class="alert alert-warning" role=alert>
-					<p>Vous n'avez pas encore de topic à afficher</p>
-				</div>		
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		{% else %}
+			
+			<div class="alert alert-warning" role=alert>
+				<p>Vous n'avez pas encore de topic à afficher</p>
+			</div>		
 
-			{% endif %}
-		</div>
+		{% endif %}
 	</div>
 
 
+
 {% endblock %}
 
-{# include footer #}
-{% block footer %}
-	{% include 'commerce/footer.html.twig' %}
-{% endblock %}
+
+

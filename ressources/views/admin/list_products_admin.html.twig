@@ -1,23 +1,17 @@
 {% extends 'defaultLayout.html.twig' %}
 
-{% block stylesheets %}
-	{{parent()}}
-	<link rel="stylesheet" href="{{asset('css/list-products.css')}}">
-{% endblock %}
-
 {% block contenu %}
-
-	<div class="container products">
-		<div class="row">
-			{% if success is defined %}
-				<div class="alert alert-danger" role=alert>
-					<p>{{ success }}</p>
-				</div>	
-			{% endif %}
+	<br><br><br><br>
+	<div class="row">
+		{% if success is defined %}
+			<div class="alert alert-danger" role=alert>
+				<p>{{ success }}</p>
+			</div>	
+		{% endif %}
 		
-
 		{% if products is not empty %}
 			<div class="col-md-12">
+				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
 					<thead>
 						<tr>
@@ -25,6 +19,7 @@
 							<th class="small">Nom ou Modèle</th>
 							<th class="small" width="80">Prix (€)</th>
 							<th class="small" width="80">Date de création</th>
+							<th class="small" width="80">Posté par</th>
 							<th class="small" width="80">Action</th>
 						</tr>
 					</thead>
@@ -33,12 +28,13 @@
 							<tr>
 								<td align="center">
 									{% if (value.image_1>"") %}
-										<img src="{{ asset('assets/images/'~value.image_1) }}" class="img-fluid">
+										<img src="{{ asset('assets/images/'~value.image_1) }}" style="width:70px;height:auto;">
 									{% endif %}
 								</td>
 								<td>{{value.name}}</td>
 								<td align="right">{{value.price|number_format(2, '.', ' ')}}</td>
 								<td align="center">{{value.creation_date | date('d/m/Y')}}</td>
+								<td>{{value.pseudo}}</td>
 								<td align="center">
 									<a href="{{ url('view_newAd',{'ID_product' : value.ID_product, 'token' : app.session.get('token')}) }}" class="form-control btn btn-warning">Modifier</a>
 									<br><br>
@@ -46,7 +42,8 @@
 										<input type="hidden" name="ID_product" value="{{value.ID_product}}">
 										<input type="hidden" name="token" value="{{app.session.get('token')}}">
 										<button onclick="return confirm('êtes vous sûr ??')" class="form-control btn btn-danger" type="submit">Supprimer</button> 								
-									</form><br>						
+									</form><br>
+
 								</td>
 							</tr>
 						{% endfor %}
@@ -54,18 +51,14 @@
 				</table>
 			</div>
 		{% else %}
-				
-				<div class="alert alert-warning" role=alert>
-					<p>Vous n'avez pas encore de produits à afficher</p>
-				</div>		
+			
+			<div class="alert alert-warning" role=alert>
+				<p>Vous n'avez pas encore de produits à afficher</p>
+			</div>		
 
-			{% endif %}
-		</div>
+		{% endif %}
 	</div>
-
 {% endblock %}
 
-{# include footer #}
-	{% block footer %}
-		{% include 'commerce/footer.html.twig' %}
-	{% endblock %}
+
+

@@ -705,7 +705,9 @@ class InterfaceCommerceController
 	}
 
 	//affichage de la page formulaire ajout de produit ac les eventuelles données deu produit en cas de modification	
-	public function newAdAction(Application $app, $ID_product,$token){
+
+	public function newAdAction(Application $app, Request $request, $ID_product,$token){
+
 
 
 //recupération du token de session
@@ -970,9 +972,7 @@ class InterfaceCommerceController
     		$user = $token1->getUser();    		
     		$ID_user = $user->getID_user();
 
-    		$products = $app['idiorm.db']->for_table('view_products')
-	        ->where('ID_user',$ID_user)//penser a passer l'ID_User ac la sessions
-	        ->find_result_set();
+    		
 
 
 	        if($request->get('token') == $app['session']->get('token'))
@@ -998,8 +998,7 @@ class InterfaceCommerceController
 	        	{
 	        		unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_3'));
 	        	}
-	        	$suppression->delete();
-
+	        	
 	        	$topic = $app['idiorm.db']->for_table('topic')
 	        	->where('ID_product', $request->get('ID_product'))
 	        	->find_one()
@@ -1007,18 +1006,26 @@ class InterfaceCommerceController
 	        		'ID_product' => 0,
 	        	));
 
+	        	$topic->save();
+	        	
+				$suppression->delete();
+
 	        	$success = 'Le produit a été supprimé de la liste';
-	        }
-	        else
-	        {
-	        	$success = 'Vous ne pouvez supprimé un élément sans être connecté';
+	        	
+	        	$products = $app['idiorm.db']->for_table('view_products')
+		        ->where('ID_user',$ID_user)//penser a passer l'ID_User ac la sessions
+		        ->find_result_set();
 
-	        }
+		        return $app['twig']->render('commerce/list_products.html.twig',[
+		        	'success'=>$success,
+		        	'products'=>$products
+		        ]);
+		    }
+		    else
+		    {
+		    	return $app->redirect('../inscription/erreur');
+		    }
 
-	        return $app['twig']->render('commerce/list_products.html.twig',[
-	        	'success'=>$success,
-	        	'products'=>$products
-	        ]);
 	    }
 	    else
 	    {
@@ -1203,36 +1210,52 @@ class InterfaceCommerceController
 
 				}
 
-            # Insertion en BDD
-				$inscriptionDb = $app['idiorm.db']->for_table('users')->create();
-				
-            #On associe les colonnes de notre BDD avec les valeurs du Formulaire
-            #Colonne mySQL                         #Valeurs du Formulaire
-				$inscriptionDb->name            =   $inscription['name'];
-				$inscriptionDb->surname         =   $inscription['surname'];
-				$inscriptionDb->pseudo          =   $inscription['pseudo'];
-				$inscriptionDb->street          =   $inscription['street'];
-				$inscriptionDb->zip_code        =   $inscription['zip_code'];
-				$inscriptionDb->city            =   $inscription['city'];
-				$inscriptionDb->mail            =   $inscription['email'];
-				$inscriptionDb->phone           =   $inscription['phone'];
-				$inscriptionDb->society_name    =   $inscription['society_name'];
-				if(!empty($inscription['avatar']))
-					$inscriptionDb->avatar          =	$newname.'.jpg';   
-				$inscriptionDb->password 		= 	$app['security.encoder.digest']->encodePassword($inscription['password'], '');
-				$inscriptionDb->creation_date	=	strtotime("now");
-				
-            # Insertion en BDD
-				$inscriptionDb->save();
-				
-            # Redirection
-				return $app->redirect( $app['url_generator'] ->generate('connexion', [ 
+				$users = $app['idiorm.db']->for_table('users')
+				->where('mail', $inscription['email'])
+				->find_result_set();
 
-				]));
-			}
+
+				if(count($users) == 0)
+				{
+		            # Insertion en BDD
+						$inscriptionDb = $app['idiorm.db']->for_table('users')->create();
+						
+		            #On associe les colonnes de notre BDD avec les valeurs du Formulaire
+		            #Colonne mySQL                         #Valeurs du Formulaire
+						$inscriptionDb->name            =   $inscription['name'];
+						$inscriptionDb->surname         =   $inscription['surname'];
+						$inscriptionDb->pseudo          =   $inscription['pseudo'];
+						$inscriptionDb->street          =   $inscription['street'];
+						$inscriptionDb->zip_code        =   $inscription['zip_code'];
+						$inscriptionDb->city            =   $inscription['city'];
+						$inscriptionDb->mail            =   $inscription['email'];
+						$inscriptionDb->phone           =   $inscription['phone'];
+						$inscriptionDb->society_name    =   $inscription['society_name'];
+						if(!empty($inscription['avatar']))
+							$inscriptionDb->avatar          =	$newname.'.jpg';   
+						$inscriptionDb->password 		= 	$app['security.encoder.digest']->encodePassword($inscription['password'], '');
+						$inscriptionDb->creation_date	=	strtotime("now");
+						
+		            # Insertion en BDD
+						$inscriptionDb->save();
+						
+		            # Redirection
+						return $app->redirect( $app['url_generator'] ->generate('connexion', [ 
+
+						]));
+				}
+				else
+				{
+
+					$error = "Cette adresse mail est déjà utilisée. Veuillez en choisir une autre";
+					return $app['twig']->render('commerce/inscription.html.twig', [
+						'form' => $form->createView(),
+						'error'=> $error
+					]);
+				}	
 			
 			
-			
+		}
 			
 		endif;
 
@@ -1456,34 +1479,52 @@ class InterfaceCommerceController
 					$image->move($chemin, $newname.'.jpg');
 				}
 
-            # Insertion en BDD
-				$infosProfilDb = $app['idiorm.db']->for_table('users')->create();
-				
-            #On associe les colonnes de notre BDD avec les valeurs du Formulaire
-            #Colonne mySQL                         #Valeurs du Formulaire
-				$infosProfilDb->name            =   $infosProfil['name'];
-				$infosProfilDb->surname         =   $infosProfil['surname'];
-				$infosProfilDb->pseudo          =   $infosProfil['pseudo'];
-				$infosProfilDb->street          =   $infosProfil['street'];
-				$infosProfilDb->zip_code        =   $infosProfil['zip_code'];
-				$infosProfilDb->city            =   $infosProfil['city'];
-				$infosProfilDb->mail            =   $infosProfil['email'];
-				$infosProfilDb->phone           =   $infosProfil['phone'];
-				$infosProfilDb->society_name    =   $infosProfil['society_name'];
-				if(!empty($infosProfil['avatar'])) $infosProfilDb->avatar =	$newname.'.jpg';
-				
-            # Insertion en BDD
-				$infosProfilDb->save();
-				
-            # Redirection
-				return $app->redirect('profil/success_modification');
-			}
+			$users = $app['idiorm.db']->for_table('users')
+				->where('mail', $inscription['email'])
+				->where_not_in('ID_user', $ID_user)
+				->find_result_set();
 
-    	 # Affichage du Formulaire dans la Vue
-			return $app['twig']->render('commerce/profil_modification.html.twig', [
-				'form' => $form->createView(),
-				'error'=> $error
-			]);
+
+				if(count($users) == 0)
+				{
+
+		            # Insertion en BDD
+						$infosProfilDb = $app['idiorm.db']->for_table('users')->create();
+						
+		            #On associe les colonnes de notre BDD avec les valeurs du Formulaire
+		            #Colonne mySQL                         #Valeurs du Formulaire
+						$infosProfilDb->name            =   $infosProfil['name'];
+						$infosProfilDb->surname         =   $infosProfil['surname'];
+						$infosProfilDb->pseudo          =   $infosProfil['pseudo'];
+						$infosProfilDb->street          =   $infosProfil['street'];
+						$infosProfilDb->zip_code        =   $infosProfil['zip_code'];
+						$infosProfilDb->city            =   $infosProfil['city'];
+						$infosProfilDb->mail            =   $infosProfil['email'];
+						$infosProfilDb->phone           =   $infosProfil['phone'];
+						$infosProfilDb->society_name    =   $infosProfil['society_name'];
+						if(!empty($infosProfil['avatar'])) $infosProfilDb->avatar =	$newname.'.jpg';
+						
+		            # Insertion en BDD
+						$infosProfilDb->save();
+						
+		            # Redirection
+						return $app->redirect('profil/success_modification');
+				}
+				else
+				{
+					$error = 'Cette adresse email est déjà utilisée par un autre utilisateur.';
+					return $app['twig']->render('commerce/profil_modification.html.twig', [
+						'form' => $form->createView(),
+						'error'=> $error
+					]);
+				}
+		    	 # Affichage du Formulaire dans la Vue
+					return $app['twig']->render('commerce/profil_modification.html.twig', [
+						'form' => $form->createView(),
+						'error'=> $error
+					]);
+				}
+				
 		}
 	}
 

@@ -177,6 +177,7 @@
 		{{ parent() }}
 		<script src="{{ asset("js/notify.min.js")}}"></script>
 		<script src="{{ asset('js/panier.js') }}"></script>
+		{% if event.latitude is not empty and event.longitude is not empty %}
 		<script>
 	     function initMap() {
 	       var Notre_boutique = {lat: {{ event.latitude | number | json_encode() | raw }}, lng: {{ event.longitude | number |  json_encode()  | raw }} };
@@ -191,5 +192,5 @@
 	     }
 	   </script>	
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAovZOovHb3bqa8MJtf6bhygt0FRj0XErU&callback=initMap"></script>
-
+		{% endif %}
 	{% endblock %}

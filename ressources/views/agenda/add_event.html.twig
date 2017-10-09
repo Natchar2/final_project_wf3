@@ -8,7 +8,9 @@
 
 
 {% block contenu %}
-<div class="container headerNewTopic">	
+
+<div class="container padMenu">	
+
 	<div class="row">
 		<div class="col-md-12">
 			{% if error is not empty %}
@@ -244,6 +246,7 @@
 						<div class="col-md-4 col-md-push-1">
 							<input type="hidden" name="token" value="{{app.session.get('token')}}">
 							<button  type="submit" class="btn btn-primary">Ajouter</button>
+							<a href="{{ url('list_events') }}" class="btn btn-default">Retour à la liste</a>
 						</div>
 					</div>
 				</fieldset>

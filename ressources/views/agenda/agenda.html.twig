@@ -26,6 +26,7 @@
 
                         {{ render (controller('Application\\Controller\\InterfaceAgendaController::menuAgenda', { 'active':active } )) }}
 
+
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <center><a href="{{ url('agenda_add') }}" class="btn btn-primary">Ajoutez un évènement</a></center>
                     {% else %}
