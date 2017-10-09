@@ -705,7 +705,7 @@ class InterfaceCommerceController
 	}
 
 	//affichage de la page formulaire ajout de produit ac les eventuelles données deu produit en cas de modification	
-	public function newAdAction(Application $app, $ID_product,$token){
+	public function newAdAction(Application $app, Request $request, $ID_product,$token){
 
 
 //recupération du token de session

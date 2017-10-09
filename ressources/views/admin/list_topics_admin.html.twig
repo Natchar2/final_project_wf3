@@ -12,12 +12,14 @@
 
 		{% if topics is not empty %}
 			<div class="col-md-12">
+				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%"  id="myTable">
 					<thead>
 						<tr>
 							<th>Nom du topic</th>
 							<th class="small" width="80">Date de création</th>
 							<th class="small" width="300">Lien vers le produit ou l'événement associé</th>
+							<th class="small" width="80">Action</th>
 							<th class="small" width="80">Action</th>
 						</tr>
 					</thead>
@@ -36,6 +38,7 @@
 									{% endif %}
 									
 								</td>
+								<td>{{value.pseudo}}</td>
 								<td>
 									<form action="{{ url('deleteTopic') }}"  method="post">
 										<input type="hidden" name="ID_topic" value="{{value.ID_topic}}">

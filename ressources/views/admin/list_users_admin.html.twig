@@ -10,35 +10,45 @@
 		{% endif %}
 		
 
-		{% if topics is not empty %}
+		{% if users is not empty %}
 			<div class="col-md-12">
+				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%"  id="myTable">
 					<thead>
 						<tr>
-							<th>Nom du topic</th>
+							<th width="80"></th>
+							<th class="small">Nom / Prénom</th>
+							<th class="small" width="100">Pseudo</th>
 							<th class="small" width="80">Date de création</th>
-							<th class="small" width="300">Lien vers le produit ou l'événement associé</th>
+							<th class="small" width="80">Dernière connexion</th>
+							<th class="small" width="80">Type</th>
 							<th class="small" width="80">Action</th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for value in topics %}
+						{% for value in users %}
 							<tr>
-								<td>{{value.title}}</td>
+								<td align="center">
+									{% if (value.avatar>"") %}
+										<img src="{{ asset('assets/images/'~value.avatar) }}" style="width:70px;height:auto;">
+									{% endif %}
+								</td>
+								<td>{{value.name ~ ' ' ~ value.surname }}</td>
+								<td>{{value.pseudo }}</td>
 								<td>{{value.creation_date | date('d/m/Y')}}</td>
 								<td>
-									{% if value.ID_product > 0 %}
-										<a href="{{ url('article', {'category_name': value.category_name |lower , 'slugproduct':value.name|slug , 'ID_product':value.ID_product}) }}">Shop - {{ value.name }}</a>
+									{% if (value.connexion_date>"0") %}
+										{{value.connexion_date | date('d/m/Y')}}
+									{% else %}
+										jamais
 									{% endif %}
-
-									{% if value.ID_event > 0 %}
-										<a href="{{ url('agenda_article', {'category_name': value.category_name|lower , 'slugevent':value.event_title|slug , 'ID_event':value.ID_event}) }}" class="btn btn-primary pull-right">Evénements - {{value.event_title}}</a>
-									{% endif %}
-									
 								</td>
 								<td>
-									<form action="{{ url('deleteTopic') }}"  method="post">
-										<input type="hidden" name="ID_topic" value="{{value.ID_topic}}">
+									{{ value.type }}
+								</td>
+								<td>
+									<form action=""  method="post">
+										<input type="hidden" name="ID_topic" value="{{value.ID_user}}">
 										<input type="hidden" name="token" value="{{app.session.get('token')}}">
 										<button onclick="return confirm('êtes vous sûr ??')" class="for-control btn btn-danger" type="submit">Supprimer</button> 								
 									</form>
