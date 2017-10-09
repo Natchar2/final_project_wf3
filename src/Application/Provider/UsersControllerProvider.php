@@ -45,7 +45,7 @@ class UsersControllerProvider implements UserProviderInterface
 			throw new UsernameNotFoundException(sprintf('%s n\'existe pas', $user_mail));
 		}
 		
-		return new Users($user->ID_user, $user->mail, $user->password, $user->type, $user->name, $user->surname, $user->pseudo, $user->street, $user->zip_code, $user->city, $user->phone, $user->society_name, $user->creation_date, $user->connexion_date, $user->last_date, $user->avatar);
+		return new Users($user->ID_user, $user->mail, $user->password, $user->type, $user->name, $user->surname, $user->pseudo, $user->street, $user->zip_code, $user->city, $user->phone, $user->society_name, $user->creation_date, $user->connexion_date, $user->last_date, $user->avatar, $user->newsletter);
 	}
 }
 
