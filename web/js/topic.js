@@ -7,6 +7,7 @@ $('.plus_post').click(function(e){
 		type: 'post',
 		data: {
 			number_post: number_post,
+			ID_topic: $('.ID_topic').val(),
 		},
 		dataType: 'json',
 		timeout: 4000,

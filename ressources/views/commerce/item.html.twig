@@ -140,20 +140,6 @@
 						</div>
 						<div class="card-body row">
 
-
-							{% if posts is empty %}
-								<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
-							{% else %}
-								{% for post in posts %}
-
-									{{ post.content }}
-									<br><hr><br>
-
-
-
-								{% endfor %}
-							{% endif %}
-
 							{% if posts is empty %}
 								<div class="alert alert-warning">Il n'y a pas encore de discussions sur ce produit</div>
 							{% else %}

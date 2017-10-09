@@ -35,7 +35,9 @@
 							</div>
 							<span >
 								<br>
-								<button class="btn btn-primary plus_post" type="button">Afficher plus</button>&nbsp;&nbsp;<button class="btn btn-primary" type="button">Revenir au forum</button>
+
+									<button class="btn btn-primary plus_post" type="button">Afficher plus</button>
+								&nbsp;&nbsp;<a href="{{ url('accueil_forum') }}" class="btn btn-primary" type="button">Revenir au forum</a>
 							</span>
 
 							<!-- Blog Post -->
@@ -58,7 +60,7 @@
 									</div> -->
 
 									<!-- champ caché -->
-									<input type="hidden" name="ID_topic">
+									<input type="hidden" class="ID_topic" name="ID_topic" value="{{topics.ID_topic}}">
 									<!-- Textarea -->
 									<div class="form-group">
 										<div class="col-md-12">                     
@@ -101,11 +103,11 @@
 							<h5 class="card-header">Publicité</h5>
 							<br>
 							<div class="card-body">
-								<img src="{{asset('img/chanel.jpg')}}" height="auto" width="300px" alt="chanel">
+								<a href="http://www.chanel.com/fr_FR/" target=_blank><img src="{{asset('img/chanel.jpg')}}" height="auto" width="300px" alt="chanel"></a>
 							</div>
 							<br>
 							<div class="card-body">
-								<img src="{{asset('img/ysl.jpg')}}" height="auto" width="300px" alt="yvessaintlaurent">
+								<a href="http://www.ysl.com/fr" target=_blank><img src="{{asset('img/ysl.jpg')}}" height="auto" width="300px" alt="yvessaintlaurent"></a>
 							</div>
 							<br>
 						</div>

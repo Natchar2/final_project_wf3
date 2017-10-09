@@ -1,5 +1,16 @@
 {% extends 'defaultLayout.html.twig' %}
 
 {% block contenu %}
+	<br><br><br><br>
 	<h1>Page Administrateur</h1>
+
+
+	<ul>
+		<li><a href="{{ url('listProductsAdmin') }}">Liste produits</a></li>
+		<li><a href="{{ url('listEventsAdmin') }}">Liste événements</a></li>
+		<li><a href="{{ url('listTopicsAdmin') }}">Liste topics</a></li>
+		<li><a href="{{ url('listUsersAdmin') }}">Liste utilisateurs</a></li>
+	</ul>
+
+
 {% endblock %}

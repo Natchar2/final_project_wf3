@@ -16,7 +16,6 @@
             <link rel="stylesheet" href="{{asset('css/portfolio-item.css')}}">
         {% endblock %}
 
-
         {% block contenu %}
 
             <!-- Page Content -->
@@ -27,7 +26,14 @@
 
                         {{ render (controller('Application\\Controller\\InterfaceAgendaController::menuAgenda', { 'active':active } )) }}
 
-                        <button><a href="{{ url('agenda_add') }}">Ajoutez un évènement</a></button>
+
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <center><a href="{{ url('agenda_add') }}" class="btn btn-primary">Ajoutez un évènement</a></center>
+                    {% else %}
+                        Vous devez être connecté pour poster un évènement
+                        <br>
+                        <center><a href="{{ path('connexion') }}" class="btn btn-success">Se connecter</a></center>
+                    {% endif %}
 
                     </div>
 
