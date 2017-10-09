@@ -160,7 +160,9 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('shoppingCard');
 
 		$controllers
-		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
+		->get('/connexion/{success_inscription}', 'Application\Controller\InterfaceCommerceController::connexionAction')
+		->assert('sucess_inscription', 'success_inscription')
+		->value('success_inscription', '')
 		->bind('connexion');
 
 		// $controllers
@@ -219,10 +221,16 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('reset_passwordPost');
 
 		$controllers
+
 		->get('profil/utilisateur/{ID_user}', 'Application\Controller\InterfaceCommerceController::ProfilUserAction')
 		->assert('ID_user','\d+')
 		->value('ID_user','0')
 		->bind('profilUser');
+
+		->match('/newsletter', 'Application\Controller\GlobalController::newsletterPostAction')
+		->method('POST|GET')
+		->bind('newsletter');
+
 
 
 		return $controllers;

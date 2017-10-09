@@ -27,23 +27,15 @@ class InterfaceCommerceController
 
 	public function accueilAction(Application $app)
 	{
-		$this->getRacineSite();
 		$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
 		$topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
 		$events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
-
-		// $t = 	$app['security.encoder.digest']
-		// ->encodePassword('test', '');  
-
-		// print_r($t);
-		// die();
 
 		return $app['twig']->render('commerce/accueil.html.twig',[
 			'products' => $products,
 			'topics' => $topics,       
 			'events' => $events,
 		]);
-
 	}
 
 	public function shopAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
@@ -695,11 +687,15 @@ class InterfaceCommerceController
 		return $app['twig']->render('commerce/shoppingCard.html.twig');
 	}
 
-	public function connexionAction(Application $app, Request $request)
+	public function connexionAction(Application $app, Request $request, $success_inscription)
 	{
+		$success = "";
+		if($success_inscription === 'success_inscription') $success = "Vous avez été inscrit avec succès, veuillez à present vous connecter";
+
 		return $app['twig']->render('commerce/connexion.html.twig', array(
 			'error' => $app['security.last_error']($request),
 			'last_username' => $app['session']->get('_security.last_username'),
+			'success_inscription' => $success
 		));
 
 	}
@@ -1235,14 +1231,19 @@ class InterfaceCommerceController
 							$inscriptionDb->avatar          =	$newname.'.jpg';   
 						$inscriptionDb->password 		= 	$app['security.encoder.digest']->encodePassword($inscription['password'], '');
 						$inscriptionDb->creation_date	=	strtotime("now");
+
+						$newsletter = $app['idiorm.db']->for_table('newsletter')->where('mail', $inscription['email'])->find_result_set();
+
+						if(count($newsletter) > 0)
+						{
+							$inscriptionDb->newsletter = true;
+						}
 						
 		            # Insertion en BDD
 						$inscriptionDb->save();
 						
 		            # Redirection
-						return $app->redirect( $app['url_generator'] ->generate('connexion', [ 
-
-						]));
+						return $app->redirect("connexion/success_inscription");
 				}
 				else
 				{

@@ -9,6 +9,12 @@
 		<div class="col-xs-6 col-xs-push-3">
 			<h2 class="text-center">Connexion</h2>
 			<br>
+
+			{% if success_inscription is defined and success_inscription != "" %}
+				<div class="alert alert-success" role=alert>
+					<p>{{success_inscription}}</p>
+				</div>
+			{% endif %}
 			
 			{% if error is defined %}
 				<p style="color:red; font-size:2em;">{{error}}</p>
@@ -20,7 +26,7 @@
 				</div><br>
 			{% endif %}
 
-			{% if success_mofidification_password is defined%}
+			{% if success_mofidification_password is defined %}
 				<p class="alert alert-success">{{ success_mofidification_password }}</p>
 			{% endif %}
 
