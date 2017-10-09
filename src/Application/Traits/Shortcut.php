@@ -105,6 +105,18 @@ trait Shortcut{
 		return $token;
     }
 
+    public function sendFeedback($ID_user, $message)
+    {
+    	$user = $app['idiorm.db']->for_table('users')->where('ID_user', $ID_user)->find_result_set()[0];
+
+    	$subject = "Intervation de l'administrateur sur vos données";
+    	$from = "postmaster@localhost";
+    	$to = $user->mail;
+    	$content = $message . "<br><a href='" . $this->getRacineSite() . "accueil'>Allez sur le site</a>";
+
+    	Application\Controller\GlobalController::sendMail($subject, $from, $to, $content);
+    }
+
 
 
 }
