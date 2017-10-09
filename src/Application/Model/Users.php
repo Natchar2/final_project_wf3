@@ -23,9 +23,10 @@ class Users implements UserInterface
 	private $connexion_date;
 	private $last_date;
 	private $avatar;
+    private $newsletter;
 
 	// ----------------------------------
-	public function __construct($ID_user, $mail, $password, $type, $name, $surname, $pseudo, $street, $zip_code, $city, $phone, $society_name, $creation_date, $connexion_date, $last_date, $avatar)
+	public function __construct($ID_user, $mail, $password, $type, $name, $surname, $pseudo, $street, $zip_code, $city, $phone, $society_name, $creation_date, $connexion_date, $last_date, $avatar, $newsletter)
 	{
 		$this->ID_user = $ID_user;
 		$this->mail = $mail;
@@ -43,6 +44,7 @@ class Users implements UserInterface
 		$this->connexion_date = $connexion_date;
 		$this->last_date = $last_date;
 		$this->avatar = $avatar;
+        $this->newsletter = $newsletter;
 	}
 	// ----------------------------------
 
@@ -195,6 +197,14 @@ class Users implements UserInterface
     public function getAvatar()
     {
         return $this->avatar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewsletter()
+    {
+        return $this->newsletter;
     }
 }
 
