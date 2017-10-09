@@ -1785,8 +1785,8 @@ class InterfaceCommerceController
 			->limit(1)
 			->find_one();
 
-			return $app['twig']->render('commerce/profil.html.twig',
-				['userProfil'			=>$userProfil,
+			return $app['twig']->render('commerce/profil.html.twig',[
+				'userProfil'			=>$userProfil,
 				'success_modification'	=>$success_modification,
 				'topic'					=>$topic,
 				'event'					=>$event
@@ -1794,7 +1794,7 @@ class InterfaceCommerceController
 		}
 		else
 		{
-			return $app->redirect('inscription');
+			return $app->redirect('connexion');
 		}
 	}
 }

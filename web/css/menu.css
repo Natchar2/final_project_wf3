@@ -79,3 +79,8 @@
   .navbar-wrapper .navbar {
     border-radius: 4px;
   }
+
+  .navbar-right {
+    float: left !important;
+    margin-right: -15px;
+}

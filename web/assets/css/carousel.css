@@ -18,13 +18,9 @@ header{
   background-image: url('../../img/geo.png');
 }
 
-.headerNewTopic{
-  min-height: 617px;
-}
-
-.padMenu{
-  padding-top: 60px;
-  min-height: 617px;
+.space-container{
+  padding-top: 50px;
+  min-height: 600px;
 }
 
 /* Special class on .container surrounding .navbar, used for positioning it into place. */
@@ -408,6 +404,7 @@ footer span{
   background: RGBA(51, 51, 51, 1.00);
   color: RGBA(230, 230, 230, 1.00);
   margin-bottom: 25px;
+  margin-top: 25px;
 }
 
 .result h1{

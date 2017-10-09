@@ -3,14 +3,12 @@
 {% block stylesheets %}
 	{{ parent() }}
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css">
-	<link href="{{asset('dist/css/bootstrap.min.css')}}" rel="stylesheet">
 	<link rel="stylesheet" href="{{asset('css/ajoutArticle.css')}}">
-
 {% endblock %}
 
 
 {% block contenu %}
-<div class="container">	
+<div class="container headerNewTopic">	
 	<div class="row">
 		<div class="col-md-12">
 			{% if error is not empty %}

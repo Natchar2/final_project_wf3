@@ -1,68 +1,73 @@
 {% extends 'defaultLayout.html.twig' %}
 
-
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/list-products.css')}}">
+{% endblock %}
 
 {% block contenu %}
-	<div class="row">
-		{% if success is defined %}
-			<div class="alert alert-danger" role=alert>
-				<p>{{ success }}</p>
-			</div>	
-		{% endif %}
-		
-
-		{% if products is not empty %}
-			<div class="col-md-12">
-				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
-					<thead>
-						<tr>
-							<th>Nom ou Modèle</th>
-							<th>Marque</th>
-							<th>Prix</th>
-							<th>Image 1</th>
-							<th>Date de création</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for value in products %}
-							<tr>
-
-								<td>{{value.name}}</td>
-
-								<td>{{value.brand}}</td>
-
-								<td>{{value.price}}</td>
-
-								<td><img src="{{ asset('assets/images/'~value.image_1)}}" class="img-fluid"></td>
-
-								<td>{{value.creation_date | date('d/m/Y')}}</td>
-
-								<td>
-									<form action="{{ url('deleteProduct') }}"  method="post">
-										<input type="hidden" name="ID_product" value="{{value.ID_product}}">
-										<input type="hidden" name="token" value="{{app.session.get('token')}}">
-										<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
-									</form>
-									<a href="{{ url('view_newAd',{'ID_product' : value.ID_product, 'token' : app.session.get('token')}) }}" class="btn btn-warning">Modifier</a>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		{% else %}
+	<div class="container products">
+		<div class="row">
+			{% if success is defined %}
+				<div class="alert alert-danger" role=alert>
+					<p>{{ success }}</p>
+				</div>	
+			{% endif %}
 			
-			<div class="alert alert-warning" role=alert>
-				<p>Vous n'avez pas encore de produits à afficher</p>
-			</div>		
 
-		{% endif %}
+			{% if products is not empty %}
+				<div class="col-md-12">
+					<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
+						<thead>
+							<tr>
+								<th>Nom ou Modèle</th>
+								<th>Marque</th>
+								<th>Prix</th>
+								<th>Image 1</th>
+								<th>Date de création</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for value in products %}
+								<tr>
+
+									<td>{{value.name}}</td>
+
+									<td>{{value.brand}}</td>
+
+									<td>{{value.price}}</td>
+
+									<td><img src="{{ asset('assets/images/'~value.image_1)}}" class="img-fluid"></td>
+
+									<td>{{value.creation_date | date('d/m/Y')}}</td>
+
+									<td>
+										<form action="{{ url('deleteProduct') }}"  method="post">
+											<input type="hidden" name="ID_product" value="{{value.ID_product}}">
+											<input type="hidden" name="token" value="{{app.session.get('token')}}">
+											<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
+										</form>
+										<a href="{{ url('view_newAd',{'ID_product' : value.ID_product, 'token' : app.session.get('token')}) }}" class="btn btn-warning">Modifier</a>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% else %}
+				
+				<div class="alert alert-warning" role=alert>
+					<p>Vous n'avez pas encore de produits à afficher</p>
+				</div>		
+
+			{% endif %}
+		</div>
 	</div>
-
-
 
 {% endblock %}
 
-
-
+{# include footer #}
+	{% block footer %}
+		{% include 'commerce/footer.html.twig' %}
+	{% endblock %}

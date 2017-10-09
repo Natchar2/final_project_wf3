@@ -1,69 +1,75 @@
 {% extends 'defaultLayout.html.twig' %}
 
-
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/list_topic.css')}}">
+{% endblock %}
 
 {% block contenu %}
-	<div class="row">
-		{% if success is defined %}
-			<div class="alert alert-danger" role=alert>
-				<p>{{ success }}</p>
-			</div>	
-		{% endif %}
-		
-
-		{% if topics is not empty %}
-			<div class="col-md-12">
-				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
-					<thead>
-						<tr>
-							<th>Nom du topic</th>
-							<th>Date de création</th>
-							<th>Lien vers le produit ou l'événement associé</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for value in topics %}
-							<tr>
-								<td>{{value.title}}</td>
-
-								<td>{{value.creation_date | date('d/m/Y')}}</td>
-
-								<td>
-									{% if value.ID_product > 0 %}
-										<a href="{{ url('article', {'category_name': value.category_name |lower , 'slugproduct':value.name|slug , 'ID_product':value.ID_product}) }}">{{ value.name }}</a>
-									{% endif %}
-
-									{% if value.ID_event > 0 %}
-										<a href="{{ url('agenda_article', {'category_name': value.category_name|lower , 'slugevent':value.event_title|slug , 'ID_event':value.ID_event}) }}" class="btn btn-primary pull-right">{{value.event_title}}</a>
-									{% endif %}
-									
-								</td>
-
-								<td>
-									<form action="{{ url('deleteTopic') }}"  method="post">
-										<input type="hidden" name="ID_topic" value="{{value.ID_topic}}">
-										<input type="hidden" name="token" value="{{app.session.get('token')}}">
-										<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
-									</form>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		{% else %}
+	<div class="container topicPad">
+		<div class="row">
+			{% if success is defined %}
+				<div class="alert alert-danger" role=alert>
+					<p>{{ success }}</p>
+				</div>	
+			{% endif %}
 			
-			<div class="alert alert-warning" role=alert>
-				<p>Vous n'avez pas encore de topic à afficher</p>
-			</div>		
 
-		{% endif %}
+			{% if topics is not empty %}
+				<div class="col-md-12">
+					<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
+						<thead>
+							<tr>
+								<th>Nom du topic</th>
+								<th>Date de création</th>
+								<th>Lien vers le produit ou l'événement associé</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for value in topics %}
+								<tr>
+									<td>{{value.title}}</td>
+
+									<td>{{value.creation_date | date('d/m/Y')}}</td>
+
+									<td>
+										{% if value.ID_product > 0 %}
+											<a href="{{ url('article', {'category_name': value.category_name |lower , 'slugproduct':value.name|slug , 'ID_product':value.ID_product}) }}">{{ value.name }}</a>
+										{% endif %}
+
+										{% if value.ID_event > 0 %}
+											<a href="{{ url('agenda_article', {'category_name': value.category_name|lower , 'slugevent':value.event_title|slug , 'ID_event':value.ID_event}) }}" class="btn btn-primary pull-right">{{value.event_title}}</a>
+										{% endif %}
+										
+									</td>
+
+									<td>
+										<form action="{{ url('deleteTopic') }}"  method="post">
+											<input type="hidden" name="ID_topic" value="{{value.ID_topic}}">
+											<input type="hidden" name="token" value="{{app.session.get('token')}}">
+											<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% else %}
+				
+				<div class="alert alert-warning" role=alert>
+					<p>Vous n'avez pas encore de topic à afficher</p>
+				</div>		
+
+			{% endif %}
+		</div>
 	</div>
-
 
 
 {% endblock %}
 
-
-
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}

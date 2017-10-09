@@ -1,62 +1,69 @@
 {% extends 'defaultLayout.html.twig' %}
 
-
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/list_events.css')}}">
+{% endblock %}
 
 {% block contenu %}
-	<div class="row">
-		{% if success is defined %}
-			<div class="alert alert-danger" role=alert>
-				<p>{{ success }}</p>
-			</div>	
-		{% endif %}
-		
-
-		{% if events is not empty %}
-			<div class="col-md-12">
-				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
-					<thead>
-						<tr>
-							<th>Nom de l'événement</th>
-							<th>Date d'ajout</th>
-							<th>Image</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for value in events %}
-							<tr>
-
-								<td>{{value.event_title}}</td>
-
-								<td>{{value.creation_date | date('d/m/Y')}}</td>
-
-								<td><img src="{{ asset('assets/images/'~value.image)}}" class="img-fluid"></td>
-
-								<td>
-									<form action="{{ url('deleteEvent') }}"  method="post">
-										<input type="hidden" name="ID_event" value="{{value.ID_event}}">
-										<input type="hidden" name="token" value="{{app.session.get('token')}}">
-										<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
-									</form>
-									<a href="{{ url('view_agenda_add',{'ID_event' : value.ID_event, 'token' : app.session.get('token')}) }}" class="btn btn-warning">Modifier</a>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		{% else %}
+	<div class="container eventPad">
+		<div class="row">
+			{% if success is defined %}
+				<div class="alert alert-danger" role=alert>
+					<p>{{ success }}</p>
+				</div>	
+			{% endif %}
 			
-			<div class="alert alert-warning" role=alert>
-				<p>Vous n'avez pas encore d'événement à afficher</p>
-			</div>		
 
-		{% endif %}
+			{% if events is not empty %}
+				<div class="container">
+					<div class="col-md-12">
+						<table class="table table-bordered table-striped table-hover table-condensed table-responsive" id="myTable">
+							<thead>
+								<tr>
+									<th>Nom de l'événement</th>
+									<th>Date d'ajout</th>
+									<th>Image</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for value in events %}
+									<tr>
+
+										<td>{{value.event_title}}</td>
+
+										<td>{{value.creation_date | date('d/m/Y')}}</td>
+
+										<td><img src="{{ asset('assets/images/'~value.image)}}" class="img-fluid"></td>
+
+										<td>
+											<form action="{{ url('deleteEvent') }}"  method="post">
+												<input type="hidden" name="ID_event" value="{{value.ID_event}}">
+												<input type="hidden" name="token" value="{{app.session.get('token')}}">
+												<button onclick="return confirm('êtes vous sûr ??')" class="btn btn-danger" type="submit">Supprimer</button> 								
+											</form>
+											<a href="{{ url('view_agenda_add',{'ID_event' : value.ID_event, 'token' : app.session.get('token')}) }}" class="btn btn-warning">Modifier</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			{% else %}
+				
+				<div class="alert alert-warning" role=alert>
+					<p>Vous n'avez pas encore d'événement à afficher</p>
+				</div>		
+
+			{% endif %}
+		</div>
 	</div>
-
-
 
 {% endblock %}
 
-
-
+{# include footer #}
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
+{% endblock %}

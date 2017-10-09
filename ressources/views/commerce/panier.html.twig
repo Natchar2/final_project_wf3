@@ -5,7 +5,7 @@
 	<br>
 
 	{% if products is defined and products is not empty %}
-	<div class="container padMenu">
+	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="table-responsive">
@@ -100,12 +100,16 @@
 			</div>
 		</div>
 	</div>
-
+		
+		
 		{% else %}
-			<div class="alert alert-warning" role=alert>
-				<p>Aucun produit dans le panier</p>
+			<div class="container">
+				<div class="alert alert-warning" role=alert>
+					<p>Aucun produit dans le panier</p>
+				</div>
 			</div>		
 		{% endif %}
+		
 
 
 
