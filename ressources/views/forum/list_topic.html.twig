@@ -1,6 +1,6 @@
 {% extends 'defaultLayout.html.twig' %}
 
-<<<<<<< HEAD
+
 {% block stylesheets %}
 	{{parent()}}
 	<link rel="stylesheet" href="{{asset('css/list_topic.css')}}">
@@ -14,10 +14,17 @@
 					<p>{{ success }}</p>
 				</div>	
 			{% endif %}
-			
+				
 
-			{% if topics is not empty %}
+			
 				<div class="col-md-12">
+
+					<div class="actionbar">
+						<a href="{{ url('profil', {'ID_user' : app.user.ID_user}) }}" class="btn btn-info">Retour à mon profil</a>
+					</div>
+					<br><br>
+					
+					{% if topics is not empty %}
 					<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
 						<thead>
 							<tr>
@@ -53,7 +60,7 @@
 							{% endfor %}
 						</tbody>
 					</table>
-				</div>
+				
 			{% else %}
 				
 				<div class="alert alert-warning" role=alert>
@@ -61,6 +68,7 @@
 				</div>		
 
 			{% endif %}
+			</div>
 		</div>
 	</div>
 

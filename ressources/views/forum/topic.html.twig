@@ -25,7 +25,7 @@
 							{% for value in posts %}								
 								<div class="col-xs-12 card-text old_post">
 									<p class= "pull-right">
-										par {{value.pseudo}} le : {{value.post_date | date('d/m/Y')}}</p>
+										par <a href="{{ url('profilUser', {'ID_user' : value.ID_user}) }}">{{value.pseudo}}</a> le : {{value.post_date | date('d/m/Y')}}</p>
 										<br>
 										{{value.content | balise}}
 										<hr>

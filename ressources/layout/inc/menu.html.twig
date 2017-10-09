@@ -55,6 +55,9 @@
 								<li><a href="{{ url('listProducts') }}">Mes articles</a></li>
 								<li><a href="{{ url('list_events') }}">Mes évènements</a></li>
 								<li><a href="{{ url('list_topics') }}">Mes topics</a></li>
+								{% if app.user.type[0] == 'ROLE_ADMIN' %}
+								<li><a href="{{ url('accueilAdmin') }}">Mon administration</a></li>
+							{% endif %}
 							</ul>
 						</li>
                     {% endif %}

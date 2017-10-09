@@ -23,7 +23,6 @@
 					{% else %}
 						<div>Aucun utilisateur ne correspond à votre recherche</div>
 					{% endif %}
-					<a href="{{ url('list_topics') }}" type="button" class="btn btn-info">Voir ma liste</a>
 				</h3>
 
 				<a class="modif" href="{{ url('set_profil',{'token':app.session.get('token')}) }}">Modifier le profil</a>
@@ -42,7 +41,6 @@
 					{% else %}
 						<div>Aucun topic ne correspond à votre recherche</div>
 					{% endif %}
-					<a href="{{ url('list_topics') }}" type="button" class="btn btn-info">Voir ma liste</a>
 				</div>
 
 				<div class="col-xs-12 col-md-4">
@@ -55,7 +53,6 @@
 					{% else %}
 						<div>Aucun évènement ne correspond à votre recherche</div>
 					{% endif %}
-					<a href="{{ url('list_events') }}" type="button" class="btn btn-info">Voir ma liste</a>
 				</div>
 
 				<div class="col-xs-12 col-md-4">
@@ -68,7 +65,6 @@
 					{% else %}
 						<div>Aucun produit ne correspond à votre recherche</div>
 					{% endif %}
-					<a href="{{ url('listProducts') }}" type="button" class="btn btn-info">Voir ma liste</a>
 				</div>
 
 			</div>

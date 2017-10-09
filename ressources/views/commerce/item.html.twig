@@ -72,7 +72,7 @@
 							</div>
 						</div>
 						<div class="card-body">
-							<small class="text-muted pull-right">Publié par {{ product.pseudo }} le  {{ product.creation_date|date('d/m/Y') }}</small>
+							<small class="text-muted pull-right">Publié par <a href="{{ url('profilUser', {'ID_user' : product.ID_user}) }}">{{ product.pseudo }}</a> le  {{ product.creation_date|date('d/m/Y') }}</small>
 							<h3 class="card-title">{{ product.name }} - {% if product.brand > "" %} marque : {{ product.brand }} {% endif %}</h3>							
 							<h4>€ {{ (product.price)|number_format(2, '.', ' ') }}</h4>
 							{% if (product.shipping_charges > 0) %}
@@ -145,7 +145,7 @@
 							{% else %}
 								{% for post in posts %}
 									<p class= "pull-right">
-										par {{post.pseudo}} le : {{post.post_date | date('d/m/Y')}}</p>
+										par <a href="{{ url('profilUser', {'ID_user' : post.ID_user}) }}">{{post.pseudo}}</a> le : {{post.post_date | date('d/m/Y')}}</p>
 										<br>
 										<hr>
 										{{ post.content | balise }}

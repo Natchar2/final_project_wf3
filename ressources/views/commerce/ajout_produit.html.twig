@@ -39,7 +39,7 @@
 				</div><br>
 			{% endif %}
 
-			<form action=""  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
+			<form action="{{ url('newAd') }}"  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
 				<fieldset>
 					<legend>Vendre un objet</legend>
 					<!-- champ caché pour l'id-->
@@ -125,6 +125,12 @@
 						
 						<div class="col-md-4">
 							<label class="control-label">Image</label>
+							
+							<input  type="file" class="dropify" name="image_1">
+							<input type="hidden" name="image_1-hidden"	
+							{% if modification is not empty %}
+								value="{{modification.image_1}}"
+							{% endif %}>
 							{% if modification is not empty %}
 								{% if modification.image_1 is not empty %}
 									<div class="alert alert-info" role="alert">
@@ -133,14 +139,15 @@
 									</div>
 								{% endif %}
 							{% endif %}
-							<input  type="file" class="dropify" name="image_1">
-							<input type="hidden" name="image_1-hidden"	
-							{% if modification is not empty %}
-								value="{{modification.image_1}}"
-							{% endif %}>
 						</div>
 						<div class="col-md-4">
 							<label class="control-label">Image 2</label>
+							
+							<input type="file" class="dropify" name="image_2">
+							<input type="hidden" name="image_2-hidden"	
+							{% if modification is not empty %}
+								value="{{modification.image_2}}"
+							{% endif %}>
 							{% if modification is not empty %}
 								{% if modification.image_2 is not empty %}
 									<div class="alert alert-info" role="alert">
@@ -149,14 +156,15 @@
 									</div>
 								{% endif %}
 							{% endif %}
-							<input type="file" class="dropify" name="image_2">
-							<input type="hidden" name="image_2-hidden"	
-							{% if modification is not empty %}
-								value="{{modification.image_2}}"
-							{% endif %}>
 						</div>
 						<div class="col-md-4">
 							<label class="control-label">Image 3</label>
+							
+							<input type="file" class="dropify" name="image_3">
+							<input type="hidden" name="image_3-hidden"	
+							{% if modification is not empty %}
+								value="{{modification.image_3}}"
+							{% endif %}>
 							{% if modification is not empty %}
 
 								{% if modification.image_3 is not empty %}
@@ -166,11 +174,6 @@
 									</div>
 								{% endif %}
 							{% endif %}
-							<input type="file" class="dropify" name="image_3">
-							<input type="hidden" name="image_3-hidden"	
-							{% if modification is not empty %}
-								value="{{modification.image_3}}"
-							{% endif %}>
 						</div>
 					</div>
 					<!-- Description -->

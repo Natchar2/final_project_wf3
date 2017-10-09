@@ -155,7 +155,7 @@
 								{% for topic in topics %}
 									<tr>
 										<td>{{ topic.creation_date|date('d/m/Y') }}</td>
-										<td class="hidden-xs">{{ topic.pseudo }}</td>
+										<td class="hidden-xs"><a href="{{ url('profilUser', {'ID_user' : topic.ID_user}) }}">{{ topic.pseudo }}</a></td>
 										<td>{{ topic.title }} <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
 									</tr>
 

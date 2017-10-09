@@ -12,12 +12,12 @@
 		{% endif %}
 		
 
-		{% if events is not empty %}
+		
 			<div class="col-md-12">
 
 				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
 
-
+				{% if events is not empty %}
 
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
 					<thead>
@@ -56,7 +56,7 @@
 						{% endfor %}
 					</tbody>
 				</table>
-			</div>
+
 		{% else %}
 			
 			<div class="alert alert-warning" role=alert>
@@ -64,6 +64,7 @@
 			</div>		
 
 		{% endif %}
+		</div>
 	</div>
 
 

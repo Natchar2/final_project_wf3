@@ -28,7 +28,7 @@ $('.plus_post').click(function(e){
 				  	annee = date.getFullYear();	  
 				   	chaine = jour + "/"	+ mois + "/" + annee;  
 							
-				$('.block_post').append('<div class="col-xs-12 card-text old_post"><p class= "pull-right"> par '+ data[post].pseudo +' le : ' + chaine +'</p><br>' + data[post].content + '<hr></div>');
+				$('.block_post').append('<div class="col-xs-12 card-text old_post"><p class= "pull-right"> par <a href="{{ url("profilUser", {"ID_user" : '+ data[post].ID_user +'}) }}">'+ data[post].pseudo +'</a> le : ' + chaine +'</p><br>' + data[post].content + '<hr></div>');
 			}
 		},
 		error: function(data){
