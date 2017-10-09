@@ -1284,18 +1284,18 @@ class InterfaceCommerceController
 		}
 	}
 
-	public function setProfil(Application $app, $token_user)
+	public function setProfilAction(Application $app, Request $request, $token)
 	{
-		$token = $app['security.token_storage']->getToken();
-		if($token_user != $app['session']->get('token'))
+		$token_silex = $app['security.token_storage']->getToken();
+		if($token != $app['session']->get('token'))
 		{
-			$app->redirect('403');
+			$app->redirect($this->getRacineSite() . 'error/403');
 		}
 
 		if($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
 		{
 			
-			$user = $token->get_user();    		
+			$user = $token_silex->getUser();    		
 			$ID_user = $user->getID_user();
 		}
 		else
@@ -1303,7 +1303,7 @@ class InterfaceCommerceController
 			$app->redirect('connexion');
 		}
 
-		$user = $app['idiorm.db']->for_table('users')->where('ID_user', $ID_user);
+		$user = $app['idiorm.db']->for_table('users')->where('ID_user', $ID_user)->find_result_set();
 
 		$form = $app['form.factory']->createBuilder(FormType::class)
 		
@@ -1316,7 +1316,7 @@ class InterfaceCommerceController
 		),
 			'attr'          => array(
 				'class'         => 'form-control',
-				'value' => $user->name,
+				'value' => $user[0]->name,
 			)                
 		])
 
@@ -1329,7 +1329,7 @@ class InterfaceCommerceController
 		),
 			'attr'          => array(
 				'class'         => 'form-control',
-				'value' => $user->surname,
+				'value' => $user[0]->surname,
 			)               
 		])
 
@@ -1342,7 +1342,7 @@ class InterfaceCommerceController
 		),
 			'attr'          => array(
 				'class'         => 'form-control',
-				'value' => $user->pseudo,
+				'value' => $user[0]->pseudo,
 			)                
 		])
 
@@ -1355,7 +1355,7 @@ class InterfaceCommerceController
 		),
 			'attr'          => array(
 				'class'         => 'form-control',
-				'value' => $user->street,
+				'value' => $user[0]->street,
 			)                
 		])
 
@@ -1368,7 +1368,7 @@ class InterfaceCommerceController
 		),
 			'attr'          => array(
 				'class'         => 'form-control',
-				'value' => $user->zip_code,
+				'value' => $user[0]->zip_code,
 			)                
 		])
 
@@ -1381,13 +1381,14 @@ class InterfaceCommerceController
 		),
 			'attr'          => array(
 				'class'         => 'form-control',
-				'value' => $user->city,
+				'value' => $user[0]->city,
 			)                
 		])
 
 		->add('email', TextType::class, [
+			'label' => false,
 			'constraints' => new Assert\Email(),
-			'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com')
+			'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com', 'value' => $user[0]->mail)
 		])
 		
 		->add('phone', TextType::class, [
@@ -1399,7 +1400,7 @@ class InterfaceCommerceController
 		),
 			'attr'          => array(
 				'class'         => 'form-control',
-				'value' => $user->phone,
+				'value' => $user[0]->phone,
 			)                
 		])
 
@@ -1412,7 +1413,7 @@ class InterfaceCommerceController
 		),
 			'attr'          => array(
 				'class'         => 'form-control',
-				'value' => $user->society_name,
+				'value' => $user[0]->society_name,
 			)                
 		])
 
@@ -1429,18 +1430,6 @@ class InterfaceCommerceController
 			'label'         => false,
 			'constraints'   => array(new NotBlank(
 				array('message'=>'Vous devez saisir votre mot de passe')
-			)
-		),
-			'attr'          => array(
-				'class'         => 'form-control',
-			)                
-		])
-
-		->add('passwordVerif', PasswordType::class, [
-			'required'      => true,
-			'label'         => false,
-			'constraints'   => array(new NotBlank(
-				array('message'=>'Vous devez saisir un mot de passe')
 			)
 		),
 			'attr'          => array(
@@ -1464,11 +1453,12 @@ class InterfaceCommerceController
 
 			$infosProfil['password'] = $app['security.encoder.digest']->encodePassword($infosProfil['password'], '');
 
-			if($infosProfil['password'] != $token->get_user()->getPassword())
+			if($infosProfil['password'] != $token_silex->getUser()->getPassword())
 			{
 				$error = "Mot de passe incorrecte";
 			}
-			else{
+			else
+			{
 				# Récupération de l'image
 				if(!empty($infosProfil['avatar']))
 				{
@@ -1479,53 +1469,42 @@ class InterfaceCommerceController
 					$image->move($chemin, $newname.'.jpg');
 				}
 
-			$users = $app['idiorm.db']->for_table('users')
-				->where('mail', $inscription['email'])
-				->where_not_in('ID_user', $ID_user)
-				->find_result_set();
+            	# Insertion en BDD
+				$infosProfilDb = $app['idiorm.db']->for_table('users')->find_one($user[0]->ID_user)->set(array(
+					"name" 	   		=> $infosProfil['name'],
+					"surname"  		=> $infosProfil['surname'],
+					"pseudo"   		=> $infosProfil['pseudo'],
+					"street"   		=> $infosProfil['street'],
+					"zip_code" 		=> $infosProfil['zip_code'],
+					"city"     		=> $infosProfil['city'],
+					"mail"    		=> $infosProfil['email'],
+					"phone"    		=> $infosProfil['phone'],
+					"society_name"  => $infosProfil['society_name'],
+				));
 
 
-				if(count($users) == 0)
-				{
+				if(!empty($infosProfil['avatar'])) $infosProfilDb = $app['idiorm.db']->for_table('users')->find_one($user[0]->ID_user)->set(array(
+					"avatar" => $newname.'.jpg'
+				));
 
-		            # Insertion en BDD
-						$infosProfilDb = $app['idiorm.db']->for_table('users')->create();
-						
-		            #On associe les colonnes de notre BDD avec les valeurs du Formulaire
-		            #Colonne mySQL                         #Valeurs du Formulaire
-						$infosProfilDb->name            =   $infosProfil['name'];
-						$infosProfilDb->surname         =   $infosProfil['surname'];
-						$infosProfilDb->pseudo          =   $infosProfil['pseudo'];
-						$infosProfilDb->street          =   $infosProfil['street'];
-						$infosProfilDb->zip_code        =   $infosProfil['zip_code'];
-						$infosProfilDb->city            =   $infosProfil['city'];
-						$infosProfilDb->mail            =   $infosProfil['email'];
-						$infosProfilDb->phone           =   $infosProfil['phone'];
-						$infosProfilDb->society_name    =   $infosProfil['society_name'];
-						if(!empty($infosProfil['avatar'])) $infosProfilDb->avatar =	$newname.'.jpg';
-						
-		            # Insertion en BDD
-						$infosProfilDb->save();
-						
-		            # Redirection
-						return $app->redirect('profil/success_modification');
-				}
-				else
-				{
-					$error = 'Cette adresse email est déjà utilisée par un autre utilisateur.';
-					return $app['twig']->render('commerce/profil_modification.html.twig', [
-						'form' => $form->createView(),
-						'error'=> $error
-					]);
-				}
-		    	 # Affichage du Formulaire dans la Vue
-					return $app['twig']->render('commerce/profil_modification.html.twig', [
-						'form' => $form->createView(),
-						'error'=> $error
-					]);
-				}
+				$infosProfilDb->save();
+            # Modification en BDD
 				
+            # Redirection
+				return $app->redirect($user[0]->ID_user . '/success_modification');
+			}
+
+			# Affichage du Formulaire dans la Vue
+			return $app['twig']->render('commerce/profil_modification.html.twig', [
+				'form' => $form->createView(),
+				'error' => $error,
+			]);
+
 		}
+	 	# Affichage du Formulaire dans la Vue
+		return $app['twig']->render('commerce/profil_modification.html.twig', [
+			'form' => $form->createView()
+		]);
 	}
 
 	// ----------------------- recherche -------------------------------------
@@ -1728,8 +1707,8 @@ class InterfaceCommerceController
 			$url .= "Topic";
 			break;
 			case 'products':
-			$product = $app['idiorm.db']->for_table('category')->where('ID_category', $args->ID_category)->find_result_set();
-			$url .= 'Shop - ' . $category_name;
+			$category = $app['idiorm.db']->for_table('category')->where('ID_category', $args->ID_category)->find_result_set();
+			$url .= 'Shop - ' . $category[0]->category_name;
 			break;
 			default:
 			'titre non trouvé';

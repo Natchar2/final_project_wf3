@@ -1,0 +1,136 @@
+{% extends 'defaultLayout.html.twig' %}
+
+{% block contenu %}
+	<div class="padMenu">
+		<div class="col-xs-10 col-xs-offset-1">
+
+			{% if error  is defined %}
+				<p>{{ error }}</p>
+			{% endif %}
+
+			<h3 class="col-xs-12">Modification du profil</h3>
+			<form enctype="multipart/form-data" class="form-horizontal" method="POST">
+				<!-- NOM  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Nom
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.name) }}
+					</div>
+				</div>
+				
+				<!-- PRENOM  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Prénom
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.surname) }}
+					</div>
+				</div>
+				
+				<!-- PSEUDO  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Pseudo
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.pseudo) }}
+					</div>
+				</div>
+				
+				<!-- RUE  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Rue
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.street) }}
+					</div>
+				</div>
+
+				<!-- Code Postal  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Code Postal
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.zip_code) }}
+					</div>
+				</div>
+
+				<!-- VILLE  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Ville
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.city) }}
+					</div>
+				</div>
+
+				<!-- MAIL  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Mail
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.email) }}
+					</div>
+				</div>
+
+				<!-- TELEPHONE  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Numéro de téléphone
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.phone) }}
+					</div>
+				</div>
+
+				<!-- NOM DE LA SOCIETE  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Nom de la société
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.society_name) }}
+					</div>
+				</div>
+				
+				<!-- AVATAR -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Avatar image
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.avatar) }}
+					</div>
+				</div>
+
+				<!-- PASSWORD  -->
+				<div class="form-group">
+					<label for="" class="col-md-3 control-label">
+						Mot de passe
+					</label>
+					<div class="col-md-7">
+						{{ form_row(form.password) }}
+					</div>
+				</div>
+				
+				
+				{# Important pour la validation du Token #}
+				{{ form_row(form._token) }}
+				
+				<!-- Submit -->
+				<div class="form-group">
+					<div class="col-xs-7 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">Modifier</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

@@ -89,7 +89,20 @@ trait Shortcut{
 
     	$racine_url .= '/web/';
 
-    	return $racine_url;
+    	return 'http://127.0.0.1' . $racine_url;
+    }
+
+    public function generateToken($n)
+    {
+    	$string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		$token = "";
+
+		for ($i = 0; $i < $n; $i++)
+		{
+			$token .= $string[mt_rand(0,mb_strlen($string) - 1)];
+		}
+
+		return $token;
     }
 
 
