@@ -687,16 +687,28 @@ class InterfaceCommerceController
 		return $app['twig']->render('commerce/shoppingCard.html.twig');
 	}
 
-	public function connexionAction(Application $app, Request $request, $success_inscription)
+	public function connexionAction(Application $app, Request $request, $info_data)
 	{
-		$success = "";
-		if($success_inscription === 'success_inscription') $success = "Vous avez été inscrit avec succès, veuillez à present vous connecter";
+		if($info_data === 'erreur')
+		{
+			$info = "Vous devez être connecter pour accèder à cette page";
+			
+			return $app['twig']->render('commerce/connexion.html.twig', array(
+				'error' => $app['security.last_error']($request),
+				'last_username' => $app['session']->get('_security.last_username'),
+				'erreur_connexion' => $info
+			));
+		}
+		
+		if($info_data === 'success_inscription') $info = "Vous avez été inscrit avec succès, veuillez à present vous connecter";
 
 		return $app['twig']->render('commerce/connexion.html.twig', array(
 			'error' => $app['security.last_error']($request),
 			'last_username' => $app['session']->get('_security.last_username'),
-			'success_inscription' => $success
+			'success_inscription' => $info
 		));
+
+
 
 	}
 
@@ -1194,6 +1206,13 @@ class InterfaceCommerceController
 					'error'=> $error
 				]);
 			}
+	        elseif(null!=($request->get('phone')) && !empty($request->get('phone')) && !preg_match('#^([0-9]{2}[\- .]?){4}\d{2}$#i',$request->get('phone')))
+	        {
+				return $app['twig']->render('commerce/inscription.html.twig', [
+					'form' => $form->createView(),
+					'error'=> 'Téléphone invalide'
+				]);
+	        }
 			else{
 				# Récupération de l'image
 				if(!empty($inscription['avatar'])){
@@ -1876,7 +1895,7 @@ class InterfaceCommerceController
 		}
 		else
 		{
-			return $app->redirect($this->getRacineSite().'inscription/erreur');
+			return $app->redirect($this->getRacineSite().'connexion/erreur');
 		}
 	}
 }

@@ -98,6 +98,17 @@
 			->get('/user/liste', 'Application\Controller\AdminController::listUsersAdminAction')
 			->bind('listUsersAdmin');
 
+			$controllers
+			->post('/user/changeTypeUser', 'Application\Controller\AdminController::changeTypeUserAction')
+			->bind('changeTypeUser');
+
+			$controllers
+			->post('/user/removeUser', 'Application\Controller\AdminController::removeUserAction')
+			->bind('removeUser');
+
+			$controllers
+			->post('/user/changeMailUser', 'Application\Controller\AdminController::changeMailUserAction')
+			->bind('changeMailUser');
 
 
 	    	return $controllers;

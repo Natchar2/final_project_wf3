@@ -8,11 +8,15 @@
 				<p>{{ success }}</p>
 			</div>	
 		{% endif %}
+
+		<p class="result_change col-xs-8 col-xs-offset-2 alert"></p>
 		
 
 		{% if users is not empty %}
 			<div class="col-md-12">
-				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
+				<div class="actionbar">
+					<a href="{{ url('accueilAdmin') }}" class="btn btn-default">Retour à l'accueil</a>
+				</div>
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%"  id="myTable">
 					<thead>
 						<tr>
@@ -23,6 +27,7 @@
 							<th class="small" width="80">Dernière connexion</th>
 							<th class="small" width="80">Type</th>
 							<th class="small" width="80">Action</th>
+							<th class="small" width="80">Modifier l'email</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -44,14 +49,20 @@
 									{% endif %}
 								</td>
 								<td>
-									{{ value.type }}
+									<select id="change-type" onchange="change_type($(this).val(), {{ value.ID_user }});">
+										<option {% if value.type == "ROLE_ADMIN" %}selected{% endif %} value="ROLE_ADMIN">Admin</option>
+										<option {% if value.type == "ROLE_USER" %}selected{% endif %} value="ROLE_USER">Utilisateur lambda</option>
+									</select>
 								</td>
 								<td>
-									<form action=""  method="post">
-										<input type="hidden" name="ID_topic" value="{{value.ID_user}}">
+									<form action="" method="post">
+										<input type="hidden" name="ID_user" value="{{value.ID_user}}" class="ID_user">
 										<input type="hidden" name="token" value="{{app.session.get('token')}}">
-										<button onclick="return confirm('êtes vous sûr ??')" class="for-control btn btn-danger" type="submit">Supprimer</button> 								
+										<button onclick="event.preventDefault(); res = confirm('êtes vous sûr ??'); if(res) remove_user({{ value.ID_user }});" class="for-control btn btn-danger" type="submit">Supprimer</button> 								
 									</form>
+								</td>
+								<td>
+									<input type="text" value="{{ value.mail }}" onclick="accept_modify('{{ value.pseudo }}', {{ value.ID_user }}, this)" class="modify_mail" ID-user="{{ value.ID_user }}" Pseudo-user="{{ value.pseudo }}">
 								</td>
 							</tr>
 						{% endfor %}
@@ -67,9 +78,10 @@
 		{% endif %}
 	</div>
 
-
-
 {% endblock %}
 
 
-
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('js/change.js') }}"></script>
+{% endblock %}

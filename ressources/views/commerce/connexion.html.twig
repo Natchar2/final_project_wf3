@@ -15,6 +15,12 @@
 					<p>{{success_inscription}}</p>
 				</div>
 			{% endif %}
+
+			{% if erreur_connexion is defined %}
+				<div class="alert alert-danger" role=alert>
+					<p>{{erreur_connexion}}</p>
+				</div>
+			{% endif %}
 			
 			{% if error is defined %}
 				<p style="color:red; font-size:2em;">{{error}}</p>

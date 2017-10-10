@@ -89,8 +89,8 @@
 
 						{% for product in products %}
 
-							<div class="col-sm-4 col-lg-4 col-md-4 {{ global.request.get('category_name') }}">
-								<div class="thumbnail">
+							<div class="col-sm-4 col-lg-4 col-md-4{{ global.request.get('category_name') }}">
+								<div class="thumbnail col-xs-12">
 									{% if product.image_1 > "" %}
 										<img src="{{ asset('assets/images/'~product.image_1) }}" alt="" style="height:150px;width:auto;margin-left:auto;margin-right:auto;">
 									{% else %}
@@ -102,12 +102,15 @@
 										<h4><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a>
 										</h4>
 
-										<p>{{ product.description| accroche | balise }}</p>
+										<p class="fix-accroche">{{ product.description| accroche | balise }}</p>
 
 									</div>
+									<div class="price">
+										<h4>{{ (product.price)|number_format(2, '.', ' ') }} €</h4>
+									</div>
 									<div class="ratings">
-										<a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" class="btn btn-primary pull-right"> Details </a>
-										<h4>€ {{ (product.price)|number_format(2, '.', ' ') }}</h4>
+										<a class="btn btn-primary add_product btn-width" ID-product="{{ product.ID_product }}">Ajouter (<span class="total_by_id" ID-product="{{ product.ID_product }}">0</span>)</a>
+										<a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" class="btn btn-info pull-right btn-width"> Details </a>
 									</div>
 								</div>
 							</div>
@@ -168,4 +171,10 @@
 {# include footer #}
 {% block footer %}
 	{% include 'commerce/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('js/notify.min.js') }}"></script>
+	<script src="{{ asset('js/panier.js') }}"></script>
 {% endblock %}

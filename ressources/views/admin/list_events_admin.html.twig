@@ -15,18 +15,16 @@
 			</div>	
 		{% endif %}
 		
-
-		
 			<div class="col-md-12">
 
 
                 <div class="actionbar">
                     <a href="{{ url('addEventAdmin') }}" class="btn btn-primary">Ajoutez un évènement</a>
                     &nbsp;&nbsp;
-					<a href="{{ url('listEventsAdmin') }}" class="btn btn-default">Retour à l'accueil</a>
+					<a href="{{ url('accueilAdmin') }}" class="btn btn-default">Retour à l'accueil</a>
 					<br><br>
 				</div>
-
+		{% if events is not empty %}
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
 					<thead>
 						<tr>

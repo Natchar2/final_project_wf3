@@ -1,3 +1,4 @@
+
 .carousel-shop {
   margin-right: -15px;
   margin-left: -15px;
@@ -16,6 +17,16 @@ a.list-group-item, button.list-group-item {
 
 .thumbnail {
   padding: 5px;
+  min-height: 388px;
+  float: left;
+}
+
+.price{
+  text-align: center;
+}
+
+.btn-width{
+  min-width: 100px;
 }
 
 .streetTitle{
@@ -23,9 +34,13 @@ a.list-group-item, button.list-group-item {
 }
 
 /*Button*/
-a.btn.btn-primary.pull-right{
+a.btn.btn-info.pull-right{
   background: RGBA(39, 40, 34, 1.00);
-  padding: 2px;
+  margin-left: 2px;
+}
+
+.fix-accroche{
+  height: 6.8em;
 }
 
 /* FOOTER

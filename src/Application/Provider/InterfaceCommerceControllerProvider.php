@@ -160,9 +160,9 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('shoppingCard');
 
 		$controllers
-		->get('/connexion/{success_inscription}', 'Application\Controller\InterfaceCommerceController::connexionAction')
-		->assert('sucess_inscription', 'success_inscription')
-		->value('success_inscription', '')
+		->get('/connexion/{info_data}', 'Application\Controller\InterfaceCommerceController::connexionAction')
+		->assert('info_data', 'success_inscription|erreur')
+		->value('info_data', '')
 		->bind('connexion');
 
 		// $controllers

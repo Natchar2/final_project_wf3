@@ -20,6 +20,8 @@
 
 	class AdminController
 	{
+		use Shortcut;
+
 	    public function accueilAdminAction(Application $app)
 	    {
 	    	//if($this->is_Admin())
@@ -764,6 +766,97 @@
 		} 	
 
   
+	}
+
+	public function changeTypeUserAction(Application $app, Request $request)
+	{
+		$user = $app['idiorm.db']->for_table('users')->where('ID_user', $request->get('ID_user'))->find_result_set()[0];
+
+		$userChange = $app['idiorm.db']->for_table('users')->where('ID_user', $request->get('ID_user'))->find_result_set()->set(array(
+			'type' => $request->get('feature_type'),
+		));
+		$userChange->save();
+
+		return new Response("<b>" . $user->pseudo . "</b> est passé avec succès à " . $request->get('feature_type'));
+	}
+
+	public function removeUserAction(Application $app, Request $request)
+	{
+		$post = $app['idiorm.db']->for_table('post')->where('ID_user', $request->get('ID_user'))->find_result_set()->set(array(
+			'ID_user' => -1,
+		));
+		$post->save();
+
+
+		$topic = $app['idiorm.db']->for_table('topic')->where('ID_user', $request->get('ID_user'))->find_result_set()->set(array(
+			'ID_user' => -1,
+		));
+		$topic->save();
+
+		$products = $app['idiorm.db']->for_table('products')->where('ID_user', $request->get('ID_user'))->find_result_set();
+
+		foreach ($products as $product)
+		{
+			$topic = $app['idiorm.db']->for_table('topic')->where('ID_product', (int)$product->ID_product)->find_result_set();
+			if (count($topic)>0)
+        	{
+        		$topic->set(array(
+        		'ID_product' => null,
+        	));
+
+				$topic->save();
+			}
+		}
+
+		$products->delete();
+
+		$events = $app['idiorm.db']->for_table('event')->where('ID_user', $request->get('ID_user'))->find_result_set();
+
+		foreach ($events as $event)
+		{
+			$topic = $app['idiorm.db']->for_table('topic')->where('ID_event', (int)$event->ID_event)->find_result_set();
+			if (count($topic)>0)
+        	{
+        		$topic->set(array(
+        		'ID_event' => null,
+        	));
+
+				$topic->save();
+			}
+		}
+
+		$events->delete();
+
+
+		$user = $app['idiorm.db']->for_table('users')->find_one($request->get('ID_user'));
+
+		$pseudo = $user->pseudo;
+
+		$user->delete();
+		
+		return new Response("L'utilsateur <b>" . $pseudo . "</b> à bien été supprimé");
+	}
+
+	public function changeMailUserAction(Application $app, Request $request)
+	{
+		if (!filter_var(htmlspecialchars($request->get('mail')),FILTER_VALIDATE_EMAIL))
+		{
+			return new Response("Erreur: L'email <b>" . $request->get('mail') . "</b> entré, n'a pas un format correcte");
+		}
+
+		$user = $app['idiorm.db']->for_table('users')->where('mail', $request->get('mail'))->find_result_set();
+
+		if(count($user) > 0)
+		{
+			return new Response("Erreur: L'email <b>" . $request->get('mail') . "</b> existe déja");
+		}
+
+		$userChange = $app['idiorm.db']->for_table('users')->where('ID_user', $request->get('ID_user'))->find_result_set()->set(array(
+			'mail' => $request->get('mail'),
+		));
+		$userChange->save();
+
+		return new Response("L'email de <b>" . $request->get('pseudo') . "</b> à bien été modifié");
 	}
 
 
