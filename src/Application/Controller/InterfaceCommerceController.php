@@ -758,179 +758,191 @@ class InterfaceCommerceController
 
 
 
-			public function newAdPostAction(Application $app, Request $request)
-			{
-    	//gestion du formulaire d'ajout de produit  sur ajout_produit.html
+	public function newAdPostAction(Application $app, Request $request)
+	{
+//gestion du formulaire d'ajout de produit  sur ajout_produit.html
 
-				$token1 = $app['security.token_storage']->getToken();
+		$token1 = $app['security.token_storage']->getToken();
 
-				if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
 
-					$user = $token1->getUser();    		
-					$ID_user = $user->getID_user();
-
-
-	    		        //utilisation de la fonction de vérification dans Model\Vérifications
-					$Verifications = new Verifications;
-
-					$verifs =  $Verifications->VerificationNewAd($request, $app);
+			$user = $token1->getUser();    		
+			$ID_user = $user->getID_user();
 
 
+		        //utilisation de la fonction de vérification dans Model\Vérifications
+			$Verifications = new Verifications;
 
-		         //Retour des variables de VerificationNewAd
-					$errors         = $verifs['errors'];
-					$error          = $verifs['error'];
-					$finalFileName1 = $verifs['finalFileName1'];
-					$finalFileName2 = $verifs['finalFileName2'];
-					$finalFileName3 = $verifs['finalFileName3'];
-
-					$ID_product = $request->get('ID_product');
-
-					if(empty($errors) && empty($error)){
-
-
-		                //SI c'est une modification d'article :
-						if($request->get('ID_product')>0)
-						{
-
-							if($app['session']->get('token') == $request->get('token'))
-							{
-
-
-								$modification = $app['idiorm.db']->for_table('products')
-								->find_one($request->get('ID_product'))
-								->set(array(
-
-									'name'             => $request->get('name'),
-									'brand'            => $request->get('brand'),
-									'price'            => $request->get('price'),
-									'description'      => $request->get('description'),
-									'image_1'          => $finalFileName1,
-									'image_2'          => $finalFileName2,
-									'image_3'          => $finalFileName3,
-									'ID_category'      => $request->get('category'),
-									'shipping_charges' => $request->get('shipping_charges'),
-								));
+			$verifs =  $Verifications->VerificationNewAd($request, $app);
 
 
 
-								$modification->save();
+         //Retour des variables de VerificationNewAd
+			$errors         = $verifs['errors'];
+			$error          = $verifs['error'];
+			$finalFileName1 = $verifs['finalFileName1'];
+			$finalFileName2 = $verifs['finalFileName2'];
+			$finalFileName3 = $verifs['finalFileName3'];
 
-								$success = "Votre produit a bien été ajouté ";
+			$ID_product = $request->get('ID_product');
 
-							//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
-
-								$topic = $app['idiorm.db']->for_table('topic')->where('ID_product', (int)$request->get('ID_product'))->find_one();
-								if (count($topic)>0)
-					        	{
-					        		$topic->set(array(
-					        			'title' 	 => $request->get('name'),
-					        			'ID_category'=> $request->get('category'),
-					        		));
-						        	$topic->save();
-						        }
-								
-								
-								$success = "Votre produit a bien été modifié et le topic sur le sujet également";
-
-							}
-							else
-							{
-								return $app->redirect($this->getRacineSite().'inscription/erreur');
-							}
-						}
-						else
-						{
-							
-		    				//Connexion à la bdd
-							$product = $app['idiorm.db']->for_table('products')->create();
+			if(empty($errors) && empty($error)){
 
 
-			    				//Affectation des valeurs
-							$product->name             = $request->get('name');
-							$product->brand            = $request->get('brand');
-							$product->price            = $request->get('price');
-							$product->description      = $request->get('description');
-							$product->image_1          = $finalFileName1;
-							$product->image_2          = $finalFileName2;
-							$product->image_3          = $finalFileName3;
-							$product->ID_category      = $request->get('category');
-							$product->creation_date    = strtotime('now');
-							$product->ID_user		   = $ID_user;
+                //SI c'est une modification d'article :
+				if($request->get('ID_product')>0)
+				{
+
+					if($app['session']->get('token') == $request->get('token'))
+					{
 
 
-		    			//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
-							if((float)$request->get('shipping_charges') == 0.0)
-							{
+						$modification = $app['idiorm.db']->for_table('products')
+						->find_one($request->get('ID_product'))
+						->set(array(
 
-								$product->shipping_charges = 0.0;
-							}
-							else
-							{
+							'name'             => $request->get('name'),
+							'brand'            => $request->get('brand'),
+							'price'            => $request->get('price'),
+							'description'      => $request->get('description'),
+							'image_1'          => $finalFileName1,
+							'image_2'          => $finalFileName2,
+							'image_3'          => $finalFileName3,
+							'ID_category'      => $request->get('category'),
+							'shipping_charges' => $request->get('shipping_charges'),
+						));
 
-								$product->shipping_charges  = $request->get('shipping_charges');
-							}
 
-		    				//ON persiste
-							$product->save();
-							$last_insert_id = $product->id();
 
-							$success = "Votre produit a bien été ajouté et un topic a été créer sur le sujet";
+						$modification->save();
 
-						//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
-							$topic = $app['idiorm.db']->for_table('topic')->create();
+						$success = "Votre produit a bien été ajouté ";
 
-							$topic->title 	 	  = $request->get('name');
-							$topic->ID_category   = $request->get('category');
-							$topic->ID_product 	  = $last_insert_id;
-							$topic->creation_date = strtotime('now');
-							$topic->ID_user		  = $ID_user;	
+					//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
 
-							$topic->save();
+						$topic = $app['idiorm.db']->for_table('topic')->where('ID_product', (int)$request->get('ID_product'))->find_result_set();
+						if (count($topic)>0)
+			        	{
+			        		$topic->set(array(
+			        			'title' 	 => $request->get('name'),
+			        			'ID_category'=> $request->get('category'),
+			        		));
+				        	$topic->save();
+				        }
+						
+						
+						$success = "Votre produit a bien été modifié et le topic sur le sujet également";
+						$products = $app['idiorm.db']->for_table('view_products')
+				        ->where('ID_user',$ID_user)  //penser a passer l'ID_User ac la sessions
+				        ->find_result_set();
 
-						}
 
-						return $app['twig']->render('commerce/ajout_produit.html.twig',[
-							'success'     => $success,
-							'errors'      => [] ,
-							'error'       => [] ,
-							'categories'  => $app['categories'],
-							'modification'=> '',
-							'ID_product'  => $ID_product,
-						]);
+						return $app['twig']->render('commerce/list_products.html.twig',[
+						'success'     => $success,
+						'categories'  => $app['categories'],
+						'products'	  => $products,
+
+					]);
 
 					}
 					else
 					{
-			    	if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
-				    {//meme en cas d'erreur
-				            //appel de base pour afficher les données pour retrouver l'article a modifier
-				    $modification = $app['idiorm.db']->for_table('products')
-				    ->find_one($ID_product);
-
+						return $app->redirect($this->getRacineSite().'inscription/erreur');
+					}
 				}
 				else
 				{
-					$ID_product = '0';
-					$modification ='';
-				}
-				return $app['twig']->render('commerce/ajout_produit.html.twig',[
-					'errors'      => $errors,
-					'error'       => $error,
-					'categories'  => $app['categories'],
-					'modification'=> $modification,
-					'ID_product'  => $ID_product,
+					
+    				//Connexion à la bdd
+					$product = $app['idiorm.db']->for_table('products')->create();
 
+
+	    				//Affectation des valeurs
+					$product->name             = $request->get('name');
+					$product->brand            = $request->get('brand');
+					$product->price            = $request->get('price');
+					$product->description      = $request->get('description');
+					$product->image_1          = $finalFileName1;
+					$product->image_2          = $finalFileName2;
+					$product->image_3          = $finalFileName3;
+					$product->ID_category      = $request->get('category');
+					$product->creation_date    = strtotime('now');
+					$product->ID_user		   = $ID_user;
+					$product->status 		   = 1;
+
+
+    			//Affectation d'une valeur par défaut à zéro si il n'y en a pas eu dans le formulaire
+					if((float)$request->get('shipping_charges') == 0.0)
+					{
+
+						$product->shipping_charges = 0.0;
+					}
+					else
+					{
+
+						$product->shipping_charges  = $request->get('shipping_charges');
+					}
+
+    				//ON persiste
+					$product->save();
+					$last_insert_id = $product->id();
+
+					$success = "Votre produit a bien été ajouté et un topic a été créer sur le sujet";
+
+				//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
+					$topic = $app['idiorm.db']->for_table('topic')->create();
+
+					$topic->title 	 	  = $request->get('name');
+					$topic->ID_category   = $request->get('category');
+					$topic->ID_product 	  = $last_insert_id;
+					$topic->creation_date = strtotime('now');
+					$topic->ID_user		  = $ID_user;	
+
+					$topic->save();
+
+				}
+
+				return $app['twig']->render('commerce/ajout_produit.html.twig',[
+					'success'     => $success,
+					'errors'      => [] ,
+					'error'       => [] ,
+					'categories'  => $app['categories'],
+					'modification'=> '',
+					'ID_product'  => $ID_product,
 				]);
 
 			}
-
+			else
+			{
+	    	if($ID_product>0)// affichage des données pour un article a modifier dans le formulaire de ajout_produit.html
+		    {//meme en cas d'erreur
+		            //appel de base pour afficher les données pour retrouver l'article a modifier
+		    $modification = $app['idiorm.db']->for_table('products')
+		    ->find_one($ID_product);
 
 		}
 		else
 		{
-			return $app->redirect($this->getRacineSite().'inscription/erreur');
+			$ID_product = '0';
+			$modification ='';
 		}
+		return $app['twig']->render('commerce/ajout_produit.html.twig',[
+			'errors'      => $errors,
+			'error'       => $error,
+			'categories'  => $app['categories'],
+			'modification'=> $modification,
+			'ID_product'  => $ID_product,
+
+		]);
+
+	}
+
+
+	}
+	else
+	{
+		return $app->redirect($this->getRacineSite().'inscription/erreur');
+	}
 
 	}
 //gestion des produits en ventes par un utlisateur

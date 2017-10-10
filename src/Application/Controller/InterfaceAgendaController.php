@@ -254,6 +254,16 @@ class InterfaceAgendaController
 								
 									
 				              $success = "Votre événement a bien été modifié et le topic sur le sujet également";
+
+				                $events = $app['idiorm.db']->for_table('view_events')
+						        ->where('ID_user', $ID_user)  //penser a passer l'ID_User ac la sessions
+						        ->find_result_set();
+
+						            return $app['twig']->render('agenda/list_events.html.twig',[
+							        'success'     => $success,
+							        'categories'  => $app['categories'],
+							        'events'	  => $events
+							   		]);
 				          }
 				          else
 				          {
@@ -284,6 +294,7 @@ class InterfaceAgendaController
 								$event->latitude	  		= $request->get('latitude');
 								$event->longitude	  		= $request->get('longitude');
 								$event->ID_user	  			= $ID_user;
+								$event->status 		        = 1;
 
 			    			
 
