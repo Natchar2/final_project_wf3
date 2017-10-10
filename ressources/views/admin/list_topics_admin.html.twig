@@ -1,5 +1,10 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
+{% endblock %}
+
 {% block contenu %}
 	<br><br><br><br>
 	<div class="row">
@@ -12,7 +17,12 @@
 
 		{% if topics is not empty %}
 			<div class="col-md-12">
-				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
+                <div class="actionbar">
+                    <a href="{{ url('addTopicAdmin') }}" class="btn btn-primary">Publier un topic</a>
+                    &nbsp;&nbsp;
+					<a href="{{ url('listEventsAdmin') }}" class="btn btn-default">Retour à l'accueil</a>
+					<br><br>
+				</div>
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%"  id="myTable">
 					<thead>
 						<tr>
