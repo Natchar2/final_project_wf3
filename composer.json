@@ -12,7 +12,8 @@
         "symfony/validator": "^3.3",
         "symfony/config": "^3.3",
         "symfony/security-csrf": "^3.3",
-        "stripe/stripe-php": "^5.2"
+        "stripe/stripe-php": "^5.2",
+        "fabschurt/silex-provider-captcha": "^1.0@dev"
     },
 
     "autoload": {

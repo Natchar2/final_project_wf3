@@ -190,7 +190,7 @@
 									<tr>
 										<td>{{ topic.creation_date|date('d/m/Y') }}</td>
 										<td class="hidden-xs"><a href="{{ url('profilUser', {'ID_user' : topic.ID_user}) }}">{{ topic.pseudo }}</a></td>
-										<td>{{ topic.title }} <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
+										<td>{{ topic.title }} <a href="{{ url('forum_topic', {slugTopic: topic.title | lower | slug, ID_topic: topic.ID_topic}) }}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
 									</tr>
 
 								{% endfor %}
@@ -257,31 +257,33 @@
 					<!-- Nos partenaires -->
 					<div class="container-fluid partenaires col-xs-12">
 						<div class="container">
-							<div class="row">
+							<div class="row partenaire">
 								<h2 class="titleAnnonces">Nos partenaires</h2>
 								<br>
 								<!-- Three columns of text below the carousel -->
 								<div class="row">
-									<a href="https://www.abslyon.com/" target=_blank class="col-lg-3">
-										<img class="featurette-image img-responsive center-block" src="{{asset('img/abs.png')}}" alt="logo_abs">
-										<br>
+									<center>
+										<a href="https://www.abslyon.com/" target=_blank class="col-xs-12 col-md-3">
+											<img class="featurette-image img-responsive center-block" src="{{asset('img/abs.png')}}" alt="logo_abs">
+											<br>
 
-									</a>
+										</a>
 
-									<a href="https://www.hawaiisurf.com/" target=_blank class="col-lg-3">
-										<img class="featurette-image img-responsive center-block" src="{{asset('img/hawai.png')}}" alt="logo_hawai">
-										<br>
-									</a>
+										<a href="https://www.hawaiisurf.com/" target=_blank class="col-xs-12 col-md-3">
+											<img class="featurette-image img-responsive center-block" src="{{asset('img/hawai.png')}}" alt="logo_hawai">
+											<br>
+										</a>
 
-									<a href="http://www.bikes.com/fr" target=_blank class="col-lg-3">
-										<img class="featurette-image img-responsive center-block" src="{{asset('img/rm.png')}}" alt="logo_rm">
-										<br>
-									</a>
+										<a href="http://www.bikes.com/fr" target=_blank class="col-xs-12 col-md-3">
+											<img class="featurette-image img-responsive center-block" src="{{asset('img/rm.png')}}" alt="logo_rm">
+											<br>
+										</a>
 
-									<a href="https://www.vans.fr/" target=_blank class="col-lg-3">
-										<img class="featurette-image img-responsive center-block" src="{{asset('img/vans.png')}}" alt="logo_vans">
-										<br>
-									</a>
+										<a href="https://www.vans.fr/" target=_blank class="col-xs-12 col-md-3">
+											<img class="featurette-image img-responsive center-block" src="{{asset('img/vans.png')}}" alt="logo_vans">
+											<br>
+										</a>
+									</center>
 								</div>
 							</div>
 						</div>

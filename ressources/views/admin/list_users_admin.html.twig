@@ -1,5 +1,10 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
+{% endblock %}
+
 {% block contenu %}
 	<br><br><br><br>
 	<div class="row">
@@ -17,6 +22,8 @@
 				<div class="actionbar">
 					<a href="{{ url('accueilAdmin') }}" class="btn btn-default">Retour à l'accueil</a>
 				</div>
+				<br><br>
+
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%"  id="myTable">
 					<thead>
 						<tr>
@@ -35,7 +42,7 @@
 							<tr>
 								<td align="center">
 									{% if (value.avatar>"") %}
-										<img src="{{ asset('assets/images/'~value.avatar) }}" style="width:70px;height:auto;">
+										<img src="{{ asset('assets/images/avatar/'~value.avatar) }}" style="width:70px;height:auto;">
 									{% endif %}
 								</td>
 								<td>{{value.name ~ ' ' ~ value.surname }}</td>

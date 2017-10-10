@@ -16,3 +16,7 @@ html, body{
 	color: #444;
 	vertical-align:middle;
 }
+
+.space-container{
+	overflow: hidden;
+}

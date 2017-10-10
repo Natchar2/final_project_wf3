@@ -56,6 +56,14 @@ class ComposerStaticInitd2789be6c79001b6dba6cb12567944c1
         array (
             'Idiorm\\' => 7,
         ),
+        'G' => 
+        array (
+            'Gregwar\\Captcha\\' => 16,
+        ),
+        'F' => 
+        array (
+            'FabSchurt\\Silex\\Provider\\Captcha\\' => 33,
+        ),
         'E' => 
         array (
             'Egulias\\EmailValidator\\' => 23,
@@ -185,6 +193,14 @@ class ComposerStaticInitd2789be6c79001b6dba6cb12567944c1
         'Idiorm\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/Idiorm',
+        ),
+        'Gregwar\\Captcha\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gregwar/captcha',
+        ),
+        'FabSchurt\\Silex\\Provider\\Captcha\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fabschurt/silex-provider-captcha/src',
         ),
         'Egulias\\EmailValidator\\' => 
         array (

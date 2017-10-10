@@ -24,7 +24,7 @@
 
 				<div class="col-xs-12 col-sm-6">			
 					{% if products is not empty %}
-						Il y a actuellement <b>{{ products|length }}  produits</b> en base
+						Il y a actuellement <b>{{ products|length }}  produits</b> enregistré,
 					{% endif %}
 					dont xxx en attente de validation.
 				</div>
@@ -42,7 +42,7 @@
 
 				<div class="col-xs-12 col-sm-6">			
 					{% if events is not empty %}
-						Il y a actuellement <b>{{ events|length }} Evénements</b> en base
+						Il y a actuellement <b>{{ events|length }} Evénements</b> enregistré
 					{% endif %}
 					{% if eventsGone is not empty %}
 						dont <b>{{ eventsGone|length }} Evénements</b> terminés
@@ -65,7 +65,7 @@
 				<div class="col-xs-12 col-sm-6">			
 					{% if products is not empty %}
 
-						Il y a actuellement <b>{{ topics|length }} Topics</b> en base
+						Il y a actuellement <b>{{ topics|length }} Topics</b> enregistré
 						<br>
 						dont :
 						<ul>
@@ -98,7 +98,7 @@
 					{% if users is not empty %}
 
 
-						Il y a actuellement <b>{{ users|length }} Utilisateurs</b> en base
+						Il y a actuellement <b>{{ users|length }} Utilisateurs</b> enregistré
 						<br>
 						dont :
 						<ul>
@@ -106,7 +106,7 @@
 								<li>{{ usersWait|length }}  en attente de validation du mot de passe</li>
 							{% endif %}
 							{% if topicsEvents is not empty %}
-								<li>{{ usersAdmin|length }}  en rôle Administrateurs</li>
+								<li>{{ usersAdmin|length }}  utilisateur &eacute;tant Administrateur</li>
 							{% endif %}
 						</ul>
 					{% endif %}

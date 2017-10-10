@@ -582,7 +582,7 @@ class InterfaceCommerceController
 					$to = $seller->mail;
 
 					$strTemp = ($value > 1) ? "s" : "";
-					$content = "Bonjour " . $seller->name . ", un client vous demande " . $value . " article" . $strTemp . ", cliquez sur le lien suivant pour accepter la vente: <br/><a href='" . PUBLIC_ROOT . "suivi'>Accepter la vente</a><br/><b>Cordialement.</b>";
+					$content = "Bonjour " . $seller->name . ", un client vous demande " . $value . " article" . $strTemp . ", cliquez sur le lien suivant pour accepter la vente: <br/><a href='" . $this->getRacineSite() . "suivi'>Accepter la vente</a><br/><b>Cordialement.</b>";
 					
 					$globalController->sendMailAction($app, $subject, $from, $to, $content);
 
@@ -601,7 +601,7 @@ class InterfaceCommerceController
 					$order->save();
 				}
 
-				return 'Votre demande a bien été prise en compte';
+				return 'Votre demande a bien été prise en compte<br/> <a href="' . $this->getRacineSite() . "accueil>Retour à l'accueil</a>";
 			}
 			else
 			{

@@ -34,6 +34,8 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Idiorm\\' => array($baseDir . '/src/Idiorm'),
+    'Gregwar\\Captcha\\' => array($vendorDir . '/gregwar/captcha'),
+    'FabSchurt\\Silex\\Provider\\Captcha\\' => array($vendorDir . '/fabschurt/silex-provider-captcha/src'),
     'Egulias\\EmailValidator\\' => array($vendorDir . '/egulias/email-validator/EmailValidator'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),

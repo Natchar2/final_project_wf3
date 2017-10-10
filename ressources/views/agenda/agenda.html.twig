@@ -88,7 +88,7 @@
 
                                 {% for event in events %}
 
-                                    <div class="col-xs-6 col-md-4">
+                                    <div class="col-xs-6 col-md-4" style="min-height: 450px; position: relative">
                                         <a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}">
                                             {% if event.image > "" %}
                                                 <img class="img-responsive" style="width:auto;height:100px;margin-left:auto;margin-right:auto;" src="{{ asset('assets/images/'~event.image) }}" alt="">
@@ -108,11 +108,10 @@
                                         </i></h6>
 
                                         <p>{{ event.event_description|accroche }}</p>
-                                        <a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-default pull-right">Infos</a>
+                                        <a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-default pull-right" style="position: absolute; bottom: 50px; right: 40px">Infos</a>
 
-                                        <br><br>
-                                        <hr class="col-xs-9 col-xs-push-1">
-                                        <br><br>
+                                        <hr class="col-xs-9 col-xs-push-1" style="padding: 0; position: absolute; bottom: 0;">
+
                                     </div>
 
                                 {% endfor %}

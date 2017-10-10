@@ -1,6 +1,7 @@
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
-	<div class="container">
+	<div class="contanier-fluid">
+	<div class="container col-xs-12">
 		<div class="row col-xs-12">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -38,7 +39,7 @@
 
 				
 
-				<ul class="nav navbar-nav navbar-right">
+				<ul class="nav navbar-nav">
 					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 						<li><a href="{{ path('deconnexion') }}">Déconnexion</a></li>
 						<li><a href="{{ url('suivi') }}">Suivi commandes</a></li>
@@ -73,5 +74,6 @@
 			<!--/.nav-collapse -->
 		</div>
 	</div>
+</div>
 </nav>
 <div class="space-container">
