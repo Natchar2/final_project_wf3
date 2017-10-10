@@ -827,7 +827,7 @@ class InterfaceCommerceController
 						if (count($topic)>0)
 			        	{
 			        		$topic->set(array(
-			        			'title' 	 => $request->get('name'),
+			        			'title' 	 => 'Shop - ' . $request->get('name'),
 			        			'ID_category'=> $request->get('category'),
 			        		));
 				        	$topic->save();
@@ -895,7 +895,7 @@ class InterfaceCommerceController
 				//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
 					$topic = $app['idiorm.db']->for_table('topic')->create();
 
-					$topic->title 	 	  = $request->get('name');
+					$topic->title 	 	  = 'Shop - ' . $request->get('name');
 					$topic->ID_category   = $request->get('category');
 					$topic->ID_product 	  = $last_insert_id;
 					$topic->creation_date = strtotime('now');

@@ -257,7 +257,7 @@ class InterfaceAgendaController
 								if (count($topic)>0)
 					        	{
 					        		$topic->set(array(
-									'title' 	 => $request->get('event_title'),
+									'title' 	 => 'Evénement - '.$request->get('event_title').' à ' .$request->get('city'),
 									'ID_category'=> $request->get('category'),
 									));
 
@@ -324,7 +324,7 @@ class InterfaceAgendaController
 							//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
 							$topic = $app['idiorm.db']->for_table('topic')->create();
 
-							$topic->title 	 	  = $request->get('event_title');
+							$topic->title 	 	  = 'Evénement - '.$request->get('event_title').' à ' .$request->get('city');
 							$topic->ID_category   = $request->get('category');
 							$topic->ID_event 	  = $last_insert_id;
 							$topic->creation_date = strtotime('now');
