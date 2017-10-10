@@ -34,7 +34,7 @@
 							{% endif %}					
 						</div>
 						<div class="card-body">
-							<small class="text-muted pull-right">Publié par {{ event.pseudo }} le  {{ event.creation_date|date('d/m/Y') }}</small>
+							<small class="text-muted pull-right">Publié par	<a href="{{ url('profilUser', {'ID_user' : event.ID_user}) }}">{{ event.pseudo }}</a>  le  {{ event.creation_date|date('d/m/Y') }}</small>
 							<h3 class="card-title">{{ event.event_title }}</h3>							
 							<p class="card-text">{{ event.event_description }}</p>
 						</div>
@@ -132,6 +132,7 @@
 							{% endif %}
 						</div>
 					</div>
+					
 					<br><br>
 					<br><br>
 				</div>
@@ -150,7 +151,7 @@
 							{% else %}
 								{% for post in posts %}
 									<p class= "pull-right">
-									par {{post.pseudo}} le : {{post.post_date | date('d/m/Y')}}</p>
+									par <a href="{{ url('profilUser', {'ID_user' : post.ID_user}) }}">{{post.pseudo}}</a> le : {{post.post_date | date('d/m/Y')}}</p>
 									<br>
 									<hr>
 									{{ post.content | balise }}

@@ -129,9 +129,9 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('view_newAd');
 
 		$controllers
-		->post('/produit/ajouter/{ID_product}', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
-		->assert('ID_product', '\d+')
-		->value('ID_product', '0')
+		->post('/produit/ajouter', 'Application\Controller\InterfaceCommerceController::newAdPostAction')
+		//->assert('ID_product', '\d+')
+		//->value('ID_product', '0')
 		->bind('newAd');
 
 		$controllers
@@ -151,7 +151,7 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('listProducts');
 
 		$controllers
-		->get('/produit/liste', 'Application\Controller\InterfaceCommerceController::deleteProduct')
+		->post('/produit/liste', 'Application\Controller\InterfaceCommerceController::deleteProduct')
 		->assert('ID_product', '\d+')
 		->bind('deleteProduct');
 
@@ -160,7 +160,9 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->bind('shoppingCard');
 
 		$controllers
-		->get('/connexion', 'Application\Controller\InterfaceCommerceController::connexionAction')
+		->get('/connexion/{success_inscription}', 'Application\Controller\InterfaceCommerceController::connexionAction')
+		->assert('sucess_inscription', 'success_inscription')
+		->value('success_inscription', '')
 		->bind('connexion');
 
 		// $controllers
@@ -182,23 +184,6 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->assert('success_modification','success_modification')
 		->value('success_modification','0')
 		->bind('profil');
-
-		$controllers
-		->get('/agenda', 'Application\Controller\InterfaceCommerceController::AgendaAction')
-		->bind('agenda');
-
-
-		$controllers
-		->get('/forumAjoutPost', 'Application\Controller\InterfaceCommerceController::forumAjoutPostAction')
-		->bind('forumAjoutPost');
-
-		$controllers
-		->get('/forumIndex', 'Application\Controller\InterfaceCommerceController::forumIndexAction')
-		->bind('forumIndex');
-
-		$controllers
-		->get('/forumPostDetail', 'Application\Controller\InterfaceCommerceController::forumPostDetailAction')
-		->bind('forumPostDetail');
 
 		$controllers
 		->post('/search', 'Application\Controller\InterfaceCommerceController::searchAction')
@@ -234,6 +219,18 @@ class InterfaceCommerceControllerProvider implements ControllerProviderInterface
 		->assert('token','\w+')
 		->value('token','0')
 		->bind('reset_passwordPost');
+
+		$controllers
+		->get('profil/utilisateur/{ID_user}', 'Application\Controller\InterfaceCommerceController::ProfilUserAction')
+		->assert('ID_user','\d+')
+		->value('ID_user','0')
+		->bind('profilUser');
+
+		$controllers
+		->match('/newsletter', 'Application\Controller\GlobalController::newsletterPostAction')
+		->method('POST|GET')
+		->bind('newsletter');
+
 
 
 		return $controllers;

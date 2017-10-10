@@ -45,11 +45,11 @@
 								{% for value in topics %}
 									<div class="card-body">
 										<h2 class="card-title">{{value.title}}</h2>
-										<p class="card-text">{{value.content}}</p>
+										<p class="card-text">{{value.content | balise}}</p>
 										<a href="{{ url('forum_topic', {'slugTopic' : value.title | slug, 'ID_topic' : value.ID_topic}) }}" class="btn btn-primary">En savoir plus</a>
 									</div>
 									<div class="card-footer text-muted">
-										poster le {{value.creation_date | date('d/m/Y')}} Par <a href="#">{{value.name}}</a>
+										poster le {{value.creation_date | date('d/m/Y')}} Par <a href="{{ url('profilUser', {'ID_user' : value.ID_user}) }}">{{value.pseudo}}</a>
 									</div>
 								{% endfor %}
 							</div>

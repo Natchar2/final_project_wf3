@@ -217,5 +217,93 @@
 
 			return $app->redirect($this->getRacineSite() . 'reset_password-' . $token_reset);
 		}
+
+		public function newsletterPostAction(Application $app, Request $request)
+		{
+
+	    	if($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+	    	{
+				$token = $app['security.token_storage']->getToken();
+				$user = $token->getUser();
+
+	    		if($user->getNewsletter())
+	    		{
+	    			$app->redirect('accueil#newsletter');
+	    		}
+
+	    		$newsletter_exist = $app['idiorm.db']->for_table('newsletter')->where('mail', $user->getMail())->find_result_set();
+
+				if(count($newsletter_exist) > 0)
+				{
+	    			$saveInscriptionNews = $app['idiorm.db']->for_table('users')->where('mail', $user->getMail())->find_result_set()->set(array(
+	    				'newsletter' => true,
+	    			));
+	    			$saveInscriptionNews->save();
+
+	    			$newsletter = $app['idiorm.db']->for_table('newsletter')->create();
+	    			$newsletter->mail = $user->getMail();
+	    			$newsletter->save();
+
+	    			return $app->redirect('accueil#newsletter');
+	    		}
+
+	    		return $app['twig']->render('commerce/accueil.html.twig', array(
+    				'mail_exist' => 'Impossible de vous inscrire à la newsletter, cette email existe déjà',
+    				'products' => $products,
+					'topics' => $topics,       
+					'events' => $events,
+    			));
+			}
+			else
+			{
+				$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
+				$topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
+				$events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
+
+				if(null === $request->get('mail'))
+				{
+					return $app->redirect('accueil#newsletter');
+				}
+
+				$mail = $request->get('mail');
+
+				$user = $app['idiorm.db']->for_table('users')->where('mail', $mail)->find_result_set();
+
+				if(count($user) > 0)
+				{
+					return $app['twig']->render('commerce/accueil.html.twig', array(
+	    				'mail_exist' => 'Impossible de vous inscrire à la newsletter, cette email existe déjà',
+	    				'products' => $products,
+						'topics' => $topics,       
+						'events' => $events,
+	    			));
+				}
+
+				$newsletter_exist = $app['idiorm.db']->for_table('newsletter')->where('mail', $mail)->find_result_set();
+
+				if(count($newsletter_exist) > 0)
+				{
+					return $app['twig']->render('commerce/accueil.html.twig', array(
+	    				'mail_exist' => 'Impossible de vous inscrire à la newsletter, cette email existe déjà',
+	    				'products' => $products,
+						'topics' => $topics,       
+						'events' => $events,
+	    			));
+				}
+
+				$newsletter = $app['idiorm.db']->for_table('newsletter')->create();
+    			$newsletter->mail = $mail;
+    			$newsletter->save();
+
+    			$app['session']->set('user_add_newsletter', true);
+
+    			return $app['twig']->render('commerce/accueil.html.twig', array(
+    				'success_inscription_newsletter' => 'Vous avez été inscrit avec success à la newsletter',
+    				'products' => $products,
+					'topics' => $topics,       
+					'events' => $events,
+    			));
+			}
+		}
 	}
 ?>

@@ -74,9 +74,6 @@
 	</header>
 
 
-	<!-- Marketing messaging and featurettes
-	================================================== -->
-	<!-- Wrap the rest of the page in another container to center all the content. -->
 	<div class="container marketing col-xs-12">
 		<div class="container">
 			<div class="row">
@@ -113,20 +110,56 @@
 		</div>
 
 		<!-- NEWSLETTER -->
-		<div class="container-fluid col-xs-12 newsletter">
+
+		<div class="container-fluid col-xs-12 newsletter" id="newsletter">
+				{% if mail_invalid is defined %}
+					<div class="col-xs-8 col-xs-offset-2 alert alert-danger">
+						<p style="color: black; font-size: 1.5em;">{{ mail_invalid }}</p>
+					</div>
+				{% endif %}
+
+				{% if mail_exist is defined %}
+					<div class="col-xs-8 col-xs-offset-2 alert alert-danger">
+						<p style="color: black; font-size: 1.5em;">{{ mail_exist }}</p>
+					</div>
+				{% endif %}
+
+				{% if success_inscription_newsletter is defined %}
+					<div class="col-xs-8 col-xs-offset-2 alert alert-success">
+						<p style="color: black; font-size: 1.5em;">{{ success_inscription_newsletter }}</p>
+					</div>
+				{% endif %}
 			<div class="container">
 				<div class="row">
+					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+						{% if app.user.getNewsletter() == 0 %}
+							<h2>Inscrivez vous à notre newsletter</h2>
 
+							<br>
+							<p>Pour vous tenir informé(e) de l’actualité et événements importants concernant Street Connect, abonnez-vous à notre newsletter maintenant.</p>
+							<br>
 
-					<h2>Inscrivez vous à notre newsletter</h2>
+							<a href="{{ url('newsletter') }}" class="btn btn-default">S'inscrire &raquo;</a>
+						{% else %}
+							<p>Vous êtes inscrit à la newsletter</p>
+						{% endif %}
+					{% else %}
+						{% if app.session.get('user_add_newsletter') is null %}
+							<h2>Inscrivez vous à notre newsletter</h2>
 
+							<br>
+							<p>Pour vous tenir informé(e) de l’actualité et événements importants concernant Street Connect, abonnez-vous à notre newsletter maintenant.</p>
+							<br>
 
-					<br>
-					<p>Pour vous tenir informé(e) de l’actualité et événements importants concernant Street Connect, abonnez-vous à notre newsletter maintenant.
-					</p>
-					<br>
+							<form action="{{ url('newsletter') }}" method="POST">
+								<input type="text" placeholder="Votre email.." name="mail" aria-describedby="basic-addon1" required>
+								<button type="submit" class="btn btn-default" role="button">S'inscrire &raquo;</button>
+							</form>
+						{% else %}
+							<p>Vous êtes inscrit à la newsletter</p>
+						{% endif %}
+					{% endif %}
 					<div class="input-group center-block">
-						<input type="text" placeholder=" mon email" aria-describedby="basic-addon1"><a class="btn btn-default" href="#" role="button">Envoyer &raquo;</a>
 					</div>
 				</div>
 			</div>
@@ -155,7 +188,7 @@
 								{% for topic in topics %}
 									<tr>
 										<td>{{ topic.creation_date|date('d/m/Y') }}</td>
-										<td class="hidden-xs">{{ topic.pseudo }}</td>
+										<td class="hidden-xs"><a href="{{ url('profilUser', {'ID_user' : topic.ID_user}) }}">{{ topic.pseudo }}</a></td>
 										<td>{{ topic.title }} <a><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
 									</tr>
 

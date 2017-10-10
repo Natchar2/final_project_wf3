@@ -27,23 +27,15 @@ class InterfaceCommerceController
 
 	public function accueilAction(Application $app)
 	{
-		$this->getRacineSite();
 		$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
 		$topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
 		$events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
-
-		// $t = 	$app['security.encoder.digest']
-		// ->encodePassword('test', '');  
-
-		// print_r($t);
-		// die();
 
 		return $app['twig']->render('commerce/accueil.html.twig',[
 			'products' => $products,
 			'topics' => $topics,       
 			'events' => $events,
 		]);
-
 	}
 
 	public function shopAction($category_name,Application $app,$page = 1,$nbPerPage = 6)
@@ -695,11 +687,15 @@ class InterfaceCommerceController
 		return $app['twig']->render('commerce/shoppingCard.html.twig');
 	}
 
-	public function connexionAction(Application $app, Request $request)
+	public function connexionAction(Application $app, Request $request, $success_inscription)
 	{
+		$success = "";
+		if($success_inscription === 'success_inscription') $success = "Vous avez été inscrit avec succès, veuillez à present vous connecter";
+
 		return $app['twig']->render('commerce/connexion.html.twig', array(
 			'error' => $app['security.last_error']($request),
 			'last_username' => $app['session']->get('_security.last_username'),
+			'success_inscription' => $success
 		));
 
 	}
@@ -793,10 +789,10 @@ class InterfaceCommerceController
 					if(empty($errors) && empty($error)){
 
 
-
 		                //SI c'est une modification d'article :
 						if($request->get('ID_product')>0)
 						{
+
 							if($app['session']->get('token') == $request->get('token'))
 							{
 
@@ -823,29 +819,29 @@ class InterfaceCommerceController
 								$success = "Votre produit a bien été ajouté ";
 
 							//connexion a la bdd pour l'insertion automatique d'un topic en cas d'ajout de produit
-								$topic = $app['idiorm.db']->for_table('topic')
-								->where($request->get('ID_product'))
-								->find_one()
-								->set(array(
 
-									'title' 	 => $request->get('name'),
-									'ID_category'=> $request->get('category'),
-
-								));
-
-								$topic->save();
+								$topic = $app['idiorm.db']->for_table('topic')->where('ID_product', (int)$request->get('ID_product'))->find_one();
+								if (count($topic)>0)
+					        	{
+					        		$topic->set(array(
+					        			'title' 	 => $request->get('name'),
+					        			'ID_category'=> $request->get('category'),
+					        		));
+						        	$topic->save();
+						        }
+								
 								
 								$success = "Votre produit a bien été modifié et le topic sur le sujet également";
 
 							}
 							else
 							{
-								return $app->redirect('../inscription/erreur');
+								return $app->redirect($this->getRacineSite().'inscription/erreur');
 							}
 						}
 						else
 						{
-
+							
 		    				//Connexion à la bdd
 							$product = $app['idiorm.db']->for_table('products')->create();
 
@@ -900,6 +896,7 @@ class InterfaceCommerceController
 							'error'       => [] ,
 							'categories'  => $app['categories'],
 							'modification'=> '',
+							'ID_product'  => $ID_product,
 						]);
 
 					}
@@ -914,7 +911,7 @@ class InterfaceCommerceController
 				}
 				else
 				{
-					$ID_product = 0;
+					$ID_product = '0';
 					$modification ='';
 				}
 				return $app['twig']->render('commerce/ajout_produit.html.twig',[
@@ -922,7 +919,7 @@ class InterfaceCommerceController
 					'error'       => $error,
 					'categories'  => $app['categories'],
 					'modification'=> $modification,
-					'ID_product'  => $request->get('ID_product'),
+					'ID_product'  => $ID_product,
 
 				]);
 
@@ -932,7 +929,7 @@ class InterfaceCommerceController
 		}
 		else
 		{
-			return $app->redirect('../inscription/erreur');
+			return $app->redirect($this->getRacineSite().'inscription/erreur');
 		}
 
 	}
@@ -999,14 +996,13 @@ class InterfaceCommerceController
 	        		unlink(PUBLIC_ROOT.'assets/images/'.$suppression->get('image_3'));
 	        	}
 	        	
-	        	$topic = $app['idiorm.db']->for_table('topic')
-	        	->where('ID_product', $request->get('ID_product'))
-	        	->find_one()
-	        	->set(array(
-	        		'ID_product' => 0,
-	        	));
+        		$topic = $app['idiorm.db']->for_table('topic')->where('ID_product', (int)$request->get('ID_product'))->find_one();
 
-	        	$topic->save();
+	        	if (count($topic)>0)
+	        	{
+	        		$topic->set(array('ID_product' => null));
+		        	$topic->save();
+		        }
 	        	
 				$suppression->delete();
 
@@ -1023,13 +1019,13 @@ class InterfaceCommerceController
 		    }
 		    else
 		    {
-		    	return $app->redirect('../inscription/erreur');
+		    	return $app->redirect($this->getRacineSite().'inscription/erreur');
 		    }
 
 	    }
 	    else
 	    {
-	    	return $app->redirect('../inscription/erreur');
+	    	return $app->redirect($this->getRacineSite().'inscription/erreur');
 	    }
 
 	}  
@@ -1235,14 +1231,19 @@ class InterfaceCommerceController
 							$inscriptionDb->avatar          =	$newname.'.jpg';   
 						$inscriptionDb->password 		= 	$app['security.encoder.digest']->encodePassword($inscription['password'], '');
 						$inscriptionDb->creation_date	=	strtotime("now");
+
+						$newsletter = $app['idiorm.db']->for_table('newsletter')->where('mail', $inscription['email'])->find_result_set();
+
+						if(count($newsletter) > 0)
+						{
+							$inscriptionDb->newsletter = true;
+						}
 						
 		            # Insertion en BDD
 						$inscriptionDb->save();
 						
 		            # Redirection
-						return $app->redirect( $app['url_generator'] ->generate('connexion', [ 
-
-						]));
+						return $app->redirect("connexion/success_inscription");
 				}
 				else
 				{
@@ -1793,13 +1794,19 @@ class InterfaceCommerceController
 			$userProfil = $app['idiorm.db']->for_table('users')
 			->find_one($ID_user);
 
-			$topic = $app['idiorm.db']->for_table('topic')
+			$topic = $app['idiorm.db']->for_table('view_topics')
 			->where('ID_user',$ID_user)
 			->order_by_desc('creation_date')
 			->limit(1)
 			->find_one();
 
-			$event = $app['idiorm.db']->for_table('event')
+			$event = $app['idiorm.db']->for_table('view_events')
+			->where('ID_user',$ID_user)
+			->order_by_desc('creation_date')
+			->limit(1)
+			->find_one();
+
+			$product = $app['idiorm.db']->for_table('view_products')
 			->where('ID_user',$ID_user)
 			->order_by_desc('creation_date')
 			->limit(1)
@@ -1809,12 +1816,67 @@ class InterfaceCommerceController
 				'userProfil'			=>$userProfil,
 				'success_modification'	=>$success_modification,
 				'topic'					=>$topic,
-				'event'					=>$event
+				'event'					=>$event,
+				'product'				=>$product
 			]);			
 		}
 		else
 		{
 			return $app->redirect('connexion');
+		}
+	}
+
+	public function profilUserAction(Application $app, $ID_user)
+	{
+		$token1 = $app['security.token_storage']->getToken();
+
+		if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY'))
+		{
+
+			$user = $token1->getUser();    		
+	    	$ID_user1 = $user->getID_user();
+
+	    	if($ID_user1 !== $ID_user)
+	    	{
+
+				$userProfil = $app['idiorm.db']->for_table('users')
+				->find_one($ID_user);
+
+				$topic = $app['idiorm.db']->for_table('view_topics')
+				->where('ID_user',$ID_user)
+				->order_by_desc('creation_date')
+				->limit(1)
+				->find_one();
+
+				$event = $app['idiorm.db']->for_table('view_events')
+				->where('ID_user',$ID_user)
+				->order_by_desc('creation_date')
+				->limit(1)
+				->find_one();
+
+				$product = $app['idiorm.db']->for_table('view_products')
+				->where('ID_user',$ID_user)
+				->order_by_desc('creation_date')
+				->limit(1)
+				->find_one();
+
+				return $app['twig']->render('commerce/profilUser.html.twig',[
+					'userProfil'			=>$userProfil,
+					'topic'					=>$topic,
+					'event'					=>$event,
+					'product'				=>$product
+				]);
+
+			}
+
+			else
+			{
+				return $app->redirect($this->getRacineSite().'/profil/'.$ID_user);
+			}			
+		}
+		else
+		{
+			return $app->redirect($this->getRacineSite().'inscription/erreur');
 		}
 	}
 }
