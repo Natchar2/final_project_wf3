@@ -1126,6 +1126,7 @@ class InterfaceCommerceController
 		])
 
 		->add('email', TextType::class, [
+			'label'         => false,
 			'constraints' => new Assert\Email(),
 			'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com')
 		])

@@ -69,7 +69,7 @@
                             <hr>
                         {% endif %}
 
-                        <div class="row">
+                        <div class="row containerAgenda">
 
                             <div class="col-lg-12">
                                 <h3>
@@ -108,7 +108,7 @@
                                         </i></h6>
 
                                         <p>{{ event.event_description|accroche }}</p>
-                                        <a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-primary pull-right">Infos</a>
+                                        <a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-default pull-right">Infos</a>
 
                                         <br><br>
                                         <hr class="col-xs-9 col-xs-push-1">

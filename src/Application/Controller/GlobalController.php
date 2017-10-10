@@ -233,6 +233,9 @@
 	    		}
 
 	    		$newsletter_exist = $app['idiorm.db']->for_table('newsletter')->where('mail', $user->getMail())->find_result_set();
+	    		$products=$app['idiorm.db']->for_table('view_products')->order_by_desc('creation_date')->limit(6)->find_result_set();
+				$topics=$app['idiorm.db']->for_table('view_topics')->order_by_desc('creation_date')->limit(6)->find_result_set();
+				$events=$app['idiorm.db']->for_table('view_events')->order_by_desc('creation_date')->limit(3)->find_result_set();
 
 				if(count($newsletter_exist) > 0)
 				{

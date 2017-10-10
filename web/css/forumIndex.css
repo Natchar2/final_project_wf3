@@ -57,10 +57,14 @@
     padding: 5px;
   }
 
-  
-
   h1{
     font-family: monoton;
+  }
+
+  .blogPost{
+    background: RGBA(51, 51, 51, 1.00);
+    padding: 10px;
+    color: RGBA(230, 230, 230, 1.00);
   }
 
 /* FOOTER
