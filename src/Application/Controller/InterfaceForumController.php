@@ -180,7 +180,8 @@ class InterfaceForumController
 					$post->ID_user   = $request->get('ID_user');
 					$post->post_date = strtotime('now');
 					$post->ID_user   = $ID_user;
-	
+					$post->status = 1;
+
 					$post->save();
 	
 					if($ID_topic>0)
@@ -300,6 +301,7 @@ class InterfaceForumController
 		            $topic->ID_category      = $request->get('category');
 		 			$topic->creation_date    = strtotime('now');
 		 			$topic->ID_user			 = $ID_user;
+		 			$topic->status 		  	 = 1;
 		 			
 		 			$topic->save();
 

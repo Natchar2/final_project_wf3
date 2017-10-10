@@ -10,7 +10,7 @@
 	<div class="row">
 		{% if success is defined %}
 			<div class="alert alert-danger" role=alert>
-				<p>{{ success }}</p>
+				<p align="center">{{ success }}</p>
 			</div>	
 		{% endif %}
 		
@@ -29,7 +29,7 @@
 							<th>Nom du topic</th>
 							<th class="small" width="80">Date de création</th>
 							<th class="small" width="300">Lien vers le produit ou l'événement associé</th>
-							<th class="small" width="80">Action</th>
+							<th class="small" width="80">Pseudo</th>
 							<th class="small" width="80">Action</th>
 						</tr>
 					</thead>
@@ -44,16 +44,16 @@
 									{% endif %}
 
 									{% if value.ID_event > 0 %}
-										<a href="{{ url('agenda_article', {'category_name': value.category_name|lower , 'slugevent':value.event_title|slug , 'ID_event':value.ID_event}) }}" class="btn btn-primary pull-right">Evénements - {{value.event_title}}</a>
+										<a href="{{ url('agenda_article', {'category_name': value.category_name|lower , 'slugevent':value.event_title|slug , 'ID_event':value.ID_event}) }}">Evénements - {{value.event_title}}</a>
 									{% endif %}
 									
 								</td>
 								<td>{{value.pseudo}}</td>
 								<td>
-									<form action="{{ url('deleteTopic') }}"  method="post">
+									<form action="{{ url('deleteTopicAdmin') }}"  method="post">
 										<input type="hidden" name="ID_topic" value="{{value.ID_topic}}">
 										<input type="hidden" name="token" value="{{app.session.get('token')}}">
-										<button onclick="return confirm('êtes vous sûr ??')" class="for-control btn btn-danger" type="submit">Supprimer</button> 								
+										<button onclick="return confirm('Cette action supprimera le topic et tous les posts associés\r\nêtes-vous sûr ??')" class="for-control btn btn-danger" type="submit">Supprimer</button> 								
 									</form>
 								</td>
 							</tr>

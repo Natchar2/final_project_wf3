@@ -20,7 +20,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3">
-					<h4 class="lead">Street Connect</h4>
+					<h4 class="lead">Agenda</h4>
 					{{ render (controller('Application\\Controller\\InterfaceAgendaController::menuAgenda', { 'active':active } )) }}
 				</div>
 
@@ -36,12 +36,13 @@
 						<div class="card-body">
 							<small class="text-muted pull-right">Publié par	<a href="{{ url('profilUser', {'ID_user' : event.ID_user}) }}">{{ event.pseudo }}</a>  le  {{ event.creation_date|date('d/m/Y') }}</small>
 							<h3 class="card-title">{{ event.event_title }}</h3>							
-							<p class="card-text">{{ event.event_description }}</p>
+							<p class="card-text">{{ event.event_description | balise}}</p>
 						</div>
 					</div>
 					<br><br>
 					<hr>
 				</div>
+				<div class="container">
 				<div class="row">
 					<div class="col-md-4 col-md-push-3">
 						<div class="card-header">
@@ -65,25 +66,25 @@
 								Contacts :<br>
 								{{event.mail}}<br>
 								{{event.phone}}<br>
-								{{event.url_1}}<br>
+								<a href="{{ event.url_1 }}">{{event.url_1}}</a><br>
 								{% if 'facebook' in event.url_2 %}
-									<i class="fa fa-facebook-official" aria-hidden="true"></i> {{event.url_2}}<br>
+									<i class="fa fa-facebook-official" aria-hidden="true"></i> <a href="{{ event.url_2 }}">{{event.url_2}}</a><br>
 								{% elseif 'twitter' in event.url_2 %}
-									<i class="fa fa-twitter" aria-hidden="true"></i> {{event.url_2}}<br>
+									<i class="fa fa-twitter" aria-hidden="true"></i> <a href="{{ event.url_2 }}">{{event.url_2}}</a><br>
 								{% elseif 'instagram' in event.url_2 %}
-									<i class="fa fa-instagram" aria-hidden="true"></i> {{event.url_2}}<br>
+									<i class="fa fa-instagram" aria-hidden="true"></i> <a href="{{ event.url_2 }}">{{event.url_2}}</a><br>
 								{% else %}
-									{{event.url_2}}<br>
+									<a href="{{ event.url_2 }}">{{event.url_2}}</a><br>
 								{% endif %}
 
 								{% if 'facebook' in event.url_3  %}
-									<i class="fa fa-facebook-official" aria-hidden="true"></i> {{event.url_3 }}<br>
+									<i class="fa fa-facebook-official" aria-hidden="true"></i> <a href="{{ event.url_3 }}">{{event.url_3 }}</a><br>
 								{% elseif 'twitter' in event.url_3  %}
-									<i class="fa fa-twitter" aria-hidden="true"></i> {{event.url_3 }}<br>
+									<i class="fa fa-twitter" aria-hidden="true"></i> <a href="{{ event.url_3 }}">{{event.url_3 }}</a><br>
 								{% elseif 'instagram' in event.url_3  %}
-									<i class="fa fa-instagram" aria-hidden="true"></i> {{event.url_3 }}<br>
+									<i class="fa fa-instagram" aria-hidden="true"></i> <a href="{{ event.url_3 }}">{{event.url_3 }}</a><br>
 								{% else %}
-									{{event.url_3 }}<br>
+									<a href="{{ event.url_3 }}">{{event.url_3 }}</a><br>
 								{% endif %}
 
 							</p>
@@ -95,8 +96,8 @@
 					</div>
 					</div>
 				</div>
-
-
+				</div>
+					<div class="container containerSuggest">
 					<div class="card card-outline-secondary my-4">
 
 						<div class="card-header">
@@ -132,10 +133,12 @@
 							{% endif %}
 						</div>
 					</div>
+					</div>
 					
 					<br><br>
 					<br><br>
 				</div>
+				<div class="container">
 				<div class="row">
 					<div class="card card-outline-secondary my-4">
 
@@ -143,7 +146,7 @@
 						<hr>
 						<br><br>
 						<div class="card-header">
-							<h4 class="lead">Discussion autour de l'événement</h4>
+							<h4>Discussion autour de l'événement</h4>
 						</div>
 						<div class="card-body">
 							{% if posts is empty %}
@@ -164,6 +167,7 @@
 					<br><br>						
 					<br><br>
 
+				</div>
 				</div>
 			</div>
 		</div>

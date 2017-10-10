@@ -1,16 +1,121 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
+{% endblock %}
+
+
 {% block contenu %}
-	<br><br><br><br>
-	<h1>Page Administrateur</h1>
+	<div class="padMenu">
+<br><br>
+		<h1 class="text-center">Administration</h1>
+<br><br>
+	    <div class="row">
+	        <div class="col-xs-12 col-lg-4 col-lg-push-1 thumbnail" onclick="window.location='{{ url('listProductsAdmin') }}';" onmouseover="this.style.cursor='pointer';">
+				<div class="col-xs-12 col-sm-4">
+					<center>
+			            <figure class="dashboard-img-phold">
+			            	<img src="{{ asset('assets/images/logos/shop.jpg') }}" width="200" height="200" class="img-responsive" alt="">
+		            	</figure>
+		              	<h3>Produits</h3>
+	                </center>
+	        	</div>
+
+				<div class="col-xs-12 col-sm-6">			
+					{% if products is not empty %}
+						Il y a actuellement <b>{{ products|length }}  produits</b> en base
+					{% endif %}
+					dont xxx en attente de validation.
+				</div>
+	        </div>
+	        
+	        <div class="col-xs-12 col-lg-4 col-lg-push-2 thumbnail" onclick="window.location='{{ url('listEventsAdmin') }}';" onmouseover="this.style.cursor='pointer';">
+				<div class="col-xs-12 col-sm-4">
+					<center>
+			            <figure class="dashboard-img-phold">
+			            	<img src="{{ asset('assets/images/logos/event.png') }}" width="200" height="200" class="img-responsive" alt="">
+		            	</figure>
+		              	<h3>Evénements</h3>
+		            </center>
+	        	</div>
+
+				<div class="col-xs-12 col-sm-6">			
+					{% if events is not empty %}
+						Il y a actuellement <b>{{ events|length }} Evénements</b> en base
+					{% endif %}
+					{% if eventsGone is not empty %}
+						dont <b>{{ eventsGone|length }} Evénements</b> terminés
+					{% endif %}
+				</div>
+	        </div>
+	    </div>
+
+	    <div class="row">
+	        <div class="col-xs-12 col-lg-4 col-lg-push-1 thumbnail"  onclick="window.location='{{ url('listTopicsAdmin') }}';" onmouseover="this.style.cursor='pointer';">
+				<div class="col-xs-12 col-sm-4">
+					<center>
+			            <figure class="dashboard-img-phold">
+			            	<img src="{{ asset('assets/images/logos/post.png') }}" width="200" height="200" class="img-responsive" alt="">
+		            	</figure>
+		              	<h3>Topics</h3>
+	                </center>
+	        	</div>
+
+				<div class="col-xs-12 col-sm-6">			
+					{% if products is not empty %}
+
+						Il y a actuellement <b>{{ topics|length }} Topics</b> en base
+						<br>
+						dont :
+						<ul>
+							{% if topicsProducts is not empty %}
+								<li>{{ topicsProducts|length }}  liés aux produits</li>
+							{% endif %}
+							{% if topicsEvents is not empty %}
+								<li>{{ topicsEvents|length }}  liés aux événements</li>
+							{% endif %}
+							{% if topicsAnonymous is not empty %}
+								<li>{{ topicsAnonymous|length }}  anonymes *</li>		
+							{% endif %}
+						</ul>
+					{% endif %}
+					<span class="mentions">* relicats de topics d'utilisateurs ayant été supprimés</span>
+				</div>
+	        </div>
+	        
+	        <div class="col-xs-12 col-lg-4 col-lg-push-2 thumbnail"  onclick="window.location='{{ url('listUsersAdmin') }}';" onmouseover="this.style.cursor='pointer';">
+				<div class="col-xs-12 col-sm-4">
+					<center>
+			            <figure class="dashboard-img-phold">
+			            	<img src="{{ asset('assets/images/logos/user.png') }}" width="200" height="200" class="img-responsive" alt="">
+		            	</figure>
+		              	<h3>Utilisateurs</h3>
+		            </center>
+	        	</div>
+
+				<div class="col-xs-12 col-sm-6">
+					{% if users is not empty %}
 
 
-	<ul>
-		<li><a href="{{ url('listProductsAdmin') }}">Liste produits</a></li>
-		<li><a href="{{ url('listEventsAdmin') }}">Liste événements</a></li>
-		<li><a href="{{ url('listTopicsAdmin') }}">Liste topics</a></li>
-		<li><a href="{{ url('listUsersAdmin') }}">Liste utilisateurs</a></li>
-	</ul>
+						Il y a actuellement <b>{{ users|length }} Utilisateurs</b> en base
+						<br>
+						dont :
+						<ul>
+							{% if topicsProducts is not empty %}
+								<li>{{ usersWait|length }}  en attente de validation du mot de passe</li>
+							{% endif %}
+							{% if topicsEvents is not empty %}
+								<li>{{ usersAdmin|length }}  en rôle Administrateurs</li>
+							{% endif %}
+						</ul>
+					{% endif %}
 
+				</div>
+
+
+	        </div>
+	    </div>
+    </div>
 
 {% endblock %}

@@ -24,13 +24,12 @@
 
 						<!-- include menu -->
 						<div class="col-md-3">
-							<h4 class="lead">Street Connect</h4>
+							<h4 class="lead" style="color: black;">Forum</h4>
 							{{ render (controller('Application\\Controller\\InterfaceForumController::menuForum', { 'active':active } )) }}
 						</div>
 
 						<!-- Blog Entries Column -->
 						<div class="col-md-5">
-							<h1 class="my-4">Forum</h1>
 							<hr>
 							<h3>
 								{% if global.request.get('category_name') == "all" %}
@@ -41,12 +40,12 @@
 							</h3>
 							<hr>
 							<!-- Blog Post -->
-							<div class="card mb-4">
+							<div class="card mb-4 blogPost">
 								{% for value in topics %}
 									<div class="card-body">
 										<h2 class="card-title">{{value.title}}</h2>
 										<p class="card-text">{{value.content | balise}}</p>
-										<a href="{{ url('forum_topic', {'slugTopic' : value.title | slug, 'ID_topic' : value.ID_topic}) }}" class="btn btn-primary">En savoir plus</a>
+										<a href="{{ url('forum_topic', {'slugTopic' : value.title | slug, 'ID_topic' : value.ID_topic}) }}" class="btn btn-default btn-xs">En savoir plus</a>
 									</div>
 									<div class="card-footer text-muted">
 										{% if value.ID_user == -1 %}
@@ -55,6 +54,7 @@
 											poster le {{value.creation_date | date('d/m/Y')}} Par <a href="{{ url('profilUser', {'ID_user' : value.ID_user}) }}">{{value.pseudo}}</a>
 										{% endif %}
 									</div>
+									<hr>
 								{% endfor %}
 							</div>
 
@@ -65,38 +65,36 @@
 
 								<div class="paging col-xs-12" style="text-align:center;margin:25px 0;">
 									{% if (pageMax) > 1 %}
-										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default">Début</a>
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': 1 }) }}" class="btn btn-default btn-xs">Début</a>
 									{% endif %}
-
 									{% if (page - 1) > 1 %}
-										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">Précédent</a>
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-chevron-left"></span></a>
 									{% endif %}
 									&nbsp;&nbsp;
 									{% if (page - 2) >= 1 %}
-										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default">{{ (page - 2) }}</a>
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 2) }) }}" class="btn btn-default btn-xs">{{ (page - 2) }}</a>
 									{% endif %}
 									&nbsp;&nbsp;                       
 									{% if (page - 1) >= 1 %}
-										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default">{{ (page - 1) }}</a>
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page - 1) }) }}" class="btn btn-default btn-xs">{{ (page - 1) }}</a>
 									{% endif %}
 									&nbsp;&nbsp;
-									<a href="#" class="btn btn-primary">{{ page }}</a>
+									<a href="#" class="btn btn-primary btn-xs">{{ page }}</a>
 									&nbsp;&nbsp;
 									{% if (page + 1) <= pageMax %}
-										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">{{ (page + 1) }}</a>
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default btn-xs">{{ (page + 1) }}</a>
 									{% endif %}
 									&nbsp;&nbsp;   
 									{% if (page + 2) < pageMax %}
-										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default">{{ (page + 2) }}</a>
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 2) }) }}" class="btn btn-default btn-xs">{{ (page + 2) }}</a>
 									{% endif %}
 									&nbsp;&nbsp; 
 									{% if (page + 1) < pageMax %}
-										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default">Suivant</a>
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': (page + 1) }) }}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-chevron-right"></span></a>
 									{% endif %}
 									&nbsp;&nbsp;
-
 									{% if (pageMax) > 1 %}
-										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default">Fin</a>
+										<a href="{{ url('accueil_forum_page', {'category_name': global.request.get('category_name')|lower , 'page': pageMax }) }}"  class="btn btn-default btn-xs">Fin</a>
 									{% endif %}							
 								</div> 
 							{% endif %}

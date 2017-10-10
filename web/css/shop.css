@@ -43,6 +43,11 @@ a.btn.btn-info.pull-right{
   height: 6.8em;
 }
 
+img .slides{
+  height: 500px;
+  min-width: 100%
+}
+
 /* FOOTER
 -------------------------------------------------- */
 

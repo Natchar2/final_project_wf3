@@ -15,14 +15,18 @@
 			<div class="col-md-8">
 				<h1 class="my-4">Forum</h1>
 				<!-- Blog Post -->
-				<div class="card mb-4">
+				<div class="card mb-4 topicPost">
 					<div class="card-body">
 						<h2 class="card-title">{{topics.title}}</h2>
+						
 						<div class="block_post">
 							<h2 class="card-text">
 								{{topics.category_name}}<br>
 							</h2> 
+
+							<hr>
 							{% for value in posts %}								
+
 								<div class="col-xs-12 card-text old_post">
 									<p class= "pull-right">
 										par <a href="{{ url('profilUser', {'ID_user' : value.ID_user}) }}">{{value.pseudo}}</a> le : {{value.post_date | date('d/m/Y')}}</p>
@@ -30,15 +34,24 @@
 										{{value.content | balise}}
 										<hr>
 									</div>
-
 								{% endfor %}
+								
 							</div>
 							<span >
 								<br>
 
 									<button class="btn btn-primary plus_post" type="button">Afficher plus</button>
-								&nbsp;&nbsp;<a href="{{ url('accueil_forum') }}" class="btn btn-primary" type="button">Revenir au forum</a>
+								&nbsp;&nbsp;<a href="{{ url('accueil_forum') }}" class="btn btn-primary">Revenir au forum</a>
+								
+									{% if topics.ID_product > 0 %}
+									&nbsp;&nbsp;<a href="{{ url('article', {'category_name': topics.category_name |lower , 'slugproduct':topics.name|slug , 'ID_product':topics.ID_product}) }}" class="btn btn-primary"  target="_blank">Voir l'annonce</a>
+									{% endif %}
+
+									{% if topics.ID_event > 0 %}
+									&nbsp;&nbsp;<a href="{{ url('agenda_article', {'category_name': topics.category_name|lower , 'slugevent':topics.event_title|slug , 'ID_event':topics.ID_event}) }}" class="btn btn-primary" target="_blank">Voir l'annonce</a>
+									{% endif %}
 							</span>
+							
 
 							<!-- Blog Post -->
 							<h2 >Ajoutez un commentaire</h2>
@@ -68,7 +81,7 @@
 										</div>
 									</div>
 									<input type="hidden" name="token" value="{{app.session.get('token')}}">
-									<button type="submit" class="btn btn-success">Poster</button>
+									<button type="submit" class="btn btn-default">Poster</button>
 								</fieldset>
 							</form>
 						</p>
