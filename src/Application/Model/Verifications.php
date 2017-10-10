@@ -22,7 +22,7 @@ class Verifications
 		if(null!=($request->get('name')) && !empty($request->get('name')))
 		{
 
-			if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_]{3,50}$#i',$request->get('name')))
+			if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_\.]{3,50}$#i',$request->get('name')))
 			{
 				$errors[] = 'Nom ou modèle invalide';
 			}
@@ -43,10 +43,6 @@ class Verifications
 			{
 				$errors[] = 'Marque invalide';
 			}
-		}
-		else
-		{
-			$errors[] = "Veuillez remplir le champ marque";
 		}
 
 		//verification du champ category
@@ -199,7 +195,7 @@ class Verifications
             }
 
         }
-        else
+        elseif(!empty($request->get('image_1-hidden')))
         {
         	if(!empty($request->get('image_1-hidden')))
         	{
@@ -218,6 +214,10 @@ class Verifications
         		$finalFileName1 = null;
         	}
 
+        }
+        else
+        {
+            $errors[] = 'Veuillez ajouter une image';
         }
 
         //verification du champ image_2
@@ -576,7 +576,7 @@ class Verifications
         //verification du champ title
         if(null!=($request->get('event_title')) && !empty($request->get('event_title')))
         {
-            if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_\s\;\!\.\?\:\,\'+\(\)]{3,100}$#i',$request->get('event_title')))
+            if (!preg_match('#^[a-z0-9A-Z \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\_\s\;\!\.\?\:\,\'+\(\)]{3,100}$#i',$request->get('event_title')))
             {
                 $errors[] = 'Nom de l\'événement invalide';
             }
@@ -625,7 +625,7 @@ class Verifications
         //verification du champ street name
         if(null!=($request->get('street_name')) && !empty($request->get('street_name')))
         {
-            if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\-\/)]{3,100}$#i',$request->get('street_name')))
+            if (!preg_match('#^[a-z0-9 \-áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\-\/\')]{3,100}$#i',$request->get('street_name')))
             {
                 $errors[] = 'Nom de la rue invalide';
             }
@@ -740,7 +740,7 @@ class Verifications
             }
 
         }
-        else
+        elseif(!empty($request->get('image-hidden')))
         {
             if(!empty($request->get('image-hidden')))
             {
@@ -759,6 +759,10 @@ class Verifications
                 $finalFileName1 = null;
             }
 
+        }
+        else
+        {
+            $errors[] = 'Veuillez ajouter une image';
         }
 
          //verification du champ url_1
@@ -830,18 +834,18 @@ class Verifications
         //verification du champ latitude
         if(null!=($request->get('latitude')) && !empty($request->get('latitude')))
         {
-            if (!preg_match('#(^\d){1,2}\.(\d){6}$#i',$request->get('latitude')))
+            if (!preg_match('#^(\-){0,1}(\d){1,2}\.(\d){6}$#i',$request->get('latitude')))
             {
-                $errors[] = 'Coordonnées de latitude';
+                $errors[] = 'Coordonnées de latitude invalide';
             }
         }
 
         //verification du champ longitude
         if(null!=($request->get('longitude')) && !empty($request->get('longitude')))
         {
-            if (!preg_match('#(^\d){1,2}\.(\d){6}$#i',$request->get('longitude')))
+            if (!preg_match('#^(\-){0,1}(\d){1,2}\.(\d){6}$#i',$request->get('longitude')))
             {
-                $errors[] = 'Coordonnées de longitude';
+                $errors[] = 'Coordonnées de longitude invalide';
             }
         }
 

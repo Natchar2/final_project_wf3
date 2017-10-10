@@ -691,9 +691,12 @@ class InterfaceCommerceController
 	{
 		$success = "";
 		if($success_inscription === 'success_inscription') $success = "Vous avez été inscrit avec succès, veuillez à present vous connecter";
+		
+		$error='';
+		if(!empty($app['security.last_error']($request))) $error ="Ces identifiants ne sont pas valides";
 
 		return $app['twig']->render('commerce/connexion.html.twig', array(
-			'error' => $app['security.last_error']($request),
+			'error' => $error,
 			'last_username' => $app['session']->get('_security.last_username'),
 			'success_inscription' => $success
 		));
@@ -1140,12 +1143,8 @@ class InterfaceCommerceController
 		])
 
 		->add('society_name', TextType::class, [
-			'required'      => true,
-			'label'         => false,
-			'constraints'   => array(new NotBlank(
-				array('message'=>'Vous devez saisir un nom de société')
-			)
-		),
+			'required'      => false,
+			'label'         => false,			
 			'attr'          => array(
 				'class'         => 'form-control',
 			)                
@@ -1400,6 +1399,7 @@ class InterfaceCommerceController
 
 		->add('email', TextType::class, [
 			'label' => false,
+			'required'=>true,
 			'constraints' => new Assert\Email(),
 			'attr' => array('class' => 'form-control', 'placeholder' => 'Your@email.com', 'value' => $user[0]->mail)
 		])
@@ -1418,12 +1418,9 @@ class InterfaceCommerceController
 		])
 
 		->add('society_name', TextType::class, [
-			'required'      => true,
+			'required'      => false,
 			'label'         => false,
-			'constraints'   => array(new NotBlank(
-				array('message'=>'Vous devez saisir un nom de société')
-			)
-		),
+					
 			'attr'          => array(
 				'class'         => 'form-control',
 				'value' => $user[0]->society_name,

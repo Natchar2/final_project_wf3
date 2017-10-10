@@ -209,15 +209,25 @@ class InterfaceAgendaController
 			                //SI c'est une modification d'article :
 			            if($request->get('ID_event')>0)
 			            {
-
+ 								
 
 				              $modification = $app['idiorm.db']->for_table('event')
-				              ->find_one($request->get('ID_event'))
-				              ->set(array(
+				              ->find_one($request->get('ID_event'));
+
+								if(!empty($request->get('end_date'))){
+									$date = implode("-",  array_reverse(explode("/", $request->get('end_date'))));
+
+                            		$end_date = strtotime($date);
+								}
+								else
+								{
+									$end_date = null;
+								}
+
+				              $modification->set(array(
 
 				                  'event_title'   		=> $request->get('event_title'),
-				                  'start_date'    		=> strtotime($request->get('start_date')),
-									'end_date'      	=> strtotime($request->get('end_date')),
+				                  'start_date'    		=> strtotime(implode("-",  array_reverse(explode("/", $request->get('end_date'))))),
 				                  'event_description'   => $request->get('event_description'),
 				                  'image'         		=> $finalFileName1,
 								  'ID_category'   		=> $request->get('category'),
@@ -231,6 +241,8 @@ class InterfaceAgendaController
 				                  'phone' 		  		=> $request->get('phone'),
 				                  'latitude'	  		=> $request->get('latitude'),
 				                  'longitude'	  		=> $request->get('longitude'),
+				                  'end_date'	  		=> $end_date,
+				                 
 				              ));
 
 
@@ -274,14 +286,11 @@ class InterfaceAgendaController
 
 				    				//Affectation des valeurs
 								$event->event_title   		= $request->get('event_title');
-								$event->start_date    		= strtotime($request->get('start_date'));
-								if(!empty($request->get('end_date'))){
-									$event->end_date      		= strtotime($request->get('end_date'));
-								}
-
+								$event->start_date    		= strtotime(implode("-",  array_reverse(explode("/", $request->get('start_date')))));
 								$event->creation_date 		= strtotime('now');
 								$event->event_description   = $request->get('event_description');
 								$event->image        		= $finalFileName1;
+								$event->start_date    		= strtotime($request->get('start_date'));
 								$event->ID_category   		= $request->get('category');
 								$event->street_name   		= $request->get('street_name');
 								$event->zip_code 	  		= $request->get('zip_code');
@@ -295,7 +304,15 @@ class InterfaceAgendaController
 								$event->longitude	  		= $request->get('longitude');
 								$event->ID_user	  			= $ID_user;
 								$event->status 		        = 1;
+								if(!empty($request->get('end_date'))){
+									$date = implode("-",  array_reverse(explode("/", $request->get('end_date'))));
 
+                            		$end_date = strtotime($date);
+								}
+								else
+								{
+									$event->end_date     	= null;
+								}
 			    			
 
 			    				//ON persiste
