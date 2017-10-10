@@ -15,13 +15,14 @@
 			<div class="col-md-8">
 				<h1 class="my-4">Forum</h1>
 				<!-- Blog Post -->
-				<div class="card mb-4">
+				<div class="card mb-4 topicPost">
 					<div class="card-body">
 						<h2 class="card-title">{{topics.title}}</h2>
 						<div class="block_post">
 							<h2 class="card-text">
 								{{topics.category_name}}<br>
 							</h2> 
+							<hr>
 							{% for value in posts %}								
 								<div class="col-xs-12 card-text old_post">
 									<p class= "pull-right">
@@ -68,7 +69,7 @@
 										</div>
 									</div>
 									<input type="hidden" name="token" value="{{app.session.get('token')}}">
-									<button type="submit" class="btn btn-success">Poster</button>
+									<button type="submit" class="btn btn-default">Poster</button>
 								</fieldset>
 							</form>
 						</p>

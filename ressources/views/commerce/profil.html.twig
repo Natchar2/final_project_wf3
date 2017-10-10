@@ -14,7 +14,7 @@
 			<div class="col-xs-12 text-center intro">
 
 				<hr>
-				<img class="img-circle img-responsive img-center" src="{{ asset('assets/images/avatar/'~app.user.getAvatar()) }}" alt="avatar">
+				<img class="img-circle img-responsive img-center" style="height: 150px;width: auto;" src="{{ asset('assets/images/avatar/'~app.user.getAvatar()) }}" alt="avatar">
 
 				<h3>
 					{% if userProfil is defined and userProfil is not empty %}
@@ -23,6 +23,8 @@
 					{% else %}
 						<div>Aucun utilisateur ne correspond à votre recherche</div>
 					{% endif %}
+					<br>
+					<br>
 					<a href="{{ url('list_topics') }}" type="button" class="btn btn-info">Voir ma liste</a>
 				</h3>
 

@@ -1,14 +1,22 @@
 {% extends 'defaultLayout.html.twig' %}
 
-
 {% block contenu %}
-	<div  class="alert alert-danger" style="font-size: 4em; display: flex; justify-content: center; align-items: center; height: 100%; flex-direction: column">
-		<p>404 NOT FOUND</p><br/>
-		<a href="{{ url('accueil') }}">Accueil</a>
-	</div>
-<div class="erreur">
-		
-		<img src="{{ asset('assets/images/slack-imgs.com.gif') }}">
+	<div class="container padContainer">
 
-</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="alert alert-danger text-center">
+					<h1>404 NOT FOUND</h1>
+					<br>
+					<img src="{{ asset('assets/images/slack-imgs.com.gif') }}" class="img-responsive">
+					<br>
+					<h2><a href="{{ url('accueil') }}">Retournez à l'accueil</a></h2>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block footer %}
+	{% include 'commerce/footer.html.twig' %}
 {% endblock %}

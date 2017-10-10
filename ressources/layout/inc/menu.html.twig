@@ -29,7 +29,7 @@
 							<form action="{{ url('search') }}" class="navbar-form navbar-left" method="post">
 								
 									<input type="text" name="searchString" class="form-control" required/>
-									<button type="submit" class="btn btn-block" style="margin-top:7px;"><i class="fa fa-search fa-3" aria-hidden="true" style="color:gold;"></i></button>
+									<button type="submit" class="btn btn-block" style="margin-top:7px;"><i class="fa fa-search fa-3" aria-hidden="true" style="color:black;"></i></button>
 								
 							</form>
 						</ul>
@@ -54,7 +54,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 							{% if app.user.getAvatar() is not empty %}
-                            	<img src="{{ asset('assets/images/avatar/'~app.user.getAvatar()) }}" style="width:35px;height:auto;">
+                            	<img src="{{ asset('assets/images/avatar/'~app.user.getAvatar()) }}" style="width:auto;height:30px;">
 							{% endif %}
                             <span class="caret"></span></a>
 							<ul class="dropdown-menu">

@@ -28,6 +28,11 @@ a.btn.btn-primary.pull-right{
   padding: 2px;
 }
 
+img .slides{
+  height: 500px;
+  min-width: 100%
+}
+
 /* FOOTER
 -------------------------------------------------- */
 
