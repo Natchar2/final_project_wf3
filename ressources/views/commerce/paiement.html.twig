@@ -160,8 +160,6 @@
 					$result += "<p>Effectuer le (timestamps): "  + data.token.created + "</p>";
 					if(data.token.used){ data.used = "oui"; } else { data.used = "non"; }
 					$result += "<p>Utilisé: "  + data.used + "</p>";
-
-					$('#card-infos').html($result).attr('class', 'alert alert-info');
 					
 					stripeTokenHandler(data.token);
 				}

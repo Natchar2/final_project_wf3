@@ -55,11 +55,14 @@
 
 					<!-- champ caché pour l'id-->
 					<input type="hidden" name="ID_event" 
-					{% if modification is not empty %}
-						value="{{modification.ID_event}}"
-					{% endif %}>
+						{% if modification is not empty %}
+							value="{{modification.ID_event}}"
+						{% endif %}>
 					{% if app.user.ID_user is defined %}
-					<input type="hidden" name="ID_user" value=" {{ app.user.ID_user }} ">
+						<input type="hidden" name="ID_user" 
+						{% if userCreator is not empty %}
+							value="{{ userCreator.ID_user }}"
+						{% endif %}>
 					{% endif %}
 
 
@@ -89,7 +92,7 @@
 						<label class="col-md-4 control-label">Date de fin</label>
 						<div class="col-md-4">
 							<input class="form-control input-md" type="text" name="end_date" placeholder="ex : 01/01/2001" 
-							{% if modification is not empty %}
+							{% if modification is not empty and modification.end_date>0 %}
 								value="{{modification.end_date|date('d/m/Y')}}"
 							{% endif %}>
 						</div>

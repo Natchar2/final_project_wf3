@@ -39,7 +39,7 @@
 				</div><br>
 			{% endif %}
 
-			<form action=""  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
+			<form action="{{ url('addProductPostAdmin') }}"  class="form-horizontal itemForm" method="POST" enctype="multipart/form-data">
 				<fieldset>
 					<legend>Vendre un objet
 						<span class="pull-right">
@@ -58,6 +58,14 @@
 					{% if modification is not empty %}
 						value="{{modification.ID_product}}"
 					{% endif %}>
+					{% if app.user.ID_user is defined %}
+						<input type="hidden" name="ID_user" 
+						{% if userCreator is not empty %}
+							value="{{ userCreator.ID_user }}"
+						{% endif %}>
+					{% endif %}
+
+
 					
 					<!-- nom et marque -->
 					<div class="form-group">
@@ -137,59 +145,57 @@
 						<div class="col-md-4">
 							<label class="control-label">Image</label>
 							{% if modification is not empty %}
-								{% if modification.image_1 is not empty %}
-									<div class="alert alert-info" role="alert">
-										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
-										<a href="{{ asset('/assets/images/'~modification.image_1)}}"></a>								
-									</div>
-								{% endif %}
-							{% endif %}
 							<input  type="file" class="dropify" name="image_1">
 							<input type="hidden" name="image_1-hidden"	
 							{% if modification is not empty %}
 								value="{{modification.image_1}}"
-							{% endif %}>
-						</div>
-						<div class="col-md-4">
-							<label class="control-label">Image 2</label>
-							{% if modification is not empty %}
-								{% if modification.image_2 is not empty %}
+							{% endif %}>								
+								{% if modification.image_1 is not empty %}
 									<div class="alert alert-info" role="alert">
-										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
-										<a href="{{ asset('/assets/images/'~modification.image_2)}}"></a>							
+										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>
+										<a href="{{ asset('/assets/images/'~modification.image_1)}}" target="_blank">Voir l'image</a>								
 									</div>
 								{% endif %}
 							{% endif %}
+						</div>
+						<div class="col-md-4">
+							<label class="control-label">Image 2</label>
 							<input type="file" class="dropify" name="image_2">
 							<input type="hidden" name="image_2-hidden"	
 							{% if modification is not empty %}
 								value="{{modification.image_2}}"
 							{% endif %}>
-						</div>
-						<div class="col-md-4">
-							<label class="control-label">Image 3</label>
 							{% if modification is not empty %}
-
-								{% if modification.image_3 is not empty %}
+								{% if modification.image_2 is not empty %}
 									<div class="alert alert-info" role="alert">
 										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
-										<a href="{{ asset('/assets/images/'~modification.image_3)}}"></a>							
+										<a href="{{ asset('/assets/images/'~modification.image_2)}}" target="_blank">Voir l'image</a>		
 									</div>
 								{% endif %}
 							{% endif %}
+						</div>
+						<div class="col-md-4">
+							<label class="control-label">Image 3</label>
 							<input type="file" class="dropify" name="image_3">
 							<input type="hidden" name="image_3-hidden"	
 							{% if modification is not empty %}
 								value="{{modification.image_3}}"
 							{% endif %}>
+							{% if modification is not empty %}
+								{% if modification.image_3 is not empty %}
+									<div class="alert alert-info" role="alert">
+										<p>Vous avez déja enregistré une image si vous voulez la modifiée vous pouvez en déposer une nouvelle</p>	
+										<a href="{{ asset('/assets/images/'~modification.image_3)}}" target="_blank">Voir l'image</a>		
+									</div>
+								{% endif %}
+							{% endif %}
 						</div>
 					</div>
 					<!-- Description -->
 					<div class="form-group">
 						<div class="col-md-12">
 							<label class="control-label">Description</label>
-							<textarea name="description" class="form-control" placeholder="Saisissez une description du produit"						
-							>
+							<textarea name="description" class="form-control" placeholder="Saisissez une description du produit">
 							{% if modification is not empty %}
 								{{modification.description}}
 							{% endif %}
