@@ -14,7 +14,7 @@
 			<div class="col-xs-12 text-center intro">
 
 				<hr>
-				<img class="img-circle img-responsive img-center" src="{{ asset('assets/images/avatar/'~app.user.getAvatar()) }}" alt="avatar">
+				<img class="img-circle img-responsive img-center" src="{{ asset('assets/images/avatar/'~ userProfil.avatar) }}" alt="avatar">
 
 				<h3>
 					{% if userProfil is defined and userProfil is not empty %}

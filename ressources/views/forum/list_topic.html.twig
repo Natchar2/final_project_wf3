@@ -1,6 +1,5 @@
 {% extends 'defaultLayout.html.twig' %}
 
-
 {% block stylesheets %}
 	{{parent()}}
 	<link rel="stylesheet" href="{{asset('css/list_topic.css')}}">
@@ -45,7 +44,7 @@
 									{% endif %}
 
 									{% if value.ID_event > 0 %}
-										<a href="{{ url('agenda_article', {'category_name': value.category_name|lower , 'slugevent':value.event_title|slug , 'ID_event':value.ID_event}) }}" class="btn btn-primary pull-right">Evénements - {{value.event_title}}</a>
+										<a href="{{ url('agenda_article', {'category_name': value.category_name|lower , 'slugevent':value.event_title|slug , 'ID_event':value.ID_event}) }}">Evénements - {{value.event_title}}</a>
 									{% endif %}
 									
 								</td>
