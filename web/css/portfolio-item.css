@@ -18,6 +18,6 @@ footer {
 
 .containerAgenda{
 	background: RGBA(51, 51, 51, 1.00);
-	color: grey;
-	padding: 20px;
+    padding: 10px;
+    color: RGBA(230, 230, 230, 1.00);
 }
