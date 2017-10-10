@@ -140,7 +140,6 @@ class InterfaceAgendaController
 						//appel de base pour afficher les données pour retrouver l'article a modifier
 						    $modification = $app['idiorm.db']->for_table('event')
 						    ->find_one($ID_event);
-
 					   	}else
 						{
 							return $app->redirect($this->getRacineSite().'inscription/erreur');
@@ -154,6 +153,7 @@ class InterfaceAgendaController
 					}
 
 					return $app['twig']->render('agenda/add_event.html.twig', [
+					    
 					    'categories'  => $app['categories'],      
 					    'error'       => [] ,
 					    'errors'      => [],

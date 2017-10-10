@@ -1,5 +1,10 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
+{% endblock %}
+
 {% block contenu %}
 	<br><br><br><br>
 	<div class="row">
@@ -11,7 +16,13 @@
 		
 		{% if products is not empty %}
 			<div class="col-md-12">
-				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
+                <div class="actionbar">
+                    <a href="{{ url('addProductAdmin') }}" class="btn btn-primary">Vendre un objet</a>
+                    &nbsp;&nbsp;
+					<a href="{{ url('accueilAdmin') }}" class="btn btn-default">Retour à l'accueil</a>
+				</div>
+				<br><br>
+
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
 					<thead>
 						<tr>
@@ -36,7 +47,7 @@
 								<td align="center">{{value.creation_date | date('d/m/Y')}}</td>
 								<td>{{value.pseudo}}</td>
 								<td align="center">
-									<a href="{{ url('view_newAd',{'ID_product' : value.ID_product, 'token' : app.session.get('token')}) }}" class="form-control btn btn-warning">Modifier</a>
+    								<a href="{{ url('addProductAdmin',{'ID_product' : value.ID_product, 'token' : app.session.get('token')}) }}" class="form-control btn btn-warning">Modifier</a>
 									<br><br>
 									<form action="{{ url('deleteProduct') }}"  method="post">
 										<input type="hidden" name="ID_product" value="{{value.ID_product}}">

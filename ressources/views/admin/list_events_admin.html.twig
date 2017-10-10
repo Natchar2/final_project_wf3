@@ -1,5 +1,9 @@
 {% extends 'defaultLayout.html.twig' %}
 
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
+{% endblock %}
 
 
 {% block contenu %}
@@ -15,9 +19,13 @@
 		
 			<div class="col-md-12">
 
-				<a href="{{ url('accueilAdmin') }}" class="btn btn-default pull-right">Retour à l'accueil</a>
 
-				{% if events is not empty %}
+                <div class="actionbar">
+                    <a href="{{ url('addEventAdmin') }}" class="btn btn-primary">Ajoutez un évènement</a>
+                    &nbsp;&nbsp;
+					<a href="{{ url('listEventsAdmin') }}" class="btn btn-default">Retour à l'accueil</a>
+					<br><br>
+				</div>
 
 				<table class="table table-bordered table-striped table-hover table-condensed table-responsive" width="85%" id="myTable">
 					<thead>
@@ -44,7 +52,7 @@
 								<td>{{value.start_date | date('d/m/Y')}}</td>
 								<td>{{value.pseudo}}</td>
 								<td align="center">
-									<a href="{{ url('view_agenda_add',{'ID_event' : value.ID_event, 'token' : app.session.get('token')}) }}" class="form-control btn btn-warning">Modifier</a>
+									<a href="{{ url('addEventAdmin',{'ID_event' : value.ID_event, 'token' : app.session.get('token')}) }}" class="form-control btn btn-warning">Modifier</a>
 									<br><br>
 									<form action="{{ url('deleteEvent') }}"  method="post">
 										<input type="hidden" name="ID_event" value="{{value.ID_event}}">
