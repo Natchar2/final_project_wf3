@@ -37,7 +37,7 @@
 							<tr>
 								<td align="center">
 									{% if (value.image>"") %}
-										<img src="{{ asset('assets/images/'~value.image) }}" class="img-responsive">
+										<img src="{{ asset('assets/images/'~value.image) }}" style="width:70px;height:auto;max-height:70px;">
 									{% endif %}
 								</td>
 								<td>{{value.event_title}}</td>

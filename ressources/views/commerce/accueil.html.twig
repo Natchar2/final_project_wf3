@@ -88,7 +88,7 @@
 							<div style="width:180px;height:180px;border:1px solid #444;border-radius: 35%;overflow: hidden;margin-left:auto;margin-right:auto;">
 
 								{% if product.image_1 > "" %}
-									<img src="{{ asset('assets/images/'~product.image_1) }}" alt="" style="height:180px;width:auto;margin-left:auto;margin-right:auto;">
+									<img src="{{ asset('assets/images/'~product.image_1) }}" alt="" style="height:180px;width:auto;max-width:180px;margin-left:auto;margin-right:auto;">
 								{% else %}
 									<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="180" height="180">
 								{% endif %}		
@@ -96,7 +96,7 @@
 
 							<h2><a href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}">{{ product.name }}</a></h2>
 							
-							<p>{{ product.description|accroche }}</p>
+							<p>{{ product.description | accroche | balise}}</p>
 							<p><a class="btn btn-default" href="{{ url('article', {'category_name': product.category_name|lower , 'slugproduct':product.name|slug , 'ID_product':product.ID_product}) }}" >Détails &raquo;</a></p>				
 
 						</div>
@@ -190,7 +190,7 @@
 									<tr>
 										<td>{{ topic.creation_date|date('d/m/Y') }}</td>
 										<td class="hidden-xs"><a href="{{ url('profilUser', {'ID_user' : topic.ID_user}) }}">{{ topic.pseudo }}</a></td>
-										<td>{{ topic.title }} <a href="{{ url('forum_topic', {slugTopic: topic.title | lower | slug, ID_topic: topic.ID_topic}) }}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
+										<td>{{ topic.title | convert_encoding('UTF-8', 'ISO-8859-1') }} <a href="{{ url('forum_topic', {slugTopic: topic.title | lower | slug, ID_topic: topic.ID_topic}) }}"><span class="glyphicon glyphicon-circle-arrow-right"></span></a></td>
 									</tr>
 
 								{% endfor %}
@@ -229,7 +229,7 @@
 									<br>
 									{{ event.city ~ ' (' ~ event.zip_code ~ ')'}}
 								</i></h4>
-								<p>{{ event.event_description|accroche }}.</p>
+								<p>{{ event.event_description | accroche  | balise }}.</p>
 								<a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-default pull-right">Infos &raquo;</a>
 							</div>
 							<div class="col-md-5  {% if bRevStyle == true %} col-md-pull-7 {% endif %}">
@@ -255,38 +255,32 @@
 
 
 					<!-- Nos partenaires -->
-					<div class="container-fluid partenaires col-xs-12">
-						<div class="container">
-							<div class="row partenaire">
+					<div class="container partenaires col-xs-12">
+							<div class="row partenaire col-xs-12">
 								<h2 class="titleAnnonces">Nos partenaires</h2>
 								<br>
 								<!-- Three columns of text below the carousel -->
-								<div class="row">
-									<center>
-										<a href="https://www.abslyon.com/" target=_blank class="col-xs-12 col-md-3">
+
+								<center>
+										<a href="https://www.abslyon.com/" target="_blank" class="col-xs-12 col-md-3">
 											<img class="featurette-image img-responsive center-block" src="{{asset('img/abs.png')}}" alt="logo_abs">
-											<br>
-
 										</a>
 
-										<a href="https://www.hawaiisurf.com/" target=_blank class="col-xs-12 col-md-3">
+										<a href="https://www.hawaiisurf.com/" target="_blank" class="col-xs-12 col-md-3">
 											<img class="featurette-image img-responsive center-block" src="{{asset('img/hawai.png')}}" alt="logo_hawai">
-											<br>
 										</a>
 
-										<a href="http://www.bikes.com/fr" target=_blank class="col-xs-12 col-md-3">
+										<a href="http://www.bikes.com/fr" target="_blank" class="col-xs-12 col-md-3">
 											<img class="featurette-image img-responsive center-block" src="{{asset('img/rm.png')}}" alt="logo_rm">
 											<br>
 										</a>
 
-										<a href="https://www.vans.fr/" target=_blank class="col-xs-12 col-md-3">
+										<a href="https://www.vans.fr/" target="_blank" class="col-xs-12 col-md-3">
 											<img class="featurette-image img-responsive center-block" src="{{asset('img/vans.png')}}" alt="logo_vans">
-											<br>
 										</a>
-									</center>
-								</div>
+								</center>
+
 							</div>
-						</div>
 					</div>
 				{% endblock %}
 

@@ -43,7 +43,7 @@
 							<div class="card mb-4 blogPost">
 								{% for value in topics %}
 									<div class="card-body">
-										<h2 class="card-title">{{value.title}}</h2>
+										<h2 class="card-title">{{value.title | convert_encoding('UTF-8', 'ISO-8859-1') }}</h2>
 										<p class="card-text">{{value.content | balise}}</p>
 										<a href="{{ url('forum_topic', {'slugTopic' : value.title | slug, 'ID_topic' : value.ID_topic}) }}" class="btn btn-default btn-xs">En savoir plus</a>
 									</div>
@@ -116,7 +116,7 @@
 							<br>
 							<!-- Side Widget -->
 							<div class="card my-4">
-								<h5 class="card-header">Publicité</h5>
+
 								<br>
 								<div class="card-body">
 									<a href="http://www.cartier.fr/" target=_blank><img src="{{asset('img/cartier.jpg')}}" height="auto" width="300px" alt="cartier"></a>

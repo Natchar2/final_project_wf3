@@ -107,7 +107,7 @@
                                             {{ event.city ~ ' (' ~ event.zip_code ~ ')'}}
                                         </i></h6>
 
-                                        <p>{{ event.event_description|accroche }}</p>
+                                        <p>{{ event.event_description|accroche|balise }}</p>
                                         <a href="{{ url('agenda_article', {'category_name': event.category_name|lower , 'slugevent':event.event_title|slug , 'ID_event':event.ID_event}) }}" class="btn btn-default pull-right" style="position: absolute; bottom: 50px; right: 40px">Infos</a>
 
                                         <hr class="col-xs-9 col-xs-push-1" style="padding: 0; position: absolute; bottom: 0;">

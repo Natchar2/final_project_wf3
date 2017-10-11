@@ -38,9 +38,9 @@
 
 				<h4>
 					{% if topic is defined and topic is not empty %}
-						{{topic.category_name}}</h4>
+						{{topic.category_name }}</h4>
 						<hr>
-						<p>{{topic.title}}</p>
+						<p>{{topic.title }}</p>
 					{% else %}
 						<div>Aucun topic ne correspond à votre recherche</div>
 					{% endif %}
@@ -54,7 +54,7 @@
 						<hr>
 						<h5>{{event.event_title}}</h5>
 
-						<p>{{event.event_description | balise | accroche }}</p>
+						<p>{{event.event_description | accroche | balise }}</p>
 
 					{% else %}
 						<div>Aucun évènement ne correspond à votre recherche</div>
@@ -68,7 +68,7 @@
 						{{product.category_name}}</h4>
 						<hr>
 						<h5>{{product.name}}</h5>
-						<p>{{product.description | balise | accroche }}</p>
+						<p>{{product.description | accroche | balise }}</p>
 					{% else %}
 						<div>Aucun produit ne correspond à votre recherche</div>
 					{% endif %}
